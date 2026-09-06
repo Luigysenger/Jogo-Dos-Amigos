@@ -16,7 +16,7 @@
     :root {
       --bg-1: #0f172a;
       --bg-2: #111827;
-      --card: rgba(17, 24, 39, 0.88);
+      --card: rgba(17, 24, 39, 0.90);
       --card-border: rgba(255, 255, 255, 0.10);
       --text: #f8fafc;
       --muted: #cbd5e1;
@@ -26,67 +26,40 @@
       --success: #22c55e;
       --danger: #ef4444;
       --warning: #f59e0b;
+      --dark: #0b1220;
     }
 
     body {
       min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
       color: var(--text);
-
       background:
-        radial-gradient(
-          circle at top left,
-          rgba(124, 58, 237, 0.28),
-          transparent 35%
-        ),
-        radial-gradient(
-          circle at bottom right,
-          rgba(6, 182, 212, 0.20),
-          transparent 35%
-        ),
-        linear-gradient(
-          135deg,
-          var(--bg-1),
-          var(--bg-2)
-        );
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.28), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.20), transparent 35%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
       padding: 24px;
     }
 
     .app {
-      width: min(100%, 520px);
+      width: min(100%, 760px);
+      margin: 0 auto;
     }
 
     .brand {
       text-align: center;
-      margin-bottom: 24px;
+      margin: 26px 0 24px;
     }
 
     .logo {
       width: 86px;
       height: 86px;
       margin: 0 auto 14px;
-
       border-radius: 24px;
-
       display: grid;
       place-items: center;
-
       font-size: 42px;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--primary),
-          var(--secondary)
-        );
-
-      box-shadow:
-        0 18px 50px
-        rgba(124, 58, 237, 0.35);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 18px 50px rgba(124, 58, 237, 0.35);
     }
 
     h1 {
@@ -95,102 +68,87 @@
       margin-bottom: 10px;
     }
 
+    h2 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
     .subtitle {
       color: var(--muted);
       font-size: 16px;
       line-height: 1.5;
+      max-width: 620px;
+      margin: 0 auto;
     }
 
     .card {
       border: 1px solid var(--card-border);
-
       background: var(--card);
-
       backdrop-filter: blur(14px);
-
       border-radius: 26px;
-
       padding: 24px;
-
-      box-shadow:
-        0 24px 80px
-        rgba(0, 0, 0, 0.35);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      margin-bottom: 18px;
     }
 
     .status {
       display: flex;
       align-items: center;
       gap: 10px;
-
       min-height: 44px;
-
       padding: 10px 12px;
       margin-bottom: 18px;
-
       border-radius: 14px;
-
-      background:
-        rgba(255, 255, 255, 0.06);
-
+      background: rgba(255, 255, 255, 0.06);
       color: var(--muted);
-
       font-size: 14px;
     }
 
     .status-dot {
       width: 10px;
       height: 10px;
-
       border-radius: 50%;
-
       background: var(--warning);
-
       flex: 0 0 auto;
-
-      box-shadow:
-        0 0 0 5px
-        rgba(245, 158, 11, 0.12);
+      box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.12);
     }
 
     .status.ok .status-dot {
       background: var(--success);
-
-      box-shadow:
-        0 0 0 5px
-        rgba(34, 197, 94, 0.12);
+      box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.12);
     }
 
     .status.error .status-dot {
       background: var(--danger);
-
-      box-shadow:
-        0 0 0 5px
-        rgba(239, 68, 68, 0.12);
+      box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.12);
     }
 
-    .actions {
+    .actions,
+    .stack {
       display: grid;
+      gap: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
     button {
       width: 100%;
-
       border: 0;
-
       border-radius: 16px;
-
-      padding: 17px 18px;
-
-      font-size: 17px;
+      padding: 15px 18px;
+      font-size: 16px;
       font-weight: 700;
-
       cursor: pointer;
-
-      transition:
-        transform .15s ease,
-        filter .15s ease,
-        opacity .15s ease;
+      transition: transform .15s ease, filter .15s ease, opacity .15s ease;
     }
 
     button:active {
@@ -204,413 +162,1234 @@
 
     .btn-primary {
       color: white;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--primary),
-          var(--primary-2)
-        );
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
     }
 
     .btn-secondary {
       color: white;
+      background: linear-gradient(135deg, #0891b2, var(--secondary));
+    }
 
-      background:
-        linear-gradient(
-          135deg,
-          #0891b2,
-          var(--secondary)
-        );
+    .btn-success {
+      color: white;
+      background: #15803d;
+    }
+
+    .btn-danger {
+      color: white;
+      background: #b91c1c;
+    }
+
+    .btn-warning {
+      color: #111827;
+      background: #f59e0b;
+    }
+
+    .btn-neutral {
+      color: white;
+      background: rgba(255, 255, 255, 0.10);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .small-btn {
+      width: auto;
+      padding: 10px 12px;
+      font-size: 13px;
+      border-radius: 12px;
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 7px;
+      font-weight: 700;
+    }
+
+    input,
+    select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 14px 15px;
+      outline: none;
+      font-size: 16px;
+    }
+
+    select option {
+      color: #111827;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: rgba(139, 92, 246, 0.75);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
     }
 
     .hint {
       text-align: center;
-
       margin-top: 18px;
-
       color: #94a3b8;
-
       font-size: 13px;
       line-height: 1.45;
     }
 
     .technical {
       margin-top: 14px;
-
       text-align: center;
-
       color: #64748b;
-
       font-size: 11px;
-
       overflow-wrap: anywhere;
     }
 
-    @media (max-width: 480px) {
+    .screen {
+      display: none;
+    }
 
+    .screen.active {
+      display: block;
+    }
+
+    .topbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .room-code {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 5px;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(124,58,237,.35), rgba(6,182,212,.22));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      padding: 18px;
+      margin: 10px 0 18px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-size: 12px;
+      font-weight: 800;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+    }
+
+    .pill.on {
+      color: #bbf7d0;
+      background: rgba(34,197,94,.10);
+      border-color: rgba(34,197,94,.25);
+    }
+
+    .pill.off {
+      color: #fecaca;
+      background: rgba(239,68,68,.10);
+      border-color: rgba(239,68,68,.25);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .list-item {
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 15px;
+      padding: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .list-item strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .list-item small {
+      color: #94a3b8;
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .empty {
+      color: #94a3b8;
+      text-align: center;
+      padding: 18px 12px;
+      border: 1px dashed rgba(255,255,255,.12);
+      border-radius: 14px;
+    }
+
+    .warning-box,
+    .success-box,
+    .danger-box {
+      padding: 14px;
+      border-radius: 14px;
+      line-height: 1.45;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    .warning-box {
+      background: rgba(245,158,11,.11);
+      border: 1px solid rgba(245,158,11,.25);
+      color: #fde68a;
+    }
+
+    .success-box {
+      background: rgba(34,197,94,.10);
+      border: 1px solid rgba(34,197,94,.25);
+      color: #bbf7d0;
+    }
+
+    .danger-box {
+      background: rgba(239,68,68,.10);
+      border: 1px solid rgba(239,68,68,.25);
+      color: #fecaca;
+    }
+
+    .host-controls {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .control-row {
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 15px;
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .control-row p {
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .waiting-center {
+      text-align: center;
+      padding: 12px 0;
+    }
+
+    .waiting-icon {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .muted {
+      color: #94a3b8;
+    }
+
+    @media (max-width: 640px) {
       body {
-        align-items: stretch;
-        padding: 18px;
+        padding: 16px;
       }
 
-      .app {
-        margin: auto;
+      .grid-2 {
+        grid-template-columns: 1fr;
       }
 
       .card {
-        padding: 20px;
+        padding: 19px;
         border-radius: 22px;
+      }
+
+      .room-code {
+        font-size: 28px;
+      }
+
+      .list-item {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .list-actions {
+        width: 100%;
+      }
+
+      .list-actions button {
+        flex: 1;
       }
     }
   </style>
-
 </head>
 
 <body>
-
   <main class="app">
 
     <section class="brand">
-
-      <div
-        class="logo"
-        aria-hidden="true"
-      >
-        🎯
-      </div>
-
-      <h1>
-        Jogo dos Amigos
-      </h1>
-
+      <div class="logo" aria-hidden="true">🎯</div>
+      <h1>Jogo dos Amigos</h1>
       <p class="subtitle">
-        Quiz multiplayer por times.
-        Entre pelo celular,
-        participe da votação
-        e ajude seu time a vencer.
+        Quiz multiplayer por times. O responsável cria a partida, autoriza os jogadores
+        e mantém o controle de quem pode participar.
       </p>
-
     </section>
 
+    <!-- TELA INICIAL -->
+    <section id="screenHome" class="screen active">
+      <div class="card">
+        <div id="firebaseStatus" class="status">
+          <span class="status-dot"></span>
+          <span id="firebaseStatusText">Conectando ao Firebase...</span>
+        </div>
 
-    <section class="card">
+        <div class="actions">
+          <button id="btnAbrirCriar" class="btn-primary" type="button" disabled>
+            Criar partida
+          </button>
 
-      <div
-        id="firebaseStatus"
-        class="status"
-      >
+          <button id="btnAbrirEntrar" class="btn-secondary" type="button" disabled>
+            Entrar em partida
+          </button>
+        </div>
 
-        <span class="status-dot"></span>
+        <p class="hint">
+          O responsável terá controle para aprovar participantes, bloquear jogadores
+          e desligar a partida quando quiser.
+        </p>
 
-        <span id="firebaseStatusText">
-          Conectando ao Firebase...
-        </span>
-
+        <p id="technicalInfo" class="technical"></p>
       </div>
+    </section>
 
+    <!-- CRIAR PARTIDA -->
+    <section id="screenCreate" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <h2>Criar partida</h2>
+          <button class="btn-neutral small-btn" type="button" data-go-home>Voltar</button>
+        </div>
 
-      <div class="actions">
+        <div class="form-group">
+          <label for="hostName">Nome do responsável</label>
+          <input id="hostName" maxlength="24" placeholder="Ex.: Luigy">
+        </div>
 
-        <button
-          id="btnCriar"
-          class="btn-primary"
-          type="button"
-          disabled
-        >
-          Criar partida
+        <div class="form-group">
+          <label for="matchName">Nome da partida</label>
+          <input id="matchName" maxlength="40" placeholder="Ex.: Noite de Quiz">
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="teamCount">Quantidade de times</label>
+            <select id="teamCount">
+              <option value="2">2 times</option>
+              <option value="3">3 times</option>
+              <option value="4">4 times</option>
+              <option value="5">5 times</option>
+              <option value="6">6 times</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="maxPlayers">Máximo de jogadores</label>
+            <select id="maxPlayers">
+              <option value="6">6 jogadores</option>
+              <option value="10">10 jogadores</option>
+              <option value="15">15 jogadores</option>
+              <option value="20">20 jogadores</option>
+              <option value="30">30 jogadores</option>
+              <option value="50">50 jogadores</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label for="questionCount">Quantidade de perguntas</label>
+            <select id="questionCount">
+              <option value="10">10 perguntas</option>
+              <option value="15">15 perguntas</option>
+              <option value="20" selected>20 perguntas</option>
+              <option value="30">30 perguntas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="questionTime">Tempo por pergunta</label>
+            <select id="questionTime">
+              <option value="10" selected>10 segundos</option>
+              <option value="15">15 segundos</option>
+              <option value="20">20 segundos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="warning-box">
+          Nesta versão, toda entrada precisa da autorização do responsável.
+          O responsável também poderá bloquear jogadores e desligar a partida inteira.
+        </div>
+
+        <button id="btnCreateMatch" class="btn-primary" type="button">
+          Criar partida agora
         </button>
-
-
-        <button
-          id="btnEntrar"
-          class="btn-secondary"
-          type="button"
-          disabled
-        >
-          Entrar em partida
-        </button>
-
       </div>
+    </section>
 
+    <!-- ENTRAR EM PARTIDA -->
+    <section id="screenJoin" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <h2>Entrar em partida</h2>
+          <button class="btn-neutral small-btn" type="button" data-go-home>Voltar</button>
+        </div>
 
-      <p class="hint">
+        <div class="form-group">
+          <label for="joinCode">Código da partida</label>
+          <input id="joinCode" maxlength="6" placeholder="ABC123" autocomplete="off">
+        </div>
 
-        Nesta primeira etapa,
-        vamos apenas confirmar que o site
-        abre corretamente e que a conexão
-        segura com o Firebase está funcionando.
+        <div class="form-group">
+          <label for="playerName">Seu nome ou apelido</label>
+          <input id="playerName" maxlength="24" placeholder="Ex.: João">
+        </div>
 
-      </p>
+        <div class="warning-box">
+          Sua entrada será enviada ao responsável da partida.
+          Você só entra depois que ele aprovar.
+        </div>
 
+        <button id="btnRequestJoin" class="btn-secondary" type="button">
+          Pedir permissão para entrar
+        </button>
+      </div>
+    </section>
 
-      <p
-        id="technicalInfo"
-        class="technical"
-      ></p>
+    <!-- AGUARDANDO APROVAÇÃO -->
+    <section id="screenWaiting" class="screen">
+      <div class="card">
+        <div class="waiting-center">
+          <div class="waiting-icon">⏳</div>
+          <h2>Aguardando autorização</h2>
+          <p id="waitingText" class="muted">
+            Seu pedido foi enviado ao responsável.
+          </p>
+        </div>
 
+        <div id="waitingStateBox" class="warning-box">
+          Não feche esta página. Quando o responsável aprovar, você entrará automaticamente.
+        </div>
+
+        <button id="btnCancelWaiting" class="btn-neutral" type="button">
+          Cancelar e voltar
+        </button>
+      </div>
+    </section>
+
+    <!-- SALA -->
+    <section id="screenLobby" class="screen">
+      <div class="card">
+        <div class="topbar">
+          <div>
+            <span id="rolePill" class="pill">Jogador</span>
+          </div>
+          <button id="btnLeaveLobby" class="btn-neutral small-btn" type="button">
+            Sair
+          </button>
+        </div>
+
+        <h2 id="lobbyTitle">Partida</h2>
+
+        <div id="roomCodeDisplay" class="room-code">------</div>
+
+        <div id="gameStateMessage" class="success-box">
+          Jogo liberado pelo responsável.
+        </div>
+
+        <!-- CONTROLES DO RESPONSÁVEL -->
+        <div id="hostArea" style="display:none;">
+          <div class="section-title">
+            <h3>Controle do responsável</h3>
+            <span id="hostStatusPill" class="pill on">Jogo ligado</span>
+          </div>
+
+          <div class="host-controls">
+            <div class="control-row">
+              <strong>Ligar / desligar o jogo</strong>
+              <p>
+                Quando o jogo estiver desligado, ninguém poderá entrar ou continuar jogando
+                até você liberar novamente.
+              </p>
+              <button id="btnToggleGame" class="btn-danger" type="button">
+                Desligar jogo
+              </button>
+            </div>
+
+            <div class="control-row">
+              <strong>Novas entradas</strong>
+              <p>
+                Você pode fechar apenas a entrada de novos jogadores sem desligar a sala inteira.
+              </p>
+              <button id="btnToggleEntries" class="btn-warning" type="button">
+                Bloquear novas entradas
+              </button>
+            </div>
+          </div>
+
+          <div class="section-title">
+            <h3>Pedidos aguardando aprovação</h3>
+            <span id="pendingCount" class="pill">0 pedidos</span>
+          </div>
+
+          <div id="pendingList" class="list">
+            <div class="empty">Nenhum pedido no momento.</div>
+          </div>
+
+          <div style="height:18px;"></div>
+        </div>
+
+        <div class="section-title">
+          <h3>Jogadores autorizados</h3>
+          <span id="playerCount" class="pill">0 jogadores</span>
+        </div>
+
+        <div id="playerList" class="list">
+          <div class="empty">Aguardando jogadores.</div>
+        </div>
+      </div>
     </section>
 
   </main>
 
-
   <script type="module">
-
-    import {
-      initializeApp
-    }
-    from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
     import {
       getAuth,
       signInAnonymously,
       onAuthStateChanged
-    }
-    from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-
-
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
     import {
       getDatabase,
       ref,
+      get,
       set,
+      update,
+      remove,
+      onValue,
       serverTimestamp
-    }
-    from
-    "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
-
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
     const firebaseConfig = {
-
-      apiKey:
-        "AIzaSyD_-S0j1L-YVF6ynKiF8NcTU_4_pCn-S3Q",
-
-      authDomain:
-        "jogo-dos-amigos-ca3f5.firebaseapp.com",
-
-      databaseURL:
-        "https://jogo-dos-amigos-ca3f5-default-rtdb.firebaseio.com",
-
-      projectId:
-        "jogo-dos-amigos-ca3f5",
-
-      storageBucket:
-        "jogo-dos-amigos-ca3f5.firebasestorage.app",
-
-      messagingSenderId:
-        "817678231030",
-
-      appId:
-        "1:817678231030:web:1e406c32d15e0ec7a953d7"
-
+      apiKey: "AIzaSyD_-S0j1L-YVF6ynKiF8NcTU_4_pCn-S3Q",
+      authDomain: "jogo-dos-amigos-ca3f5.firebaseapp.com",
+      databaseURL: "https://jogo-dos-amigos-ca3f5-default-rtdb.firebaseio.com",
+      projectId: "jogo-dos-amigos-ca3f5",
+      storageBucket: "jogo-dos-amigos-ca3f5.firebasestorage.app",
+      messagingSenderId: "817678231030",
+      appId: "1:817678231030:web:1e406c32d15e0ec7a953d7"
     };
 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getDatabase(app);
 
-    const statusBox =
-      document.getElementById(
-        "firebaseStatus"
-      );
+    let currentUser = null;
+    let currentRoomCode = null;
+    let currentRole = null;
+    let unsubscribeRoom = null;
+    let unsubscribeRequest = null;
 
+    const screens = {
+      home: document.getElementById("screenHome"),
+      create: document.getElementById("screenCreate"),
+      join: document.getElementById("screenJoin"),
+      waiting: document.getElementById("screenWaiting"),
+      lobby: document.getElementById("screenLobby")
+    };
 
-    const statusText =
-      document.getElementById(
-        "firebaseStatusText"
-      );
+    const firebaseStatus = document.getElementById("firebaseStatus");
+    const firebaseStatusText = document.getElementById("firebaseStatusText");
+    const technicalInfo = document.getElementById("technicalInfo");
 
+    const btnAbrirCriar = document.getElementById("btnAbrirCriar");
+    const btnAbrirEntrar = document.getElementById("btnAbrirEntrar");
 
-    const technicalInfo =
-      document.getElementById(
-        "technicalInfo"
-      );
+    const hostName = document.getElementById("hostName");
+    const matchName = document.getElementById("matchName");
+    const teamCount = document.getElementById("teamCount");
+    const maxPlayers = document.getElementById("maxPlayers");
+    const questionCount = document.getElementById("questionCount");
+    const questionTime = document.getElementById("questionTime");
 
+    const joinCode = document.getElementById("joinCode");
+    const playerName = document.getElementById("playerName");
 
-    const btnCriar =
-      document.getElementById(
-        "btnCriar"
-      );
+    const waitingText = document.getElementById("waitingText");
+    const waitingStateBox = document.getElementById("waitingStateBox");
 
+    const rolePill = document.getElementById("rolePill");
+    const lobbyTitle = document.getElementById("lobbyTitle");
+    const roomCodeDisplay = document.getElementById("roomCodeDisplay");
+    const gameStateMessage = document.getElementById("gameStateMessage");
 
-    const btnEntrar =
-      document.getElementById(
-        "btnEntrar"
-      );
+    const hostArea = document.getElementById("hostArea");
+    const hostStatusPill = document.getElementById("hostStatusPill");
+    const btnToggleGame = document.getElementById("btnToggleGame");
+    const btnToggleEntries = document.getElementById("btnToggleEntries");
 
+    const pendingCount = document.getElementById("pendingCount");
+    const pendingList = document.getElementById("pendingList");
+    const playerCount = document.getElementById("playerCount");
+    const playerList = document.getElementById("playerList");
 
-    function setStatus(
-      type,
-      text
-    ) {
-
-      statusBox.className =
-        "status" +
-        (type ? " " + type : "");
-
-      statusText.textContent =
-        text;
+    function showScreen(name) {
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
+    function setFirebaseStatus(type, text) {
+      firebaseStatus.className = "status" + (type ? " " + type : "");
+      firebaseStatusText.textContent = text;
+    }
 
-    try {
+    function cleanName(value) {
+      return value.trim().replace(/\s+/g, " ").slice(0, 24);
+    }
 
-      const app =
-        initializeApp(
-          firebaseConfig
-        );
+    function cleanMatchName(value) {
+      return value.trim().replace(/\s+/g, " ").slice(0, 40);
+    }
 
+    function cleanCode(value) {
+      return value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+    }
 
-      const auth =
-        getAuth(app);
+    function generateCode() {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let result = "";
+      for (let i = 0; i < 6; i++) {
+        result += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return result;
+    }
 
+    async function generateUniqueCode() {
+      for (let i = 0; i < 20; i++) {
+        const code = generateCode();
+        const snap = await get(ref(db, `partidas/${code}`));
+        if (!snap.exists()) return code;
+      }
+      throw new Error("Não foi possível gerar um código único agora.");
+    }
 
-      const db =
-        getDatabase(app);
+    function stopListeners() {
+      if (typeof unsubscribeRoom === "function") {
+        unsubscribeRoom();
+        unsubscribeRoom = null;
+      }
 
+      if (typeof unsubscribeRequest === "function") {
+        unsubscribeRequest();
+        unsubscribeRequest = null;
+      }
+    }
 
-      onAuthStateChanged(
-        auth,
-        async (user) => {
+    async function isCurrentUserHost(code) {
+      const snap = await get(ref(db, `partidas/${code}/hostUid`));
+      return snap.exists() && snap.val() === currentUser.uid;
+    }
 
-          if (!user) {
-            return;
+    async function createMatch() {
+      const responsibleName = cleanName(hostName.value);
+      const title = cleanMatchName(matchName.value);
+
+      if (!responsibleName) {
+        alert("Digite o nome do responsável.");
+        return;
+      }
+
+      if (!title) {
+        alert("Digite o nome da partida.");
+        return;
+      }
+
+      const button = document.getElementById("btnCreateMatch");
+      button.disabled = true;
+      button.textContent = "Criando...";
+
+      try {
+        const code = await generateUniqueCode();
+
+        const roomData = {
+          codigo: code,
+          nome: title,
+          hostUid: currentUser.uid,
+          hostNome: responsibleName,
+          criadoEm: serverTimestamp(),
+          status: "aguardando",
+          jogoLigado: true,
+          entradasAbertas: true,
+          exigirAprovacao: true,
+          configuracoes: {
+            quantidadeTimes: Number(teamCount.value),
+            maxJogadores: Number(maxPlayers.value),
+            quantidadePerguntas: Number(questionCount.value),
+            tempoPergunta: Number(questionTime.value)
           }
+        };
 
+        await set(ref(db, `partidas/${code}`), roomData);
 
-          try {
+        await set(ref(db, `partidas/${code}/jogadores/${currentUser.uid}`), {
+          uid: currentUser.uid,
+          nome: responsibleName,
+          papel: "host",
+          autorizado: true,
+          entrouEm: serverTimestamp()
+        });
 
-            await set(
+        currentRoomCode = code;
+        currentRole = "host";
 
-              ref(
-                db,
-                `testesConexao/${user.uid}`
-              ),
+        openLobby(code, "host");
+      } catch (error) {
+        console.error(error);
+        alert("Não foi possível criar a partida. " + (error.message || error));
+      } finally {
+        button.disabled = false;
+        button.textContent = "Criar partida agora";
+      }
+    }
 
-              {
-                ok: true,
+    async function requestJoin() {
+      const code = cleanCode(joinCode.value);
+      const name = cleanName(playerName.value);
 
-                atualizadoEm:
-                  serverTimestamp()
-              }
+      joinCode.value = code;
 
-            );
+      if (code.length !== 6) {
+        alert("Digite o código de 6 caracteres da partida.");
+        return;
+      }
 
+      if (!name) {
+        alert("Digite seu nome ou apelido.");
+        return;
+      }
 
-            setStatus(
-              "ok",
-              "Firebase conectado com sucesso."
-            );
+      const button = document.getElementById("btnRequestJoin");
+      button.disabled = true;
+      button.textContent = "Enviando pedido...";
 
+      try {
+        const roomSnap = await get(ref(db, `partidas/${code}`));
 
-            technicalInfo.textContent =
-              `Identificação temporária do aparelho: ${user.uid}`;
-
-
-            btnCriar.disabled =
-              false;
-
-
-            btnEntrar.disabled =
-              false;
-
-          }
-
-          catch (error) {
-
-            console.error(
-              error
-            );
-
-
-            setStatus(
-              "error",
-              "Autenticou, mas não conseguiu gravar no Realtime Database."
-            );
-
-
-            technicalInfo.textContent =
-              error.message ||
-              String(error);
-          }
-
+        if (!roomSnap.exists()) {
+          alert("Partida não encontrada.");
+          return;
         }
-      );
 
+        const room = roomSnap.val();
 
-      if (!auth.currentUser) {
+        if (!room.jogoLigado) {
+          alert("O responsável desligou esta partida. Ninguém pode jogar agora.");
+          return;
+        }
 
-        signInAnonymously(
-          auth
-        )
-        .catch(
-          (error) => {
+        if (!room.entradasAbertas) {
+          alert("O responsável bloqueou novas entradas nesta partida.");
+          return;
+        }
 
-            console.error(
-              error
-            );
+        const blockedSnap = await get(ref(db, `partidas/${code}/bloqueados/${currentUser.uid}`));
 
+        if (blockedSnap.exists() && blockedSnap.val() === true) {
+          alert("Seu acesso foi bloqueado pelo responsável desta partida.");
+          return;
+        }
 
-            setStatus(
-              "error",
-              "Não foi possível fazer a autenticação anônima."
-            );
+        const playersSnap = await get(ref(db, `partidas/${code}/jogadores`));
+        const players = playersSnap.exists() ? playersSnap.val() : {};
+        const approvedPlayers = Object.values(players).filter(p => p && p.autorizado).length;
 
+        if (approvedPlayers >= Number(room.configuracoes?.maxJogadores || 999)) {
+          alert("Esta partida já atingiu o limite de jogadores.");
+          return;
+        }
 
-            technicalInfo.textContent =
-              error.message ||
-              String(error);
+        await set(ref(db, `partidas/${code}/pedidos/${currentUser.uid}`), {
+          uid: currentUser.uid,
+          nome: name,
+          status: "pendente",
+          solicitadoEm: serverTimestamp()
+        });
 
+        currentRoomCode = code;
+        currentRole = "waiting";
+
+        waitingText.textContent = `Pedido enviado para a partida ${code}.`;
+        waitingStateBox.className = "warning-box";
+        waitingStateBox.textContent =
+          "Aguardando o responsável autorizar sua entrada. Não feche esta página.";
+
+        showScreen("waiting");
+        listenOwnRequest(code, name);
+
+      } catch (error) {
+        console.error(error);
+        alert("Não foi possível solicitar entrada. " + (error.message || error));
+      } finally {
+        button.disabled = false;
+        button.textContent = "Pedir permissão para entrar";
+      }
+    }
+
+    function listenOwnRequest(code, name) {
+      if (typeof unsubscribeRequest === "function") {
+        unsubscribeRequest();
+      }
+
+      const requestRef = ref(db, `partidas/${code}/pedidos/${currentUser.uid}`);
+
+      unsubscribeRequest = onValue(requestRef, async snap => {
+        if (!snap.exists()) return;
+
+        const request = snap.val();
+
+        if (request.status === "aprovado") {
+          await set(ref(db, `partidas/${code}/jogadores/${currentUser.uid}`), {
+            uid: currentUser.uid,
+            nome: name,
+            papel: "jogador",
+            autorizado: true,
+            entrouEm: serverTimestamp()
+          });
+
+          if (typeof unsubscribeRequest === "function") {
+            unsubscribeRequest();
+            unsubscribeRequest = null;
           }
-        );
 
+          currentRole = "player";
+          openLobby(code, "player");
+        }
+
+        if (request.status === "bloqueado") {
+          waitingStateBox.className = "danger-box";
+          waitingStateBox.textContent =
+            "O responsável bloqueou sua entrada nesta partida.";
+        }
+      });
+
+      const roomRef = ref(db, `partidas/${code}`);
+
+      if (typeof unsubscribeRoom === "function") {
+        unsubscribeRoom();
       }
 
+      unsubscribeRoom = onValue(roomRef, snap => {
+        if (!snap.exists()) {
+          waitingStateBox.className = "danger-box";
+          waitingStateBox.textContent = "A partida não existe mais.";
+          return;
+        }
+
+        const room = snap.val();
+
+        if (!room.jogoLigado) {
+          waitingStateBox.className = "danger-box";
+          waitingStateBox.textContent =
+            "O responsável desligou a partida. Aguarde ele liberar novamente.";
+        } else if (!room.entradasAbertas) {
+          waitingStateBox.className = "warning-box";
+          waitingStateBox.textContent =
+            "O responsável fechou novas entradas. Seu pedido continua aguardando decisão.";
+        }
+      });
     }
 
-    catch (error) {
+    function openLobby(code, role) {
+      stopListeners();
 
-      console.error(
-        error
-      );
+      currentRoomCode = code;
+      currentRole = role;
 
+      rolePill.textContent = role === "host" ? "Responsável" : "Jogador";
+      rolePill.className = role === "host" ? "pill on" : "pill";
+      hostArea.style.display = role === "host" ? "block" : "none";
+      roomCodeDisplay.textContent = code;
 
-      setStatus(
-        "error",
-        "Erro ao iniciar o Firebase."
-      );
+      showScreen("lobby");
 
+      const roomRef = ref(db, `partidas/${code}`);
 
-      technicalInfo.textContent =
-        error.message ||
-        String(error);
+      unsubscribeRoom = onValue(roomRef, snap => {
+        if (!snap.exists()) {
+          alert("Esta partida foi encerrada ou removida.");
+          stopListeners();
+          currentRoomCode = null;
+          currentRole = null;
+          showScreen("home");
+          return;
+        }
 
+        const room = snap.val();
+        renderLobby(room);
+      });
     }
 
+    function renderLobby(room) {
+      lobbyTitle.textContent = room.nome || "Partida";
 
-    btnCriar.addEventListener(
-      "click",
-      () => {
-
-        alert(
-          "Conexão funcionando. Na próxima etapa vamos criar a tela de criação da partida."
-        );
-
+      if (room.jogoLigado) {
+        gameStateMessage.className = "success-box";
+        gameStateMessage.textContent =
+          "Jogo liberado pelo responsável.";
+      } else {
+        gameStateMessage.className = "danger-box";
+        gameStateMessage.textContent =
+          "JOGO DESLIGADO PELO RESPONSÁVEL. Ninguém pode jogar até ele liberar novamente.";
       }
-    );
 
+      if (currentRole === "host") {
+        if (room.jogoLigado) {
+          hostStatusPill.className = "pill on";
+          hostStatusPill.textContent = "Jogo ligado";
+          btnToggleGame.className = "btn-danger";
+          btnToggleGame.textContent = "Desligar jogo";
+        } else {
+          hostStatusPill.className = "pill off";
+          hostStatusPill.textContent = "Jogo desligado";
+          btnToggleGame.className = "btn-success";
+          btnToggleGame.textContent = "Ligar jogo";
+        }
 
-    btnEntrar.addEventListener(
-      "click",
-      () => {
+        if (room.entradasAbertas) {
+          btnToggleEntries.className = "btn-warning";
+          btnToggleEntries.textContent = "Bloquear novas entradas";
+        } else {
+          btnToggleEntries.className = "btn-success";
+          btnToggleEntries.textContent = "Liberar novas entradas";
+        }
 
-        alert(
-          "Conexão funcionando. Na próxima etapa vamos criar a entrada por código da partida."
-        );
-
+        renderPending(room.pedidos || {}, room.bloqueados || {}, room);
       }
-    );
 
+      renderPlayers(room.jogadores || {}, room.bloqueados || {});
+    }
+
+    function renderPending(requests, blocked, room) {
+      const entries = Object.values(requests)
+        .filter(item => item && item.status === "pendente");
+
+      pendingCount.textContent = `${entries.length} ${entries.length === 1 ? "pedido" : "pedidos"}`;
+
+      if (!entries.length) {
+        pendingList.innerHTML = `<div class="empty">Nenhum pedido no momento.</div>`;
+        return;
+      }
+
+      pendingList.innerHTML = "";
+
+      entries.forEach(request => {
+        const item = document.createElement("div");
+        item.className = "list-item";
+
+        const info = document.createElement("div");
+        info.innerHTML = `
+          <strong>${escapeHtml(request.nome || "Jogador")}</strong>
+          <small>Aguardando sua autorização</small>
+        `;
+
+        const actions = document.createElement("div");
+        actions.className = "list-actions";
+
+        const approveButton = document.createElement("button");
+        approveButton.className = "btn-success small-btn";
+        approveButton.textContent = "Aprovar";
+        approveButton.disabled = !room.jogoLigado;
+        approveButton.addEventListener("click", () => approvePlayer(request.uid));
+
+        const blockButton = document.createElement("button");
+        blockButton.className = "btn-danger small-btn";
+        blockButton.textContent = "Bloquear";
+        blockButton.addEventListener("click", () => blockPlayer(request.uid));
+
+        actions.append(approveButton, blockButton);
+        item.append(info, actions);
+        pendingList.appendChild(item);
+      });
+    }
+
+    function renderPlayers(players, blocked) {
+      const entries = Object.values(players)
+        .filter(player => player && player.autorizado);
+
+      playerCount.textContent = `${entries.length} ${entries.length === 1 ? "jogador" : "jogadores"}`;
+
+      if (!entries.length) {
+        playerList.innerHTML = `<div class="empty">Aguardando jogadores.</div>`;
+        return;
+      }
+
+      entries.sort((a, b) => {
+        if (a.papel === "host") return -1;
+        if (b.papel === "host") return 1;
+        return (a.nome || "").localeCompare(b.nome || "");
+      });
+
+      playerList.innerHTML = "";
+
+      entries.forEach(player => {
+        const item = document.createElement("div");
+        item.className = "list-item";
+
+        const info = document.createElement("div");
+        info.innerHTML = `
+          <strong>${escapeHtml(player.nome || "Jogador")}</strong>
+          <small>${player.papel === "host" ? "Responsável da partida" : "Jogador autorizado"}</small>
+        `;
+
+        item.appendChild(info);
+
+        if (
+          currentRole === "host" &&
+          player.papel !== "host" &&
+          player.uid !== currentUser.uid
+        ) {
+          const actions = document.createElement("div");
+          actions.className = "list-actions";
+
+          const blockButton = document.createElement("button");
+          blockButton.className = "btn-danger small-btn";
+          blockButton.textContent = "Bloquear jogador";
+          blockButton.addEventListener("click", () => blockPlayer(player.uid));
+
+          actions.appendChild(blockButton);
+          item.appendChild(actions);
+        }
+
+        playerList.appendChild(item);
+      });
+    }
+
+    async function approvePlayer(uid) {
+      try {
+        if (!(await isCurrentUserHost(currentRoomCode))) {
+          alert("Somente o responsável pode aprovar jogadores.");
+          return;
+        }
+
+        const roomSnap = await get(ref(db, `partidas/${currentRoomCode}`));
+        if (!roomSnap.exists()) return;
+
+        const room = roomSnap.val();
+
+        if (!room.jogoLigado) {
+          alert("Ligue o jogo antes de aprovar jogadores.");
+          return;
+        }
+
+        const requestSnap = await get(ref(db, `partidas/${currentRoomCode}/pedidos/${uid}`));
+        if (!requestSnap.exists()) return;
+
+        const request = requestSnap.val();
+
+        await update(ref(db, `partidas/${currentRoomCode}/pedidos/${uid}`), {
+          status: "aprovado",
+          aprovadoEm: serverTimestamp()
+        });
+
+        await set(ref(db, `partidas/${currentRoomCode}/jogadores/${uid}`), {
+          uid,
+          nome: request.nome || "Jogador",
+          papel: "jogador",
+          autorizado: true,
+          entrouEm: serverTimestamp()
+        });
+
+      } catch (error) {
+        console.error(error);
+        alert("Não foi possível aprovar o jogador.");
+      }
+    }
+
+    async function blockPlayer(uid) {
+      if (!confirm("Deseja realmente bloquear este jogador nesta partida?")) {
+        return;
+      }
+
+      try {
+        if (!(await isCurrentUserHost(currentRoomCode))) {
+          alert("Somente o responsável pode bloquear jogadores.");
+          return;
+        }
+
+        await set(ref(db, `partidas/${currentRoomCode}/bloqueados/${uid}`), true);
+
+        await update(ref(db, `partidas/${currentRoomCode}/pedidos/${uid}`), {
+          status: "bloqueado",
+          bloqueadoEm: serverTimestamp()
+        });
+
+        await remove(ref(db, `partidas/${currentRoomCode}/jogadores/${uid}`));
+
+      } catch (error) {
+        console.error(error);
+        alert("Não foi possível bloquear o jogador.");
+      }
+    }
+
+    async function toggleGame() {
+      try {
+        if (!(await isCurrentUserHost(currentRoomCode))) {
+          alert("Somente o responsável pode ligar ou desligar o jogo.");
+          return;
+        }
+
+        const snap = await get(ref(db, `partidas/${currentRoomCode}/jogoLigado`));
+        const current = snap.exists() ? !!snap.val() : false;
+
+        await update(ref(db, `partidas/${currentRoomCode}`), {
+          jogoLigado: !current,
+          alteradoEm: serverTimestamp()
+        });
+
+      } catch (error) {
+        console.error(error);
+        alert("Não foi possível alterar o estado do jogo.");
+      }
+    }
+
+    async function toggleEntries() {
+      try {
+        if (!(await isCurrentUserHost(currentRoomCode))) {
+          alert("Somente o responsável pode controlar novas entradas.");
+          return;
+        }
+
+        const snap = await get(ref(db, `partidas/${currentRoomCode}/entradasAbertas`));
+        const current = snap.exists() ? !!snap.val() : false;
+
+        await update(ref(db, `partidas/${currentRoomCode}`), {
+          entradasAbertas: !current,
+          alteradoEm: serverTimestamp()
+        });
+
+      } catch (error) {
+        console.error(error);
+        alert("Não foi possível alterar as entradas.");
+      }
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    btnAbrirCriar.addEventListener("click", () => showScreen("create"));
+    btnAbrirEntrar.addEventListener("click", () => showScreen("join"));
+
+    document.querySelectorAll("[data-go-home]").forEach(button => {
+      button.addEventListener("click", () => showScreen("home"));
+    });
+
+    document.getElementById("btnCreateMatch").addEventListener("click", createMatch);
+    document.getElementById("btnRequestJoin").addEventListener("click", requestJoin);
+
+    document.getElementById("btnCancelWaiting").addEventListener("click", () => {
+      stopListeners();
+      currentRoomCode = null;
+      currentRole = null;
+      showScreen("home");
+    });
+
+    document.getElementById("btnLeaveLobby").addEventListener("click", async () => {
+      if (
+        currentRoomCode &&
+        currentRole === "player"
+      ) {
+        try {
+          await remove(ref(db, `partidas/${currentRoomCode}/jogadores/${currentUser.uid}`));
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      stopListeners();
+      currentRoomCode = null;
+      currentRole = null;
+      showScreen("home");
+    });
+
+    btnToggleGame.addEventListener("click", toggleGame);
+    btnToggleEntries.addEventListener("click", toggleEntries);
+
+    joinCode.addEventListener("input", () => {
+      joinCode.value = cleanCode(joinCode.value);
+    });
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) return;
+
+      currentUser = user;
+
+      try {
+        await set(ref(db, `testesConexao/${user.uid}`), {
+          ok: true,
+          atualizadoEm: serverTimestamp()
+        });
+
+        setFirebaseStatus("ok", "Firebase conectado com sucesso.");
+        technicalInfo.textContent = `Identificação temporária do aparelho: ${user.uid}`;
+        btnAbrirCriar.disabled = false;
+        btnAbrirEntrar.disabled = false;
+
+      } catch (error) {
+        console.error(error);
+        setFirebaseStatus("error", "Autenticou, mas não conseguiu gravar no Realtime Database.");
+        technicalInfo.textContent = error.message || String(error);
+      }
+    });
+
+    if (!auth.currentUser) {
+      signInAnonymously(auth).catch(error => {
+        console.error(error);
+        setFirebaseStatus("error", "Não foi possível fazer a autenticação anônima.");
+        technicalInfo.textContent = error.message || String(error);
+      });
+    }
   </script>
-
 </body>
 </html>
