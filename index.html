@@ -180,10 +180,10 @@
   <section class="brand">
     <div class="logo">🎯</div>
     <h1>Jogo dos Amigos</h1>
-    <p class="subtitle">Times de até 5 participantes, com técnico, código exclusivo e perguntas sincronizadas.</p>
+    <p class="subtitle">Até 10 salas. Cada time pode ter no máximo 5 participantes: 1 técnico + até 4 jogadores.</p>
   </section>
 
-  <!-- TELA PÚBLICA / PARTICIPANTE -->
+  <!-- TELA INICIAL -->
   <section id="publicScreen" class="screen active">
     <div class="card">
       <div id="serverStatus" class="status off">
@@ -191,27 +191,52 @@
         <span id="serverStatusText">Servidor desligado. Aguardando o administrador liberar.</span>
       </div>
 
+      <div class="grid2">
+        <button id="openAdminLogin" class="btnd">Área do administrador</button>
+        <button id="openPlayerArea" class="btnc">Área do jogador</button>
+      </div>
+
+      <p class="muted center" style="margin-top:14px">
+        O administrador controla apenas quando o servidor fica ligado ou desligado.
+        Técnicos e jogadores entram pela Área do jogador.
+      </p>
+    </div>
+  </section>
+
+  <!-- ÁREA DO JOGADOR -->
+  <section id="playerAreaScreen" class="screen">
+    <div class="card">
+      <div class="top">
+        <div>
+          <span class="pill p">JOGADORES</span>
+          <h2 style="margin:10px 0 0">Área do jogador</h2>
+        </div>
+        <button id="backPublicPlayerArea" class="btnd small">Voltar</button>
+      </div>
+
+      <div id="playerServerStatus" class="status off">
+        <span class="dot"></span>
+        <span id="playerServerStatusText">Servidor desligado.</span>
+      </div>
+
       <div id="serverOffArea">
         <div class="danger">
-          O servidor está desligado. Quando o administrador fizer login, as opções para jogar aparecerão automaticamente.
+          Servidor desligado. Aguarde o administrador liberar para criar um time ou entrar com código.
         </div>
       </div>
 
       <div id="serverOnArea" style="display:none">
-        <div class="success">Servidor conectado e pronto para receber participantes.</div>
+        <div class="success">Conectado com servidor. Sistema liberado para jogar.</div>
 
         <div class="grid2">
-          <button id="openCoach" class="btnp">Sou técnico — criar meu time</button>
-          <button id="openPlayer" class="btnc">Sou jogador — tenho um código</button>
+          <button id="openCoach" class="btnp">Quero ser técnico e montar meu time</button>
+          <button id="openPlayer" class="btnc">Fui convidado — entrar com nome e código</button>
         </div>
 
         <div style="height:14px"></div>
         <h3>Salas</h3>
         <div id="publicRooms" class="rooms"></div>
       </div>
-
-      <div style="height:14px"></div>
-      <button id="openAdminLogin" class="btnd">Área do administrador</button>
     </div>
   </section>
 
@@ -235,7 +260,7 @@
         <input id="adminPassword" type="password" placeholder="Digite a senha">
       </div>
 
-      <button id="adminEnter" class="btnp">Entrar e ligar servidor</button>
+      <button id="adminEnter" class="btnp">Entrar no painel e ligar servidor</button>
     </div>
   </section>
 
@@ -248,10 +273,13 @@
           <h2 style="margin:10px 0 5px">Painel conectado</h2>
           <p class="muted">Servidor liberado e pronto para receber os participantes.</p>
         </div>
-        <button id="adminLogout" class="btnr small">Desligar servidor e sair</button>
+        <div class="grid2" style="width:min(100%,380px)">
+          <button id="adminExitKeepServer" class="btnd small">Sair do painel</button>
+          <button id="adminLogout" class="btnr small">Desligar servidor</button>
+        </div>
       </div>
 
-      <div class="success">Conectado com servidor.</div>
+      <div class="success">Conectado com servidor. Ele continuará ligado mesmo se o celular ou computador for reiniciado. Só será desligado pelo botão vermelho “Desligar servidor”.</div>
 
       <div class="row" style="margin-bottom:12px">
         <h3 style="margin:0">Salas 1 a 10</h3>
@@ -352,7 +380,7 @@
           <strong id="myInviteCode">------</strong>
         </div>
 
-        <button id="copyInvite" class="btnc">Copiar link + código para enviar no WhatsApp</button>
+        <button id="copyInvite" class="btnc">Copiar URL + código para enviar no WhatsApp</button>
         <div style="height:10px"></div>
         <button id="startAnyway" class="btny">Meu time está pronto / começar assim mesmo</button>
         <div style="height:10px"></div>
@@ -365,7 +393,7 @@
       <div id="myMembers" class="list"></div>
 
       <div id="waitingGame" class="notice" style="margin-top:14px">
-        Aguardando outros times ficarem prontos.
+        Para iniciar uma partida precisam existir pelo menos 2 salas/times. O time pode jogar somente com o técnico ou com até 5 participantes no total.
       </div>
     </div>
   </section>
@@ -503,7 +531,7 @@
   onValue(ref(db,".info/serverTimeOffset"), s => offset = Number(s.val() || 0));
 
   const screens = [
-    "publicScreen","adminLoginScreen","adminPanel","coachCreateScreen","playerJoinScreen",
+    "publicScreen","playerAreaScreen","adminLoginScreen","adminPanel","coachCreateScreen","playerJoinScreen",
     "teamLobbyScreen","presentationScreen","quizScreen","finalScreen"
   ];
 
@@ -591,16 +619,21 @@
   function renderServerState(){
     if(serverOnline){
       $("serverStatus").className="status on";
-      $("serverStatusText").textContent="Conectado com servidor. Sistema liberado.";
+      $("serverStatusText").textContent="Servidor ligado.";
+      $("playerServerStatus").className="status on";
+      $("playerServerStatusText").textContent="Conectado com servidor. Sistema liberado.";
       $("serverOffArea").style.display="none";
       $("serverOnArea").style.display="block";
     }else{
       $("serverStatus").className="status off";
       $("serverStatusText").textContent="Servidor desligado. Aguardando o administrador liberar.";
+      $("playerServerStatus").className="status off";
+      $("playerServerStatusText").textContent="Servidor desligado.";
       $("serverOffArea").style.display="block";
       $("serverOnArea").style.display="none";
-      if(!isAdmin && ["coachCreateScreen","playerJoinScreen"].some(x=>$(x).classList.contains("active"))){
-        show("publicScreen");
+
+      if(["coachCreateScreen","playerJoinScreen"].some(x=>$(x).classList.contains("active"))){
+        show("playerAreaScreen");
       }
     }
   }
@@ -711,8 +744,6 @@
         loginEm:serverTimestamp()
       });
 
-      await onDisconnect(ref(db,"config/serverOnline")).set(false);
-      await onDisconnect(ref(db,"config/adminOnline/online")).set(false);
 
       show("adminPanel");
     }catch(e){
@@ -720,14 +751,25 @@
       alert("Não foi possível conectar com o servidor.");
     }finally{
       btn.disabled=false;
-      btn.textContent="Entrar e ligar servidor";
+      btn.textContent="Entrar no painel e ligar servidor";
     }
   }
 
+  async function adminExitKeepServer(){
+    try{
+      await update(ref(db,"config/adminOnline"),{online:false,saiuDoPainelEm:serverTimestamp()});
+    }catch(e){console.error(e)}
+    sessionStorage.removeItem("jda_admin");
+    isAdmin=false;
+    $("adminPassword").value="";
+    show("publicScreen");
+  }
+
   async function adminLogout(){
+    if(!confirm("Deseja realmente DESLIGAR o servidor? Os jogadores não poderão criar times nem entrar com código até você ligar novamente.")) return;
     try{
       await set(ref(db,"config/serverOnline"),false);
-      await update(ref(db,"config/adminOnline"),{online:false,saiuEm:serverTimestamp()});
+      await update(ref(db,"config/adminOnline"),{online:false,servidorDesligadoEm:serverTimestamp()});
     }catch(e){console.error(e)}
     sessionStorage.removeItem("jda_admin");
     isAdmin=false;
@@ -942,7 +984,7 @@
         stopRoomListeners();
         myRoom=null;
         myRole=null;
-        show("publicScreen");
+        show("playerAreaScreen");
         return;
       }
 
@@ -998,10 +1040,10 @@
 
     if(room.ready){
       $("waitingGame").className="success";
-      $("waitingGame").textContent="Seu time está pronto. Aguardando pelo menos outro time pronto.";
+      $("waitingGame").textContent="Seu time está pronto. A partida poderá começar quando houver pelo menos mais 1 sala/time pronto.";
     }else{
       $("waitingGame").className="notice";
-      $("waitingGame").textContent="O técnico pode completar 5 participantes ou clicar em “Começar assim mesmo”.";
+      $("waitingGame").textContent="O técnico pode completar até 5 participantes no total ou marcar o time como pronto para jogar assim mesmo.";
     }
 
     if(myRole==="coach"){
@@ -1440,16 +1482,19 @@
   async function leaveTeam(){
     stopRoomListeners();
     myRoom=null;myRole=null;
-    show("publicScreen");
+    show("playerAreaScreen");
   }
 
   // Eventos
   $("openAdminLogin").onclick=()=>show("adminLoginScreen");
+  $("openPlayerArea").onclick=()=>show("playerAreaScreen");
+  $("backPublicPlayerArea").onclick=()=>show("publicScreen");
   $("backPublic1").onclick=()=>show("publicScreen");
-  $("backPublic2").onclick=()=>show("publicScreen");
-  $("backPublic3").onclick=()=>show("publicScreen");
+  $("backPublic2").onclick=()=>show("playerAreaScreen");
+  $("backPublic3").onclick=()=>show("playerAreaScreen");
 
   $("adminEnter").onclick=adminLogin;
+  $("adminExitKeepServer").onclick=adminExitKeepServer;
   $("adminLogout").onclick=adminLogout;
   $("resetRooms").onclick=resetAllRooms;
 
@@ -1494,12 +1539,11 @@
     signInAnonymously(auth).catch(e=>console.error(e));
   }
 
-  // Se o administrador recarregar a página durante a mesma sessão, volta ao painel.
+  // Se o administrador apenas atualizar a mesma aba, volta ao painel.
+  // O estado ligado/desligado do servidor continua sendo o que está salvo no Firebase.
   if(isAdmin){
     ensureAuth().then(async()=>{
       try{
-        await set(ref(db,"config/serverOnline"),true);
-        await onDisconnect(ref(db,"config/serverOnline")).set(false);
         show("adminPanel");
       }catch(e){console.error(e)}
     });
