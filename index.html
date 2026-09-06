@@ -126,6 +126,42 @@
       display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px;border-radius:14px;
       background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)
     }
+
+    .fight-wrap{
+      display:grid;grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr);
+      gap:16px;align-items:stretch;margin-top:18px
+    }
+    .fighter{
+      min-height:260px;border-radius:22px;padding:18px;
+      border:1px solid rgba(255,255,255,.10);
+      background:linear-gradient(160deg,rgba(124,58,237,.16),rgba(255,255,255,.04));
+      display:flex;flex-direction:column;justify-content:center
+    }
+    .fighter.right{
+      background:linear-gradient(200deg,rgba(6,182,212,.16),rgba(255,255,255,.04))
+    }
+    .fighter h2{font-size:clamp(24px,5vw,34px);margin-bottom:10px}
+    .fighter ul{list-style:none;display:grid;gap:7px}
+    .fighter li{color:#dbeafe;font-size:14px}
+    .vs{
+      display:grid;place-items:center;font-size:clamp(42px,8vw,70px);font-weight:1000;
+      letter-spacing:2px;text-shadow:0 10px 40px rgba(239,68,68,.35)
+    }
+    .other-teams{display:grid;gap:10px;margin-top:16px}
+    .turn-banner{
+      border-radius:16px;padding:14px;margin-bottom:14px;text-align:center;
+      border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.055)
+    }
+    .turn-banner strong{display:block;font-size:18px;margin-bottom:5px}
+    .turn-banner.your-turn{
+      border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10);color:#bbf7d0
+    }
+    .game-config{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px
+    }
+    .game-config .subcard{padding:12px}
+    .game-config strong{display:block;font-size:18px;margin-top:4px}
+
     #fx{pointer-events:none;position:fixed;inset:0;overflow:hidden;z-index:9999}
     .piece,.drop{position:absolute;top:-40px;animation-timing-function:linear;animation-fill-mode:forwards}
     .piece{font-size:22px;animation-name:fall}
@@ -133,7 +169,8 @@
     @keyframes fall{to{transform:translateY(115vh) rotate(720deg);opacity:.2}}
     @keyframes rain{to{transform:translateY(115vh);opacity:.3}}
     @media(max-width:700px){
-      body{padding:13px}.grid2,.grid3,.rooms{grid-template-columns:1fr}.card{padding:18px;border-radius:21px}
+      body{padding:13px}.grid2,.grid3,.rooms,.game-config{grid-template-columns:1fr}.card{padding:18px;border-radius:21px}
+      .fight-wrap{grid-template-columns:1fr;gap:10px}.vs{min-height:80px}.fighter{text-align:center;min-height:auto}
     }
   </style>
 </head>
@@ -247,6 +284,29 @@
         <input id="teamName" maxlength="24" placeholder="Ex.: Os Campeões">
       </div>
 
+      <div id="firstTeamConfig">
+        <div class="grid2">
+          <div class="fg">
+            <label>Quantidade de perguntas</label>
+            <select id="questionCount">
+              <option value="10" selected>10 perguntas</option>
+              <option value="20">20 perguntas</option>
+              <option value="40">40 perguntas</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Tempo para responder</label>
+            <select id="answerTime">
+              <option value="15" selected>15 segundos</option>
+              <option value="30">30 segundos</option>
+            </select>
+          </div>
+        </div>
+        <div id="gameConfigInfo" class="notice">
+          O primeiro técnico escolhe a quantidade de perguntas e o tempo. Os próximos times entram na mesma configuração.
+        </div>
+      </div>
+
       <button id="createTeam" class="btnp">Criar meu time e gerar código</button>
     </div>
   </section>
@@ -292,9 +352,12 @@
           <strong id="myInviteCode">------</strong>
         </div>
 
-        <button id="copyInvite" class="btnc">Copiar código para enviar no WhatsApp</button>
+        <button id="copyInvite" class="btnc">Copiar link + código para enviar no WhatsApp</button>
         <div style="height:10px"></div>
-        <button id="startAnyway" class="btny">Começar assim mesmo</button>
+        <button id="startAnyway" class="btny">Meu time está pronto / começar assim mesmo</button>
+        <div style="height:10px"></div>
+        <button id="startMatchNow" class="btng" style="display:none">Iniciar partida</button>
+        <div id="startMatchHint" class="notice" style="display:none;margin-top:10px"></div>
       </div>
 
       <div style="height:14px"></div>
@@ -315,8 +378,9 @@
         <h2 style="margin:12px 0 6px">Times prontos</h2>
         <p class="muted">Confira os participantes antes da primeira pergunta.</p>
       </div>
-      <div id="presentationRooms" class="rooms" style="margin-top:16px"></div>
-      <div id="presentationCountdown" class="codebox"><strong>5</strong></div>
+      <div id="presentationFight" class="fight-wrap"></div>
+      <div id="presentationOtherTeams" class="other-teams"></div>
+      <div id="presentationCountdown" class="codebox"><small>A partida começa em</small><strong>5</strong></div>
     </div>
   </section>
 
@@ -331,6 +395,10 @@
         <div id="quizTimer" class="timer">15</div>
       </div>
 
+      <div id="turnBanner" class="turn-banner">
+        <strong>Aguardando...</strong>
+        <span>O sistema vai indicar quem responde esta pergunta.</span>
+      </div>
       <div id="quizQuestion" class="question">Carregando...</div>
       <div id="quizAnswers" class="answers"></div>
       <div id="quizResult" style="display:none;margin-top:14px"></div>
@@ -382,7 +450,37 @@
     {q:"Qual cor surge da mistura de azul e amarelo?",a:["Verde","Roxo","Laranja","Vermelho"],c:0},
     {q:"Em qual planeta vivemos?",a:["Marte","Saturno","Terra","Mercúrio"],c:2},
     {q:"Quantos meses existem em um ano?",a:["10","11","12","13"],c:2},
-    {q:"Qual destes animais é um mamífero?",a:["Tubarão","Golfinho","Sardinha","Polvo"],c:1}
+    {q:"Qual destes animais é um mamífero?",a:["Tubarão","Golfinho","Sardinha","Polvo"],c:1},
+    {q:"Qual é o resultado de 8 x 7?",a:["54","56","58","64"],c:1},
+    {q:"Qual é o maior oceano do planeta?",a:["Atlântico","Índico","Pacífico","Ártico"],c:2},
+    {q:"Qual instrumento mede a temperatura?",a:["Barômetro","Termômetro","Velocímetro","Higrômetro"],c:1},
+    {q:"Qual é a moeda oficial do Brasil?",a:["Peso","Real","Dólar","Euro"],c:1},
+    {q:"Qual destes é um estado brasileiro?",a:["Lisboa","Paraná","Lima","Madri"],c:1},
+    {q:"Quantas horas tem um dia?",a:["12","18","24","30"],c:2},
+    {q:"Qual é o satélite natural da Terra?",a:["Sol","Lua","Marte","Vênus"],c:1},
+    {q:"Qual destes é um metal?",a:["Ferro","Vidro","Madeira","Plástico"],c:0},
+    {q:"Qual é o oposto de 'entrar'?",a:["Voltar","Sair","Subir","Abrir"],c:1},
+    {q:"Qual destes animais pode voar?",a:["Pinguim","Galinha","Águia","Avestruz"],c:2},
+    {q:"Quantos minutos tem uma hora?",a:["30","45","60","90"],c:2},
+    {q:"Qual estação vem depois do inverno?",a:["Outono","Primavera","Verão","Inverno"],c:1},
+    {q:"Qual destes é um continente?",a:["Amazonas","Europa","Sahara","Andes"],c:1},
+    {q:"Qual é a soma de 25 + 17?",a:["40","41","42","43"],c:2},
+    {q:"Qual órgão bombeia o sangue pelo corpo?",a:["Pulmão","Coração","Estômago","Rim"],c:1},
+    {q:"Qual destas opções é uma fruta?",a:["Batata","Cenoura","Banana","Alface"],c:2},
+    {q:"Qual gás respiramos em maior necessidade para viver?",a:["Oxigênio","Hélio","Hidrogênio","Neônio"],c:0},
+    {q:"Qual destes números é par?",a:["7","9","12","15"],c:2},
+    {q:"Quantos segundos tem um minuto?",a:["30","45","60","100"],c:2},
+    {q:"Qual é a primeira letra do alfabeto?",a:["A","B","C","D"],c:0},
+    {q:"Qual país é conhecido pelo formato de bota no mapa?",a:["Portugal","Itália","França","Grécia"],c:1},
+    {q:"Qual destes é um planeta?",a:["Lua","Júpiter","Sol","Andrômeda"],c:1},
+    {q:"Qual é o plural de 'cão'?",a:["Cãos","Cães","Cões","Cãoses"],c:1},
+    {q:"Qual destes esportes usa uma bola laranja e cesta?",a:["Futebol","Vôlei","Basquete","Tênis"],c:2},
+    {q:"Qual é a cor tradicional de uma esmeralda?",a:["Azul","Verde","Vermelha","Preta"],c:1},
+    {q:"Quantos lados possui um quadrado?",a:["3","4","5","6"],c:1},
+    {q:"Qual é o maior animal terrestre?",a:["Girafa","Elefante","Hipopótamo","Rinoceronte"],c:1},
+    {q:"Qual destes é usado para escrever?",a:["Lápis","Prato","Copo","Sapato"],c:0},
+    {q:"Qual é o resultado de 100 dividido por 4?",a:["20","25","30","40"],c:1},
+    {q:"Qual destas cores faz parte da bandeira do Brasil?",a:["Roxo","Rosa","Verde","Cinza"],c:2}
   ];
 
   const app = initializeApp(firebaseConfig);
@@ -511,6 +609,26 @@
     return Object.values(room?.members||{}).filter(Boolean);
   }
 
+  function orderedRoomMembers(room){
+    const members = roomMembers(room);
+    const coach = members.find(m=>m.role==="coach");
+    const players = members
+      .filter(m=>m.role==="player")
+      .sort((a,b)=>Number(a.joinedAt||0)-Number(b.joinedAt||0));
+    return [coach,...players].filter(Boolean);
+  }
+
+  function responderForQuestion(room,index){
+    const roster = orderedRoomMembers(room);
+    if(!roster.length) return null;
+    return roster[index % roster.length];
+  }
+
+  async function getGameSettings(){
+    const snap = await get(ref(db,"config/gameSettings"));
+    return snap.exists()?snap.val():null;
+  }
+
   function renderRooms(containerId,rooms,admin=false){
     const box=$(containerId);
     box.innerHTML="";
@@ -626,7 +744,8 @@
     for(const key of Object.keys(codes)) await remove(ref(db,`inviteCodes/${key}`));
     await remove(ref(db,"rooms"));
     await remove(ref(db,"game"));
-    alert("Salas limpas.");
+    await remove(ref(db,"config/gameSettings"));
+    alert("Salas e configuração da rodada limpas.");
   }
 
   async function createTeam(){
@@ -640,6 +759,18 @@
 
     const teamName=validateCleanField($("teamName").value,"o nome do time");
     if(!teamName) return;
+
+    let gameSettings=await getGameSettings();
+    if(!gameSettings){
+      gameSettings={
+        questionCount:Number($("questionCount").value||10),
+        answerTime:Number($("answerTime").value||15),
+        createdAt:Date.now()
+      };
+      if(![10,20,40].includes(gameSettings.questionCount)) gameSettings.questionCount=10;
+      if(![15,30].includes(gameSettings.answerTime)) gameSettings.answerTime=15;
+      await set(ref(db,"config/gameSettings"),gameSettings);
+    }
 
     await ensureAuth();
     user=auth.currentUser;
@@ -875,15 +1006,49 @@
 
     if(myRole==="coach"){
       $("startAnyway").style.display = room.ready ? "none" : "block";
+      updateStartMatchAvailability();
     }
+  }
+
+  async function updateStartMatchAvailability(){
+    if(myRole!=="coach"){
+      $("startMatchNow").style.display="none";
+      $("startMatchHint").style.display="none";
+      return;
+    }
+
+    const snap=await get(ref(db,"rooms"));
+    const rooms=snap.exists()?snap.val():{};
+    const occupied=Object.entries(rooms).filter(([_,r])=>r?.coachUid);
+    const ready=occupied.filter(([_,r])=>r?.ready===true);
+
+    if(occupied.length<2){
+      $("startMatchNow").style.display="none";
+      $("startMatchHint").style.display="block";
+      $("startMatchHint").textContent="Aguardando pelo menos mais 1 técnico criar outro time.";
+      return;
+    }
+
+    $("startMatchHint").style.display="block";
+
+    if(ready.length!==occupied.length){
+      $("startMatchNow").style.display="none";
+      $("startMatchHint").textContent=`Já existem ${occupied.length} times. Aguardando todos os técnicos marcarem seus times como prontos.`;
+      return;
+    }
+
+    $("startMatchNow").style.display="block";
+    $("startMatchHint").className="success";
+    $("startMatchHint").textContent=`${ready.length} times prontos. A partida já pode ser iniciada.`;
   }
 
   async function copyInvite(){
     const code=$("myInviteCode").textContent.trim();
-    const text=`Jogo dos Amigos - entre no meu time usando o código ${code}`;
+    const url=window.location.origin+window.location.pathname;
+    const text=`🎯 Jogo dos Amigos\nEntre no meu time pelo link:\n${url}\n\nCódigo do time: ${code}`;
     try{
       await navigator.clipboard.writeText(text);
-      alert("Convite copiado. Agora é só colar no WhatsApp.");
+      alert("Link + código copiados. Agora é só colar no WhatsApp.");
     }catch{
       prompt("Copie esta mensagem e envie pelo WhatsApp:",text);
     }
@@ -906,26 +1071,36 @@
       ready:true,
       readyAt:serverTimestamp()
     });
-
-    await maybeStartGame();
   }
 
   async function maybeStartGame(){
     const gameSnap=await get(ref(db,"game"));
-    if(gameSnap.exists() && ["presentation","playing"].includes(gameSnap.val()?.status)) return;
+    if(gameSnap.exists() && ["presentation","playing"].includes(gameSnap.val()?.status)){
+      alert("Já existe uma partida em andamento.");
+      return;
+    }
 
     const roomsSnap=await get(ref(db,"rooms"));
-    if(!roomsSnap.exists()) return;
+    if(!roomsSnap.exists()){
+      alert("Ainda não existem times.");
+      return;
+    }
 
     const rooms=roomsSnap.val();
     const occupied=Object.entries(rooms).filter(([_,r])=>r?.coachUid);
     const ready=occupied.filter(([_,r])=>r?.ready===true);
 
-    // Para haver disputa, pelo menos 2 times precisam estar prontos.
-    if(ready.length<2) return;
+    if(ready.length<2){
+      alert("Para iniciar, é preciso ter pelo menos 2 times prontos.");
+      return;
+    }
 
-    // Só começa quando todos os times atualmente ocupados estiverem prontos.
-    if(ready.length!==occupied.length) return;
+    if(ready.length!==occupied.length){
+      alert("Ainda existe time ocupado que não marcou que está pronto.");
+      return;
+    }
+
+    const cfg=await getGameSettings() || {questionCount:10,answerTime:15};
 
     const activeRooms={};
     ready.forEach(([id,r])=>{
@@ -942,8 +1117,8 @@
       presentationStart:Date.now()+offset,
       quiz:{
         index:0,
-        total:QUESTIONS.length,
-        duration:15,
+        total:Number(cfg.questionCount||10),
+        duration:Number(cfg.answerTime||15),
         resultReady:false,
         resultIndex:-1
       }
@@ -955,25 +1130,48 @@
 
     get(ref(db,"rooms")).then(snap=>{
       const rooms=snap.exists()?snap.val():{};
-      const box=$("presentationRooms");
-      box.innerHTML="";
+      const activeIds=Object.keys(game.activeRooms||{}).sort((a,b)=>Number(a)-Number(b));
+      const fight=$("presentationFight");
+      const others=$("presentationOtherTeams");
+      fight.innerHTML="";
+      others.innerHTML="";
 
-      Object.keys(game.activeRooms||{}).sort((a,b)=>Number(a)-Number(b)).forEach(id=>{
-        const room=rooms[id];
-        if(!room) return;
-        const ms=roomMembers(room);
-        const coach=ms.find(m=>m.role==="coach");
-        const players=ms.filter(m=>m.role==="player");
-
-        const div=document.createElement("div");
-        div.className="room ready";
-        div.innerHTML=`
-          <div class="row"><h3>${esc(room.teamName)}</h3><span class="pill p">Sala ${id}</span></div>
-          <p class="muted">🎧 ${esc(coach?.name||room.coachName)}</p>
-          <ul class="room-list">${players.map(p=>`<li>👤 ${esc(p.name)}</li>`).join("")}</ul>
+      const roomCard=(room,sideClass="")=>{
+        if(!room) return `<div class="fighter ${sideClass}"><h2>Aguardando...</h2></div>`;
+        const roster=orderedRoomMembers(room);
+        return `
+          <div class="fighter ${sideClass}">
+            <span class="pill p">Sala ${room.roomNumber}</span>
+            <h2>${esc(room.teamName)}</h2>
+            <ul>
+              ${roster.map(m=>`<li>${m.role==="coach"?"🎧 Técnico":"👤 Jogador"}: ${esc(m.name)}</li>`).join("")}
+            </ul>
+          </div>
         `;
-        box.appendChild(div);
-      });
+      };
+
+      if(activeIds.length>=2){
+        const left=rooms[activeIds[0]];
+        const right=rooms[activeIds[1]];
+        fight.innerHTML=roomCard(left)+`<div class="vs">VS</div>`+roomCard(right,"right");
+      }else if(activeIds.length===1){
+        fight.innerHTML=roomCard(rooms[activeIds[0]])+`<div class="vs">VS</div><div class="fighter right"><h2>Aguardando adversário</h2></div>`;
+      }
+
+      if(activeIds.length>2){
+        others.innerHTML=`<div class="notice center">Outros times nesta partida</div>`;
+        activeIds.slice(2).forEach(id=>{
+          const r=rooms[id];
+          const div=document.createElement("div");
+          div.className="room ready";
+          div.innerHTML=`
+            <div class="row"><h3>${esc(r.teamName)}</h3><span class="pill p">Sala ${id}</span></div>
+            <ul class="room-list">
+              ${orderedRoomMembers(r).map(m=>`<li>${m.role==="coach"?"🎧":"👤"} ${esc(m.name)}</li>`).join("")}
+            </ul>`;
+          others.appendChild(div);
+        });
+      }
     });
 
     const start=Number(game.presentationStart||Date.now()+offset);
@@ -981,7 +1179,7 @@
 
     const tick=async()=>{
       const remain=Math.max(0,Math.ceil((start+5000-(Date.now()+offset))/1000));
-      $("presentationCountdown").innerHTML=`<strong>${remain}</strong>`;
+      $("presentationCountdown").innerHTML=`<small>A partida começa em</small><strong>${remain}</strong>`;
       if(remain<=0){
         clearInterval(timerId);timerId=null;
         await tryBeginQuiz();
@@ -999,8 +1197,8 @@
       game.status="playing";
       game.quiz=game.quiz||{};
       game.quiz.index=0;
-      game.quiz.total=QUESTIONS.length;
-      game.quiz.duration=15;
+      game.quiz.total=Number(game.quiz.total||10);
+      game.quiz.duration=Number(game.quiz.duration||15);
       game.quiz.questionStart=Date.now()+offset;
       game.quiz.resultReady=false;
       game.quiz.resultIndex=-1;
@@ -1008,7 +1206,7 @@
     });
   }
 
-  function renderQuiz(game){
+  async function renderQuiz(game){
     if(!$("quizScreen").classList.contains("active")) show("quizScreen");
 
     const q=game.quiz||{};
@@ -1016,39 +1214,55 @@
     const question=QUESTIONS[index];
     if(!question) return;
 
-    get(ref(db,`rooms/${myRoom}`)).then(s=>{
-      if(s.exists()) $("quizTeamPill").textContent=s.val().teamName||`Sala ${myRoom}`;
-    });
+    const roomSnap=await get(ref(db,`rooms/${myRoom}`));
+    if(!roomSnap.exists()) return;
+    const room=roomSnap.val();
 
-    $("quizProgress").textContent=`Pergunta ${index+1} de ${q.total||QUESTIONS.length}`;
+    $("quizTeamPill").textContent=room.teamName||`Sala ${myRoom}`;
+    $("quizProgress").textContent=`Pergunta ${index+1} de ${q.total||10}`;
     $("quizQuestion").textContent=question.q;
 
-    renderAnswers(game,index,question);
+    const responder=responderForQuestion(room,index);
+    const isMyTurn=!!responder && responder.uid===user.uid;
+
+    if(responder){
+      if(isMyTurn){
+        $("turnBanner").className="turn-banner your-turn";
+        $("turnBanner").innerHTML=`<strong>É a sua vez!</strong><span>Você deve responder esta pergunta agora.</span>`;
+      }else{
+        const label=responder.role==="coach"?"técnico":"jogador";
+        $("turnBanner").className="turn-banner";
+        $("turnBanner").innerHTML=`<strong>Boa sorte ao ${label} ${esc(responder.name)}!</strong><span>Somente ${esc(responder.name)} responde esta pergunta pelo seu time.</span>`;
+      }
+    }
+
+    await renderAnswers(game,index,question,responder,isMyTurn);
     renderResult(game,index,question);
     startTimer(game);
   }
 
-  async function renderAnswers(game,index,question){
+  async function renderAnswers(game,index,question,responder,isMyTurn){
     const box=$("quizAnswers");
     box.innerHTML="";
 
     const voteSnap=await get(ref(db,`game/votes/${index}/${user.uid}`));
     const selected=voteSnap.exists()?Number(voteSnap.val()?.answer):-1;
-    const locked=game.quiz?.resultReady===true && Number(game.quiz?.resultIndex)===index;
+    const resultLocked=game.quiz?.resultReady===true && Number(game.quiz?.resultIndex)===index;
 
     question.a.forEach((opt,i)=>{
       const b=document.createElement("button");
       b.className="answer"+(selected===i?" selected":"");
-      b.disabled=locked;
+      b.disabled=resultLocked || !isMyTurn;
       b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${esc(opt)}`;
 
       b.onclick=async()=>{
-        if(remaining(game)<=0 || locked) return;
+        if(!isMyTurn || remaining(game)<=0 || resultLocked) return;
         await set(ref(db,`game/votes/${index}/${user.uid}`),{
           uid:user.uid,
           roomId:String(myRoom),
           answer:i,
           role:myRole,
+          responderUid:responder?.uid||user.uid,
           at:serverTimestamp()
         });
         [...box.children].forEach(x=>x.classList.remove("selected"));
@@ -1105,25 +1319,18 @@
       const room=rooms[roomId];
       if(!room) continue;
 
-      const roomVotes=Object.values(votes).filter(v=>v && String(v.roomId)===String(roomId));
-      const counts=[0,0,0,0];
-      roomVotes.forEach(v=>{
-        const a=Number(v.answer);
-        if(a>=0&&a<4) counts[a]++;
-      });
+      const responder=responderForQuestion(room,index);
+      const vote=responder ? votes[responder.uid] : null;
+      const official = vote && String(vote.roomId)===String(roomId) ? Number(vote.answer) : -1;
+      const correct = official===q.c;
 
-      const max=Math.max(...counts);
-      let official=counts.indexOf(max);
-
-      // Em empate, o voto do técnico desempata.
-      const tied=counts.map((n,i)=>n===max?i:-1).filter(i=>i>=0);
-      if(tied.length>1){
-        const coachVote=roomVotes.find(v=>v.role==="coach");
-        if(coachVote && tied.includes(Number(coachVote.answer))) official=Number(coachVote.answer);
-      }
-
-      const correct=official===q.c;
-      results[roomId]={answer:official,correct,counts};
+      results[roomId]={
+        answer:official,
+        correct,
+        responderUid:responder?.uid||null,
+        responderName:responder?.name||"",
+        responderRole:responder?.role||"player"
+      };
 
       if(correct){
         await runTransaction(ref(db,`rooms/${roomId}/score`),v=>Number(v||0)+1);
@@ -1152,11 +1359,15 @@
 
     if(result.correct){
       box.className="success";
-      box.innerHTML=`<strong>Seu time acertou! 🎉</strong><br>Resposta: ${String.fromCharCode(65+Number(result.answer))} - ${esc(q.a[Number(result.answer)])}`;
+      box.innerHTML=`<strong>Seu time acertou! 🎉</strong><br>${esc(result.responderName||"Participante")} respondeu: ${String.fromCharCode(65+Number(result.answer))} - ${esc(q.a[Number(result.answer)])}`;
       confetti();
     }else{
       box.className="danger";
-      box.innerHTML=`<strong>Seu time errou. 🌧️</strong><br>Resposta do time: ${String.fromCharCode(65+Number(result.answer))} - ${esc(q.a[Number(result.answer)])}<br>Correta: ${String.fromCharCode(65+q.c)} - ${esc(q.a[q.c])}`;
+      if(Number(result.answer)<0){
+        box.innerHTML=`<strong>Tempo esgotado. 🌧️</strong><br>${esc(result.responderName||"O participante da vez")} não respondeu a tempo.<br>Correta: ${String.fromCharCode(65+q.c)} - ${esc(q.a[q.c])}`;
+      }else{
+        box.innerHTML=`<strong>Seu time errou. 🌧️</strong><br>${esc(result.responderName||"Participante")} respondeu: ${String.fromCharCode(65+Number(result.answer))} - ${esc(q.a[Number(result.answer)])}<br>Correta: ${String.fromCharCode(65+q.c)} - ${esc(q.a[q.c])}`;
+      }
       rain();
     }
   }
@@ -1166,7 +1377,7 @@
       if(!game || game.status!=="playing") return game;
 
       const idx=Number(game.quiz?.index||0);
-      const total=Number(game.quiz?.total||QUESTIONS.length);
+      const total=Number(game.quiz?.total||10);
 
       if(!(game.quiz?.resultReady===true && Number(game.quiz?.resultIndex)===idx)) return game;
 
@@ -1242,13 +1453,31 @@
   $("adminLogout").onclick=adminLogout;
   $("resetRooms").onclick=resetAllRooms;
 
-  $("openCoach").onclick=()=>serverOnline?show("coachCreateScreen"):alert("Servidor desligado.");
+  $("openCoach").onclick=async()=>{
+      if(!serverOnline){alert("Servidor desligado.");return}
+      const cfg=await getGameSettings();
+      if(cfg){
+        $("questionCount").value=String(cfg.questionCount||10);
+        $("answerTime").value=String(cfg.answerTime||15);
+        $("questionCount").disabled=true;
+        $("answerTime").disabled=true;
+        $("gameConfigInfo").className="success";
+        $("gameConfigInfo").textContent=`Esta rodada já está configurada com ${cfg.questionCount} perguntas e ${cfg.answerTime} segundos por resposta.`;
+      }else{
+        $("questionCount").disabled=false;
+        $("answerTime").disabled=false;
+        $("gameConfigInfo").className="notice";
+        $("gameConfigInfo").textContent="Você é o primeiro técnico desta rodada. Escolha a quantidade de perguntas e o tempo para resposta.";
+      }
+      show("coachCreateScreen");
+    };
   $("openPlayer").onclick=()=>serverOnline?show("playerJoinScreen"):alert("Servidor desligado.");
 
   $("createTeam").onclick=createTeam;
   $("joinTeam").onclick=joinTeam;
   $("copyInvite").onclick=copyInvite;
   $("startAnyway").onclick=markReady;
+  $("startMatchNow").onclick=maybeStartGame;
   $("leaveTeam").onclick=leaveTeam;
   $("finalHome").onclick=leaveTeam;
 
