@@ -1,4 +1,4 @@
-  const QUESTIONS = [
+export const QUESTIONS = [
     {q:"Qual é o maior planeta do Sistema Solar?",a:["Terra","Marte","Júpiter","Vênus"],c:2},
     {q:"Qual animal é conhecido como o rei da selva?",a:["Leão","Elefante","Tigre","Urso"],c:0},
     {q:"Quantos dias tem uma semana?",a:["5","6","7","8"],c:2},
