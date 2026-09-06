@@ -5,317 +5,144 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jogo dos Amigos</title>
   <meta name="theme-color" content="#111827">
-
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg-1: #0f172a;
-      --bg-2: #111827;
-      --card: rgba(17, 24, 39, 0.90);
-      --card-border: rgba(255, 255, 255, 0.10);
-      --text: #f8fafc;
-      --muted: #cbd5e1;
-      --primary: #7c3aed;
-      --primary-2: #8b5cf6;
-      --secondary: #06b6d4;
-      --success: #22c55e;
-      --danger: #ef4444;
-      --warning: #f59e0b;
+      --bg-1:#0f172a; --bg-2:#111827; --card:rgba(17,24,39,.90);
+      --card-border:rgba(255,255,255,.10); --text:#f8fafc; --muted:#cbd5e1;
+      --primary:#7c3aed; --primary-2:#8b5cf6; --secondary:#06b6d4;
+      --success:#22c55e; --danger:#ef4444; --warning:#f59e0b;
     }
-
     body {
-      min-height: 100vh;
-      font-family: Arial, Helvetica, sans-serif;
-      color: var(--text);
+      min-height:100vh; font-family:Arial,Helvetica,sans-serif; color:var(--text);
       background:
-        radial-gradient(circle at top left, rgba(124, 58, 237, 0.28), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.20), transparent 35%),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2));
-      padding: 24px;
+        radial-gradient(circle at top left,rgba(124,58,237,.28),transparent 35%),
+        radial-gradient(circle at bottom right,rgba(6,182,212,.20),transparent 35%),
+        linear-gradient(135deg,var(--bg-1),var(--bg-2));
+      padding:24px;
     }
-
-    .app { width: min(100%, 760px); margin: 0 auto; }
-    .brand { text-align: center; margin: 26px 0 24px; }
-
+    .app { width:min(100%,760px); margin:0 auto; }
+    .brand { text-align:center; margin:26px 0 24px; }
     .logo {
-      width: 86px; height: 86px; margin: 0 auto 14px;
-      border-radius: 24px; display: grid; place-items: center;
-      font-size: 42px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      box-shadow: 0 18px 50px rgba(124, 58, 237, 0.35);
+      width:86px; height:86px; margin:0 auto 14px; border-radius:24px;
+      display:grid; place-items:center; font-size:42px;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      box-shadow:0 18px 50px rgba(124,58,237,.35);
     }
-
-    h1 { font-size: clamp(30px, 8vw, 46px); line-height: 1; margin-bottom: 10px; }
-    h2 { font-size: 24px; margin-bottom: 16px; }
-    h3 { font-size: 18px; margin-bottom: 12px; }
-
-    .subtitle {
-      color: var(--muted); font-size: 16px; line-height: 1.5;
-      max-width: 620px; margin: 0 auto;
+    h1 { font-size:clamp(30px,8vw,46px); line-height:1; margin-bottom:10px; }
+    h2 { font-size:24px; margin-bottom:16px; }
+    h3 { font-size:18px; margin-bottom:12px; }
+    .subtitle { color:var(--muted); font-size:16px; line-height:1.5; max-width:620px; margin:0 auto; }
+    .card,.quiz-card {
+      border:1px solid var(--card-border); background:var(--card); backdrop-filter:blur(14px);
+      border-radius:26px; padding:24px; box-shadow:0 24px 80px rgba(0,0,0,.35); margin-bottom:18px;
     }
-
-    .card {
-      border: 1px solid var(--card-border);
-      background: var(--card);
-      backdrop-filter: blur(14px);
-      border-radius: 26px;
-      padding: 24px;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-      margin-bottom: 18px;
-    }
-
     .status {
-      display: flex; align-items: center; gap: 10px;
-      min-height: 44px; padding: 10px 12px; margin-bottom: 18px;
-      border-radius: 14px; background: rgba(255,255,255,.06);
-      color: var(--muted); font-size: 14px;
+      display:flex; align-items:center; gap:10px; min-height:44px; padding:10px 12px;
+      margin-bottom:18px; border-radius:14px; background:rgba(255,255,255,.06);
+      color:var(--muted); font-size:14px;
     }
-
-    .status-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--warning); flex: 0 0 auto;
-      box-shadow: 0 0 0 5px rgba(245,158,11,.12);
-    }
-
-    .status.ok .status-dot { background: var(--success); box-shadow: 0 0 0 5px rgba(34,197,94,.12); }
-    .status.error .status-dot { background: var(--danger); box-shadow: 0 0 0 5px rgba(239,68,68,.12); }
-
-    .actions, .stack { display: grid; gap: 14px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
-
+    .status-dot { width:10px; height:10px; border-radius:50%; background:var(--warning); flex:0 0 auto; box-shadow:0 0 0 5px rgba(245,158,11,.12); }
+    .status.ok .status-dot { background:var(--success); box-shadow:0 0 0 5px rgba(34,197,94,.12); }
+    .status.error .status-dot { background:var(--danger); box-shadow:0 0 0 5px rgba(239,68,68,.12); }
+    .actions,.stack { display:grid; gap:14px; }
+    .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
     button {
-      width: 100%; border: 0; border-radius: 16px;
-      padding: 15px 18px; font-size: 16px; font-weight: 700;
-      cursor: pointer;
-      transition: transform .15s ease, filter .15s ease, opacity .15s ease;
+      width:100%; border:0; border-radius:16px; padding:15px 18px; font-size:16px; font-weight:700;
+      cursor:pointer; transition:transform .15s ease,filter .15s ease,opacity .15s ease;
     }
-
-    button:active { transform: scale(.985); }
-    button:disabled { cursor: not-allowed; opacity: .55; }
-
-    .btn-primary { color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary-2)); }
-    .btn-secondary { color: #fff; background: linear-gradient(135deg, #0891b2, var(--secondary)); }
-    .btn-success { color: #fff; background: #15803d; }
-    .btn-danger { color: #fff; background: #b91c1c; }
-    .btn-warning { color: #111827; background: #f59e0b; }
-    .btn-neutral { color: #fff; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.10); }
-
-    .small-btn { width: auto; padding: 10px 12px; font-size: 13px; border-radius: 12px; }
-
-    label {
-      display: block; color: var(--muted); font-size: 13px;
-      margin-bottom: 7px; font-weight: 700;
+    button:active { transform:scale(.985); }
+    button:disabled { cursor:not-allowed; opacity:.55; }
+    .btn-primary { color:#fff; background:linear-gradient(135deg,var(--primary),var(--primary-2)); }
+    .btn-secondary { color:#fff; background:linear-gradient(135deg,#0891b2,var(--secondary)); }
+    .btn-success { color:#fff; background:#15803d; }
+    .btn-danger { color:#fff; background:#b91c1c; }
+    .btn-warning { color:#111827; background:#f59e0b; }
+    .btn-neutral { color:#fff; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.10); }
+    .small-btn { width:auto; padding:10px 12px; font-size:13px; border-radius:12px; }
+    label { display:block; color:var(--muted); font-size:13px; margin-bottom:7px; font-weight:700; }
+    input,select {
+      width:100%; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.07);
+      color:var(--text); border-radius:14px; padding:14px 15px; outline:none; font-size:16px;
     }
-
-    input, select {
-      width: 100%; border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.07); color: var(--text);
-      border-radius: 14px; padding: 14px 15px;
-      outline: none; font-size: 16px;
-    }
-
-    select option { color: #111827; }
-    input:focus, select:focus {
-      border-color: rgba(139,92,246,.75);
-      box-shadow: 0 0 0 3px rgba(139,92,246,.15);
-    }
-
-    .form-group { margin-bottom: 15px; }
-
-    .hint {
-      text-align: center; margin-top: 18px; color: #94a3b8;
-      font-size: 13px; line-height: 1.45;
-    }
-
-    .technical {
-      margin-top: 14px; text-align: center; color: #64748b;
-      font-size: 11px; overflow-wrap: anywhere;
-    }
-
-    .screen { display: none; }
-    .screen.active { display: block; }
-
-    .topbar {
-      display: flex; gap: 12px; align-items: center;
-      justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap;
-    }
-
+    select option { color:#111827; }
+    input:focus,select:focus { border-color:rgba(139,92,246,.75); box-shadow:0 0 0 3px rgba(139,92,246,.15); }
+    .form-group { margin-bottom:15px; }
+    .hint { text-align:center; margin-top:18px; color:#94a3b8; font-size:13px; line-height:1.45; }
+    .technical { margin-top:14px; text-align:center; color:#64748b; font-size:11px; overflow-wrap:anywhere; }
+    .screen { display:none; }
+    .screen.active { display:block; }
+    .topbar { display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; }
     .room-code {
-      font-size: 34px; font-weight: 900; letter-spacing: 5px;
-      color: #fff; text-align: center;
-      background: linear-gradient(135deg, rgba(124,58,237,.35), rgba(6,182,212,.22));
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 18px; padding: 18px; margin: 10px 0 18px;
+      font-size:34px; font-weight:900; letter-spacing:5px; color:#fff; text-align:center;
+      background:linear-gradient(135deg,rgba(124,58,237,.35),rgba(6,182,212,.22));
+      border:1px solid rgba(255,255,255,.12); border-radius:18px; padding:18px; margin:10px 0 18px;
     }
-
     .pill {
-      display: inline-flex; align-items: center; gap: 7px;
-      border-radius: 999px; padding: 8px 11px; font-size: 12px;
-      font-weight: 800; background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.08); color: var(--muted);
+      display:inline-flex; align-items:center; gap:7px; border-radius:999px; padding:8px 11px;
+      font-size:12px; font-weight:800; background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08); color:var(--muted);
     }
-
-    .pill.on { color: #bbf7d0; background: rgba(34,197,94,.10); border-color: rgba(34,197,94,.25); }
-    .pill.off { color: #fecaca; background: rgba(239,68,68,.10); border-color: rgba(239,68,68,.25); }
-
-    .section-title {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 10px; margin-bottom: 12px;
-    }
-
-    .list { display: grid; gap: 10px; }
-
+    .pill.on { color:#bbf7d0; background:rgba(34,197,94,.10); border-color:rgba(34,197,94,.25); }
+    .pill.off { color:#fecaca; background:rgba(239,68,68,.10); border-color:rgba(239,68,68,.25); }
+    .section-title { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+    .list { display:grid; gap:10px; }
     .list-item {
-      background: rgba(255,255,255,.055);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 15px; padding: 13px;
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.08);
+      border-radius:15px; padding:13px; display:flex; align-items:center; justify-content:space-between; gap:12px;
     }
-
-    .list-item strong { display: block; margin-bottom: 3px; }
-    .list-item small { color: #94a3b8; }
-
-    .list-actions {
-      display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
-    }
-
-    .empty {
-      color: #94a3b8; text-align: center; padding: 18px 12px;
-      border: 1px dashed rgba(255,255,255,.12); border-radius: 14px;
-    }
-
-    .warning-box, .success-box, .danger-box {
-      padding: 14px; border-radius: 14px; line-height: 1.45;
-      font-size: 14px; margin-bottom: 14px;
-    }
-
-    .warning-box { background: rgba(245,158,11,.11); border: 1px solid rgba(245,158,11,.25); color: #fde68a; }
-    .success-box { background: rgba(34,197,94,.10); border: 1px solid rgba(34,197,94,.25); color: #bbf7d0; }
-    .danger-box { background: rgba(239,68,68,.10); border: 1px solid rgba(239,68,68,.25); color: #fecaca; }
-
-    .host-controls { display: grid; gap: 12px; margin-bottom: 18px; }
-
+    .list-item strong { display:block; margin-bottom:3px; }
+    .list-item small { color:#94a3b8; }
+    .list-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .empty { color:#94a3b8; text-align:center; padding:18px 12px; border:1px dashed rgba(255,255,255,.12); border-radius:14px; }
+    .warning-box,.success-box,.danger-box { padding:14px; border-radius:14px; line-height:1.45; font-size:14px; margin-bottom:14px; }
+    .warning-box { background:rgba(245,158,11,.11); border:1px solid rgba(245,158,11,.25); color:#fde68a; }
+    .success-box { background:rgba(34,197,94,.10); border:1px solid rgba(34,197,94,.25); color:#bbf7d0; }
+    .danger-box { background:rgba(239,68,68,.10); border:1px solid rgba(239,68,68,.25); color:#fecaca; }
+    .host-controls { display:grid; gap:12px; margin-bottom:18px; }
     .control-row {
-      background: rgba(255,255,255,.055);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 15px; padding: 14px;
-      display: grid; gap: 10px;
+      background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.08);
+      border-radius:15px; padding:14px; display:grid; gap:10px;
     }
-
-    .control-row p { color: #94a3b8; font-size: 13px; line-height: 1.45; }
-
-    .waiting-center { text-align: center; padding: 12px 0; }
-    .waiting-icon { font-size: 48px; margin-bottom: 10px; }
-    .muted { color: #94a3b8; }
-
-    /* PERGUNTAS */
-    .quiz-card {
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(17,24,39,.96);
-      border-radius: 24px;
-      padding: 22px;
-      box-shadow: 0 24px 80px rgba(0,0,0,.35);
-    }
-
-    .quiz-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-
+    .control-row p { color:#94a3b8; font-size:13px; line-height:1.45; }
+    .waiting-center { text-align:center; padding:12px 0; }
+    .waiting-icon { font-size:48px; margin-bottom:10px; }
+    .muted { color:#94a3b8; }
+    .quiz-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
     .timer {
-      min-width: 86px;
-      text-align: center;
-      font-size: 28px;
-      font-weight: 900;
-      padding: 10px 14px;
-      border-radius: 14px;
-      background: rgba(245,158,11,.12);
-      color: #fde68a;
-      border: 1px solid rgba(245,158,11,.25);
+      min-width:86px; text-align:center; font-size:28px; font-weight:900; padding:10px 14px;
+      border-radius:14px; background:rgba(245,158,11,.12); color:#fde68a; border:1px solid rgba(245,158,11,.25);
     }
-
-    .timer.danger {
-      background: rgba(239,68,68,.12);
-      color: #fecaca;
-      border-color: rgba(239,68,68,.25);
-    }
-
-    .question-text {
-      font-size: clamp(22px, 5vw, 32px);
-      font-weight: 800;
-      line-height: 1.3;
-      margin: 12px 0 18px;
-    }
-
-    .answers {
-      display: grid;
-      gap: 12px;
-    }
-
+    .timer.danger { background:rgba(239,68,68,.12); color:#fecaca; border-color:rgba(239,68,68,.25); }
+    .question-text { font-size:clamp(22px,5vw,32px); font-weight:800; line-height:1.3; margin:12px 0 18px; }
+    .answers { display:grid; gap:12px; }
     .answer-btn {
-      text-align: left;
-      padding: 16px;
-      border-radius: 15px;
-      background: rgba(255,255,255,.07);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,.10);
+      text-align:left; padding:16px; border-radius:15px; background:rgba(255,255,255,.07);
+      color:#fff; border:1px solid rgba(255,255,255,.10);
     }
-
-    .answer-btn.selected {
-      background: rgba(124,58,237,.30);
-      border-color: rgba(139,92,246,.70);
-      box-shadow: 0 0 0 3px rgba(139,92,246,.12);
-    }
-
-    .answer-btn.locked {
-      opacity: .62;
-      cursor: not-allowed;
-    }
-
+    .answer-btn.selected { background:rgba(124,58,237,.30); border-color:rgba(139,92,246,.70); box-shadow:0 0 0 3px rgba(139,92,246,.12); }
+    .answer-btn.locked { opacity:.62; cursor:not-allowed; }
     .answer-letter {
-      display: inline-grid;
-      place-items: center;
-      width: 30px;
-      height: 30px;
-      border-radius: 9px;
-      background: rgba(255,255,255,.10);
-      margin-right: 10px;
-      font-weight: 900;
+      display:inline-grid; place-items:center; width:30px; height:30px; border-radius:9px;
+      background:rgba(255,255,255,.10); margin-right:10px; font-weight:900;
     }
+    .quiz-note { margin-top:14px; text-align:center; color:#94a3b8; font-size:13px; }
+    .host-quiz-panel { margin-top:16px; display:grid; gap:10px; }
 
-    .quiz-note {
-      margin-top: 14px;
-      text-align: center;
-      color: #94a3b8;
-      font-size: 13px;
-    }
-
-    .host-quiz-panel {
-      margin-top: 16px;
-      display: grid;
-      gap: 10px;
-    }
-
-    @media (max-width: 640px) {
-      body { padding: 16px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .card { padding: 19px; border-radius: 22px; }
-      .room-code { font-size: 28px; }
-      .list-item { align-items: flex-start; flex-direction: column; }
-      .list-actions { width: 100%; }
-      .list-actions button { flex: 1; }
+    @media (max-width:640px) {
+      body { padding:16px; }
+      .grid-2 { grid-template-columns:1fr; }
+      .card,.quiz-card { padding:19px; border-radius:22px; }
+      .room-code { font-size:28px; }
+      .list-item { align-items:flex-start; flex-direction:column; }
+      .list-actions { width:100%; }
+      .list-actions button { flex:1; }
     }
   </style>
 </head>
 
 <body>
   <main class="app">
-
     <section class="brand">
       <div class="logo" aria-hidden="true">🎯</div>
       <h1>Jogo dos Amigos</h1>
@@ -325,126 +152,91 @@
       </p>
     </section>
 
-    <!-- HOME -->
     <section id="screenHome" class="screen active">
       <div class="card">
         <div id="firebaseStatus" class="status">
           <span class="status-dot"></span>
           <span id="firebaseStatusText">Conectando ao Firebase...</span>
         </div>
-
         <div class="actions">
           <button id="btnAbrirCriar" class="btn-primary" type="button" disabled>Criar partida</button>
           <button id="btnAbrirEntrar" class="btn-secondary" type="button" disabled>Entrar em partida</button>
         </div>
-
         <p class="hint">
           O responsável terá controle para aprovar participantes, bloquear jogadores,
           desligar a partida e iniciar as perguntas.
         </p>
-
         <p id="technicalInfo" class="technical"></p>
       </div>
     </section>
 
-    <!-- CRIAR -->
     <section id="screenCreate" class="screen">
       <div class="card">
         <div class="topbar">
           <h2>Criar partida</h2>
           <button class="btn-neutral small-btn" type="button" data-go-home>Voltar</button>
         </div>
-
         <div class="form-group">
           <label for="hostName">Nome do responsável</label>
           <input id="hostName" maxlength="24" placeholder="Ex.: Luigy">
         </div>
-
         <div class="form-group">
           <label for="matchName">Nome da partida</label>
           <input id="matchName" maxlength="40" placeholder="Ex.: Noite de Quiz">
         </div>
-
         <div class="grid-2">
           <div class="form-group">
             <label for="teamCount">Quantidade de times</label>
             <select id="teamCount">
-              <option value="2">2 times</option>
-              <option value="3">3 times</option>
-              <option value="4">4 times</option>
-              <option value="5">5 times</option>
-              <option value="6">6 times</option>
+              <option value="2">2 times</option><option value="3">3 times</option>
+              <option value="4">4 times</option><option value="5">5 times</option><option value="6">6 times</option>
             </select>
           </div>
-
           <div class="form-group">
             <label for="maxPlayers">Máximo de jogadores</label>
             <select id="maxPlayers">
-              <option value="6">6 jogadores</option>
-              <option value="10">10 jogadores</option>
-              <option value="15">15 jogadores</option>
-              <option value="20">20 jogadores</option>
-              <option value="30">30 jogadores</option>
-              <option value="50">50 jogadores</option>
+              <option value="6">6 jogadores</option><option value="10">10 jogadores</option>
+              <option value="15">15 jogadores</option><option value="20">20 jogadores</option>
+              <option value="30">30 jogadores</option><option value="50">50 jogadores</option>
             </select>
           </div>
         </div>
-
         <div class="grid-2">
           <div class="form-group">
             <label for="questionCount">Quantidade de perguntas</label>
-            <select id="questionCount">
-              <option value="5">5 perguntas</option>
-              <option value="10" selected>10 perguntas</option>
-            </select>
+            <select id="questionCount"><option value="5">5 perguntas</option><option value="10" selected>10 perguntas</option></select>
           </div>
-
           <div class="form-group">
             <label for="questionTime">Tempo por pergunta</label>
-            <select id="questionTime">
-              <option value="10" selected>10 segundos</option>
-              <option value="15">15 segundos</option>
-              <option value="20">20 segundos</option>
-            </select>
+            <select id="questionTime"><option value="10" selected>10 segundos</option><option value="15">15 segundos</option><option value="20">20 segundos</option></select>
           </div>
         </div>
-
         <div class="warning-box">
-          Para este teste, as perguntas já vêm no próprio código.
-          Depois que esta etapa estiver funcionando, colocaremos o banco grande de perguntas.
+          Nesta etapa, as perguntas já vêm no código para testarmos o sincronismo entre aparelhos.
         </div>
-
         <button id="btnCreateMatch" class="btn-primary" type="button">Criar partida agora</button>
       </div>
     </section>
 
-    <!-- ENTRAR -->
     <section id="screenJoin" class="screen">
       <div class="card">
         <div class="topbar">
           <h2>Entrar em partida</h2>
           <button class="btn-neutral small-btn" type="button" data-go-home>Voltar</button>
         </div>
-
         <div class="form-group">
           <label for="joinCode">Código da partida</label>
           <input id="joinCode" maxlength="6" placeholder="ABC123" autocomplete="off">
         </div>
-
         <div class="form-group">
           <label for="playerName">Seu nome ou apelido</label>
           <input id="playerName" maxlength="24" placeholder="Ex.: João">
         </div>
-
-        <div class="warning-box">
-          Sua entrada será enviada ao responsável. Você só entra depois que ele aprovar.
-        </div>
-
+        <div class="warning-box">Sua entrada será enviada ao responsável. Você só entra depois que ele aprovar.</div>
         <button id="btnRequestJoin" class="btn-secondary" type="button">Pedir permissão para entrar</button>
       </div>
     </section>
 
-    <!-- AGUARDANDO -->
     <section id="screenWaiting" class="screen">
       <div class="card">
         <div class="waiting-center">
@@ -452,26 +244,19 @@
           <h2>Aguardando autorização</h2>
           <p id="waitingText" class="muted">Seu pedido foi enviado ao responsável.</p>
         </div>
-
-        <div id="waitingStateBox" class="warning-box">
-          Não feche esta página. Quando o responsável aprovar, você entrará automaticamente.
-        </div>
-
+        <div id="waitingStateBox" class="warning-box">Não feche esta página. Quando o responsável aprovar, você entrará automaticamente.</div>
         <button id="btnCancelWaiting" class="btn-neutral" type="button">Cancelar e voltar</button>
       </div>
     </section>
 
-    <!-- SALA -->
     <section id="screenLobby" class="screen">
       <div class="card">
         <div class="topbar">
           <div><span id="rolePill" class="pill">Jogador</span></div>
           <button id="btnLeaveLobby" class="btn-neutral small-btn" type="button">Sair</button>
         </div>
-
         <h2 id="lobbyTitle">Partida</h2>
         <div id="roomCodeDisplay" class="room-code">------</div>
-
         <div id="gameStateMessage" class="success-box">Jogo liberado pelo responsável.</div>
 
         <div id="hostArea" style="display:none;">
@@ -486,19 +271,14 @@
               <p>Quando estiver desligado, ninguém poderá entrar ou continuar jogando até você liberar novamente.</p>
               <button id="btnToggleGame" class="btn-danger" type="button">Desligar jogo</button>
             </div>
-
             <div class="control-row">
               <strong>Novas entradas</strong>
               <p>Você pode fechar apenas a entrada de novos jogadores sem desligar a sala inteira.</p>
               <button id="btnToggleEntries" class="btn-warning" type="button">Bloquear novas entradas</button>
             </div>
-
             <div class="control-row">
               <strong>Perguntas de teste</strong>
-              <p>
-                Quando clicar em iniciar, todos os jogadores autorizados verão a mesma pergunta
-                e o mesmo cronômetro ao mesmo tempo.
-              </p>
+              <p>Todos os jogadores autorizados devem receber a mesma pergunta automaticamente.</p>
               <button id="btnStartQuestions" class="btn-primary" type="button">Iniciar perguntas</button>
             </div>
           </div>
@@ -507,11 +287,7 @@
             <h3>Pedidos aguardando aprovação</h3>
             <span id="pendingCount" class="pill">0 pedidos</span>
           </div>
-
-          <div id="pendingList" class="list">
-            <div class="empty">Nenhum pedido no momento.</div>
-          </div>
-
+          <div id="pendingList" class="list"><div class="empty">Nenhum pedido no momento.</div></div>
           <div style="height:18px;"></div>
         </div>
 
@@ -519,47 +295,30 @@
           <h3>Jogadores autorizados</h3>
           <span id="playerCount" class="pill">0 jogadores</span>
         </div>
-
-        <div id="playerList" class="list">
-          <div class="empty">Aguardando jogadores.</div>
-        </div>
+        <div id="playerList" class="list"><div class="empty">Aguardando jogadores.</div></div>
       </div>
     </section>
 
-    <!-- PERGUNTA -->
     <section id="screenQuiz" class="screen">
       <div class="quiz-card">
         <div class="quiz-head">
-          <div>
-            <span id="quizRolePill" class="pill">Jogador</span>
-          </div>
+          <div><span id="quizRolePill" class="pill">Jogador</span></div>
           <div id="timer" class="timer">10</div>
         </div>
-
         <div class="section-title">
           <h3 id="questionProgress">Pergunta 1 de 10</h3>
           <span id="quizRoomCode" class="pill">------</span>
         </div>
-
         <div id="questionText" class="question-text">Carregando pergunta...</div>
-
         <div id="answers" class="answers"></div>
-
-        <p id="quizNote" class="quiz-note">
-          Você pode mudar sua resposta enquanto o cronômetro estiver rodando.
-        </p>
+        <p id="quizNote" class="quiz-note">Você pode mudar sua resposta enquanto o cronômetro estiver rodando.</p>
 
         <div id="hostQuizPanel" class="host-quiz-panel" style="display:none;">
           <div class="warning-box">
-            Esta etapa é somente para testar se as perguntas aparecem sincronizadas.
-            A lógica dos times, responsável de cada time e pontuação virá na próxima etapa.
+            Este teste serve para confirmar que a pergunta abre em todos os aparelhos ao mesmo tempo.
           </div>
-          <button id="btnNextQuestion" class="btn-secondary" type="button">
-            Próxima pergunta agora
-          </button>
-          <button id="btnBackLobbyHost" class="btn-neutral" type="button">
-            Voltar para a sala
-          </button>
+          <button id="btnNextQuestion" class="btn-secondary" type="button">Próxima pergunta agora</button>
+          <button id="btnBackLobbyHost" class="btn-neutral" type="button">Voltar para a sala</button>
         </div>
       </div>
     </section>
@@ -568,9 +327,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-    import {
-      getDatabase, ref, get, set, update, remove, onValue, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+    import { getDatabase, ref, get, set, update, remove, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyD_-S0j1L-YVF6ynKiF8NcTU_4_pCn-S3Q",
@@ -583,56 +340,16 @@
     };
 
     const TEST_QUESTIONS = [
-      {
-        pergunta: "Qual é o maior planeta do Sistema Solar?",
-        opcoes: ["Terra", "Marte", "Júpiter", "Vênus"],
-        correta: 2
-      },
-      {
-        pergunta: "Qual animal é conhecido como o rei da selva?",
-        opcoes: ["Leão", "Elefante", "Tigre", "Urso"],
-        correta: 0
-      },
-      {
-        pergunta: "Quantos dias tem uma semana?",
-        opcoes: ["5", "6", "7", "8"],
-        correta: 2
-      },
-      {
-        pergunta: "Qual é a capital do Brasil?",
-        opcoes: ["Rio de Janeiro", "Brasília", "São Paulo", "Salvador"],
-        correta: 1
-      },
-      {
-        pergunta: "Qual oceano banha a maior parte do litoral brasileiro?",
-        opcoes: ["Pacífico", "Índico", "Atlântico", "Ártico"],
-        correta: 2
-      },
-      {
-        pergunta: "Quantos lados possui um triângulo?",
-        opcoes: ["2", "3", "4", "5"],
-        correta: 1
-      },
-      {
-        pergunta: "Qual destas cores é formada pela mistura de azul e amarelo?",
-        opcoes: ["Verde", "Roxo", "Laranja", "Vermelho"],
-        correta: 0
-      },
-      {
-        pergunta: "Em qual planeta vivemos?",
-        opcoes: ["Marte", "Saturno", "Terra", "Mercúrio"],
-        correta: 2
-      },
-      {
-        pergunta: "Quantos meses existem em um ano?",
-        opcoes: ["10", "11", "12", "13"],
-        correta: 2
-      },
-      {
-        pergunta: "Qual destes animais é um mamífero?",
-        opcoes: ["Tubarão", "Golfinho", "Sardinha", "Polvo"],
-        correta: 1
-      }
+      { pergunta:"Qual é o maior planeta do Sistema Solar?", opcoes:["Terra","Marte","Júpiter","Vênus"], correta:2 },
+      { pergunta:"Qual animal é conhecido como o rei da selva?", opcoes:["Leão","Elefante","Tigre","Urso"], correta:0 },
+      { pergunta:"Quantos dias tem uma semana?", opcoes:["5","6","7","8"], correta:2 },
+      { pergunta:"Qual é a capital do Brasil?", opcoes:["Rio de Janeiro","Brasília","São Paulo","Salvador"], correta:1 },
+      { pergunta:"Qual oceano banha a maior parte do litoral brasileiro?", opcoes:["Pacífico","Índico","Atlântico","Ártico"], correta:2 },
+      { pergunta:"Quantos lados possui um triângulo?", opcoes:["2","3","4","5"], correta:1 },
+      { pergunta:"Qual cor surge da mistura de azul e amarelo?", opcoes:["Verde","Roxo","Laranja","Vermelho"], correta:0 },
+      { pergunta:"Em qual planeta vivemos?", opcoes:["Marte","Saturno","Terra","Mercúrio"], correta:2 },
+      { pergunta:"Quantos meses existem em um ano?", opcoes:["10","11","12","13"], correta:2 },
+      { pergunta:"Qual destes animais é um mamífero?", opcoes:["Tubarão","Golfinho","Sardinha","Polvo"], correta:1 }
     ];
 
     const app = initializeApp(firebaseConfig);
@@ -642,62 +359,54 @@
     let currentUser = null;
     let currentRoomCode = null;
     let currentRole = null;
-
     let unsubscribeRoom = null;
     let unsubscribeRequest = null;
+    let unsubscribeQuiz = null;
     let timerInterval = null;
     let serverOffset = 0;
-    let currentQuizState = null;
+    let lastRenderedQuestionKey = "";
 
     onValue(ref(db, ".info/serverTimeOffset"), snap => {
       serverOffset = Number(snap.val() || 0);
     });
 
     const screens = {
-      home: document.getElementById("screenHome"),
-      create: document.getElementById("screenCreate"),
-      join: document.getElementById("screenJoin"),
-      waiting: document.getElementById("screenWaiting"),
-      lobby: document.getElementById("screenLobby"),
-      quiz: document.getElementById("screenQuiz")
+      home:document.getElementById("screenHome"),
+      create:document.getElementById("screenCreate"),
+      join:document.getElementById("screenJoin"),
+      waiting:document.getElementById("screenWaiting"),
+      lobby:document.getElementById("screenLobby"),
+      quiz:document.getElementById("screenQuiz")
     };
 
     const firebaseStatus = document.getElementById("firebaseStatus");
     const firebaseStatusText = document.getElementById("firebaseStatusText");
     const technicalInfo = document.getElementById("technicalInfo");
-
     const btnAbrirCriar = document.getElementById("btnAbrirCriar");
     const btnAbrirEntrar = document.getElementById("btnAbrirEntrar");
-
     const hostName = document.getElementById("hostName");
     const matchName = document.getElementById("matchName");
     const teamCount = document.getElementById("teamCount");
     const maxPlayers = document.getElementById("maxPlayers");
     const questionCount = document.getElementById("questionCount");
     const questionTime = document.getElementById("questionTime");
-
     const joinCode = document.getElementById("joinCode");
     const playerName = document.getElementById("playerName");
-
     const waitingText = document.getElementById("waitingText");
     const waitingStateBox = document.getElementById("waitingStateBox");
-
     const rolePill = document.getElementById("rolePill");
     const lobbyTitle = document.getElementById("lobbyTitle");
     const roomCodeDisplay = document.getElementById("roomCodeDisplay");
     const gameStateMessage = document.getElementById("gameStateMessage");
-
     const hostArea = document.getElementById("hostArea");
     const hostStatusPill = document.getElementById("hostStatusPill");
     const btnToggleGame = document.getElementById("btnToggleGame");
     const btnToggleEntries = document.getElementById("btnToggleEntries");
     const btnStartQuestions = document.getElementById("btnStartQuestions");
-
     const pendingCount = document.getElementById("pendingCount");
     const pendingList = document.getElementById("pendingList");
     const playerCount = document.getElementById("playerCount");
     const playerList = document.getElementById("playerList");
-
     const quizRolePill = document.getElementById("quizRolePill");
     const timer = document.getElementById("timer");
     const questionProgress = document.getElementById("questionProgress");
@@ -710,820 +419,529 @@
     function showScreen(name) {
       Object.values(screens).forEach(screen => screen.classList.remove("active"));
       screens[name].classList.add("active");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({top:0,behavior:"smooth"});
     }
 
-    function setFirebaseStatus(type, text) {
-      firebaseStatus.className = "status" + (type ? " " + type : "");
-      firebaseStatusText.textContent = text;
+    function setFirebaseStatus(type,text) {
+      firebaseStatus.className="status"+(type?" "+type:"");
+      firebaseStatusText.textContent=text;
     }
 
-    function cleanName(value) {
-      return value.trim().replace(/\s+/g, " ").slice(0, 24);
-    }
-
-    function cleanMatchName(value) {
-      return value.trim().replace(/\s+/g, " ").slice(0, 40);
-    }
-
-    function cleanCode(value) {
-      return value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
-    }
+    function cleanName(value) { return value.trim().replace(/\s+/g," ").slice(0,24); }
+    function cleanMatchName(value) { return value.trim().replace(/\s+/g," ").slice(0,40); }
+    function cleanCode(value) { return value.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6); }
 
     function generateCode() {
-      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-      let result = "";
-      for (let i = 0; i < 6; i++) {
-        result += chars[Math.floor(Math.random() * chars.length)];
-      }
+      const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let result="";
+      for(let i=0;i<6;i++) result+=chars[Math.floor(Math.random()*chars.length)];
       return result;
     }
 
     async function generateUniqueCode() {
-      for (let i = 0; i < 20; i++) {
-        const code = generateCode();
-        const snap = await get(ref(db, `partidas/${code}`));
-        if (!snap.exists()) return code;
+      for(let i=0;i<20;i++) {
+        const code=generateCode();
+        const snap=await get(ref(db,`partidas/${code}`));
+        if(!snap.exists()) return code;
       }
       throw new Error("Não foi possível gerar um código único agora.");
     }
 
-    function stopRoomListeners() {
-      if (typeof unsubscribeRoom === "function") {
-        unsubscribeRoom();
-        unsubscribeRoom = null;
-      }
-      if (typeof unsubscribeRequest === "function") {
-        unsubscribeRequest();
-        unsubscribeRequest = null;
-      }
+    function stopListeners() {
+      if(typeof unsubscribeRoom==="function"){unsubscribeRoom();unsubscribeRoom=null;}
+      if(typeof unsubscribeRequest==="function"){unsubscribeRequest();unsubscribeRequest=null;}
+      if(typeof unsubscribeQuiz==="function"){unsubscribeQuiz();unsubscribeQuiz=null;}
     }
 
     function stopTimer() {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-      }
+      if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
     }
 
     async function isCurrentUserHost(code) {
-      const snap = await get(ref(db, `partidas/${code}/hostUid`));
-      return snap.exists() && snap.val() === currentUser.uid;
+      const snap=await get(ref(db,`partidas/${code}/hostUid`));
+      return snap.exists()&&snap.val()===currentUser.uid;
     }
 
     async function createMatch() {
-      const responsibleName = cleanName(hostName.value);
-      const title = cleanMatchName(matchName.value);
+      const responsibleName=cleanName(hostName.value);
+      const title=cleanMatchName(matchName.value);
+      if(!responsibleName){alert("Digite o nome do responsável.");return;}
+      if(!title){alert("Digite o nome da partida.");return;}
 
-      if (!responsibleName) {
-        alert("Digite o nome do responsável.");
-        return;
-      }
-
-      if (!title) {
-        alert("Digite o nome da partida.");
-        return;
-      }
-
-      const button = document.getElementById("btnCreateMatch");
-      button.disabled = true;
-      button.textContent = "Criando...";
+      const button=document.getElementById("btnCreateMatch");
+      button.disabled=true; button.textContent="Criando...";
 
       try {
-        const code = await generateUniqueCode();
+        const code=await generateUniqueCode();
 
-        const roomData = {
-          codigo: code,
-          nome: title,
-          hostUid: currentUser.uid,
-          hostNome: responsibleName,
-          criadoEm: serverTimestamp(),
-          status: "aguardando",
-          jogoLigado: true,
-          entradasAbertas: true,
-          exigirAprovacao: true,
-          configuracoes: {
-            quantidadeTimes: Number(teamCount.value),
-            maxJogadores: Number(maxPlayers.value),
-            quantidadePerguntas: Number(questionCount.value),
-            tempoPergunta: Number(questionTime.value)
+        await set(ref(db,`partidas/${code}`),{
+          codigo:code, nome:title, hostUid:currentUser.uid, hostNome:responsibleName,
+          criadoEm:serverTimestamp(), status:"aguardando", jogoLigado:true,
+          entradasAbertas:true, exigirAprovacao:true,
+          configuracoes:{
+            quantidadeTimes:Number(teamCount.value),
+            maxJogadores:Number(maxPlayers.value),
+            quantidadePerguntas:Number(questionCount.value),
+            tempoPergunta:Number(questionTime.value)
           },
-          quiz: {
-            ativo: false,
-            indice: 0
-          }
-        };
-
-        await set(ref(db, `partidas/${code}`), roomData);
-
-        await set(ref(db, `partidas/${code}/jogadores/${currentUser.uid}`), {
-          uid: currentUser.uid,
-          nome: responsibleName,
-          papel: "host",
-          autorizado: true,
-          entrouEm: serverTimestamp()
+          quiz:{ativo:false,indice:0}
         });
 
-        currentRoomCode = code;
-        currentRole = "host";
-        openLobby(code, "host");
+        await set(ref(db,`partidas/${code}/jogadores/${currentUser.uid}`),{
+          uid:currentUser.uid,nome:responsibleName,papel:"host",autorizado:true,entrouEm:serverTimestamp()
+        });
 
-      } catch (error) {
+        currentRoomCode=code; currentRole="host";
+        openLobby(code,"host");
+      } catch(error) {
         console.error(error);
-        alert("Não foi possível criar a partida. " + (error.message || error));
+        alert("Não foi possível criar a partida. "+(error.message||error));
       } finally {
-        button.disabled = false;
-        button.textContent = "Criar partida agora";
+        button.disabled=false; button.textContent="Criar partida agora";
       }
     }
 
     async function requestJoin() {
-      const code = cleanCode(joinCode.value);
-      const name = cleanName(playerName.value);
+      const code=cleanCode(joinCode.value);
+      const name=cleanName(playerName.value);
+      joinCode.value=code;
+      if(code.length!==6){alert("Digite o código de 6 caracteres da partida.");return;}
+      if(!name){alert("Digite seu nome ou apelido.");return;}
 
-      joinCode.value = code;
-
-      if (code.length !== 6) {
-        alert("Digite o código de 6 caracteres da partida.");
-        return;
-      }
-
-      if (!name) {
-        alert("Digite seu nome ou apelido.");
-        return;
-      }
-
-      const button = document.getElementById("btnRequestJoin");
-      button.disabled = true;
-      button.textContent = "Enviando pedido...";
+      const button=document.getElementById("btnRequestJoin");
+      button.disabled=true; button.textContent="Enviando pedido...";
 
       try {
-        const roomSnap = await get(ref(db, `partidas/${code}`));
+        const roomSnap=await get(ref(db,`partidas/${code}`));
+        if(!roomSnap.exists()){alert("Partida não encontrada.");return;}
+        const room=roomSnap.val();
 
-        if (!roomSnap.exists()) {
-          alert("Partida não encontrada.");
-          return;
-        }
+        if(!room.jogoLigado){alert("O responsável desligou esta partida.");return;}
+        if(!room.entradasAbertas){alert("O responsável bloqueou novas entradas nesta partida.");return;}
 
-        const room = roomSnap.val();
+        const blockedSnap=await get(ref(db,`partidas/${code}/bloqueados/${currentUser.uid}`));
+        if(blockedSnap.exists()&&blockedSnap.val()===true){alert("Seu acesso foi bloqueado pelo responsável desta partida.");return;}
 
-        if (!room.jogoLigado) {
-          alert("O responsável desligou esta partida.");
-          return;
-        }
-
-        if (!room.entradasAbertas) {
-          alert("O responsável bloqueou novas entradas nesta partida.");
-          return;
-        }
-
-        const blockedSnap = await get(ref(db, `partidas/${code}/bloqueados/${currentUser.uid}`));
-
-        if (blockedSnap.exists() && blockedSnap.val() === true) {
-          alert("Seu acesso foi bloqueado pelo responsável desta partida.");
-          return;
-        }
-
-        const playersSnap = await get(ref(db, `partidas/${code}/jogadores`));
-        const players = playersSnap.exists() ? playersSnap.val() : {};
-        const approvedPlayers = Object.values(players).filter(p => p && p.autorizado).length;
-
-        if (approvedPlayers >= Number(room.configuracoes?.maxJogadores || 999)) {
-          alert("Esta partida já atingiu o limite de jogadores.");
-          return;
-        }
-
-        await set(ref(db, `partidas/${code}/pedidos/${currentUser.uid}`), {
-          uid: currentUser.uid,
-          nome: name,
-          status: "pendente",
-          solicitadoEm: serverTimestamp()
+        await set(ref(db,`partidas/${code}/pedidos/${currentUser.uid}`),{
+          uid:currentUser.uid,nome:name,status:"pendente",solicitadoEm:serverTimestamp()
         });
 
-        currentRoomCode = code;
-        currentRole = "waiting";
-
-        waitingText.textContent = `Pedido enviado para a partida ${code}.`;
-        waitingStateBox.className = "warning-box";
-        waitingStateBox.textContent = "Aguardando o responsável autorizar sua entrada.";
-
+        currentRoomCode=code; currentRole="waiting";
+        waitingText.textContent=`Pedido enviado para a partida ${code}.`;
+        waitingStateBox.className="warning-box";
+        waitingStateBox.textContent="Aguardando o responsável autorizar sua entrada.";
         showScreen("waiting");
-        listenOwnRequest(code, name);
-
-      } catch (error) {
+        listenOwnRequest(code,name);
+      } catch(error) {
         console.error(error);
-        alert("Não foi possível solicitar entrada. " + (error.message || error));
+        alert("Não foi possível solicitar entrada. "+(error.message||error));
       } finally {
-        button.disabled = false;
-        button.textContent = "Pedir permissão para entrar";
+        button.disabled=false; button.textContent="Pedir permissão para entrar";
       }
     }
 
-    function listenOwnRequest(code, name) {
-      if (typeof unsubscribeRequest === "function") unsubscribeRequest();
+    function listenOwnRequest(code,name) {
+      if(typeof unsubscribeRequest==="function") unsubscribeRequest();
 
-      const requestRef = ref(db, `partidas/${code}/pedidos/${currentUser.uid}`);
+      unsubscribeRequest=onValue(ref(db,`partidas/${code}/pedidos/${currentUser.uid}`),async snap=>{
+        if(!snap.exists()) return;
+        const request=snap.val();
 
-      unsubscribeRequest = onValue(requestRef, async snap => {
-        if (!snap.exists()) return;
-
-        const request = snap.val();
-
-        if (request.status === "aprovado") {
-          await set(ref(db, `partidas/${code}/jogadores/${currentUser.uid}`), {
-            uid: currentUser.uid,
-            nome: name,
-            papel: "jogador",
-            autorizado: true,
-            entrouEm: serverTimestamp()
+        if(request.status==="aprovado"){
+          await set(ref(db,`partidas/${code}/jogadores/${currentUser.uid}`),{
+            uid:currentUser.uid,nome:name,papel:"jogador",autorizado:true,entrouEm:serverTimestamp()
           });
-
-          if (typeof unsubscribeRequest === "function") {
-            unsubscribeRequest();
-            unsubscribeRequest = null;
-          }
-
-          currentRole = "player";
-          openLobby(code, "player");
+          if(typeof unsubscribeRequest==="function"){unsubscribeRequest();unsubscribeRequest=null;}
+          currentRole="player";
+          openLobby(code,"player");
         }
 
-        if (request.status === "bloqueado") {
-          waitingStateBox.className = "danger-box";
-          waitingStateBox.textContent = "O responsável bloqueou sua entrada nesta partida.";
-        }
-      });
-
-      const roomRef = ref(db, `partidas/${code}`);
-
-      if (typeof unsubscribeRoom === "function") unsubscribeRoom();
-
-      unsubscribeRoom = onValue(roomRef, snap => {
-        if (!snap.exists()) {
-          waitingStateBox.className = "danger-box";
-          waitingStateBox.textContent = "A partida não existe mais.";
-          return;
-        }
-
-        const room = snap.val();
-
-        if (!room.jogoLigado) {
-          waitingStateBox.className = "danger-box";
-          waitingStateBox.textContent = "O responsável desligou a partida.";
-        } else if (!room.entradasAbertas) {
-          waitingStateBox.className = "warning-box";
-          waitingStateBox.textContent = "O responsável fechou novas entradas. Seu pedido continua aguardando.";
+        if(request.status==="bloqueado"){
+          waitingStateBox.className="danger-box";
+          waitingStateBox.textContent="O responsável bloqueou sua entrada nesta partida.";
         }
       });
     }
 
-    function openLobby(code, role) {
-      stopRoomListeners();
+    function openLobby(code,role) {
+      stopListeners();
       stopTimer();
+      lastRenderedQuestionKey="";
 
-      currentRoomCode = code;
-      currentRole = role;
-
-      rolePill.textContent = role === "host" ? "Responsável" : "Jogador";
-      rolePill.className = role === "host" ? "pill on" : "pill";
-      hostArea.style.display = role === "host" ? "block" : "none";
-      roomCodeDisplay.textContent = code;
-
+      currentRoomCode=code; currentRole=role;
+      rolePill.textContent=role==="host"?"Responsável":"Jogador";
+      rolePill.className=role==="host"?"pill on":"pill";
+      hostArea.style.display=role==="host"?"block":"none";
+      roomCodeDisplay.textContent=code;
       showScreen("lobby");
 
-      const roomRef = ref(db, `partidas/${code}`);
-
-      unsubscribeRoom = onValue(roomRef, snap => {
-        if (!snap.exists()) {
+      unsubscribeRoom=onValue(ref(db,`partidas/${code}`),snap=>{
+        if(!snap.exists()){
           alert("Esta partida foi encerrada ou removida.");
-          stopRoomListeners();
-          currentRoomCode = null;
-          currentRole = null;
-          showScreen("home");
+          stopListeners(); currentRoomCode=null; currentRole=null; showScreen("home");
           return;
         }
+        const room=snap.val();
+        renderLobby(room);
+      });
 
-        const room = snap.val();
+      // CORREÇÃO PRINCIPAL:
+      // cada aparelho escuta diretamente o nó /quiz, independente do listener da sala.
+      unsubscribeQuiz=onValue(ref(db,`partidas/${code}/quiz`),async quizSnap=>{
+        if(!quizSnap.exists()) return;
 
-        if (room.quiz?.ativo) {
-          renderQuiz(room);
+        const quiz=quizSnap.val();
+
+        if(quiz.ativo===true){
+          const roomSnap=await get(ref(db,`partidas/${code}`));
+          if(roomSnap.exists()) renderQuiz(roomSnap.val());
         } else {
-          renderLobby(room);
+          stopTimer();
+          lastRenderedQuestionKey="";
+          if(currentRoomCode===code && !screens.lobby.classList.contains("active")){
+            showScreen("lobby");
+          }
         }
       });
     }
 
     function renderLobby(room) {
-      lobbyTitle.textContent = room.nome || "Partida";
+      lobbyTitle.textContent=room.nome||"Partida";
 
-      if (room.jogoLigado) {
-        gameStateMessage.className = "success-box";
-        gameStateMessage.textContent = "Jogo liberado pelo responsável.";
+      if(room.jogoLigado){
+        gameStateMessage.className="success-box";
+        gameStateMessage.textContent="Jogo liberado pelo responsável.";
       } else {
-        gameStateMessage.className = "danger-box";
-        gameStateMessage.textContent = "JOGO DESLIGADO PELO RESPONSÁVEL.";
+        gameStateMessage.className="danger-box";
+        gameStateMessage.textContent="JOGO DESLIGADO PELO RESPONSÁVEL.";
       }
 
-      if (currentRole === "host") {
-        if (room.jogoLigado) {
-          hostStatusPill.className = "pill on";
-          hostStatusPill.textContent = "Jogo ligado";
-          btnToggleGame.className = "btn-danger";
-          btnToggleGame.textContent = "Desligar jogo";
+      if(currentRole==="host"){
+        if(room.jogoLigado){
+          hostStatusPill.className="pill on"; hostStatusPill.textContent="Jogo ligado";
+          btnToggleGame.className="btn-danger"; btnToggleGame.textContent="Desligar jogo";
         } else {
-          hostStatusPill.className = "pill off";
-          hostStatusPill.textContent = "Jogo desligado";
-          btnToggleGame.className = "btn-success";
-          btnToggleGame.textContent = "Ligar jogo";
+          hostStatusPill.className="pill off"; hostStatusPill.textContent="Jogo desligado";
+          btnToggleGame.className="btn-success"; btnToggleGame.textContent="Ligar jogo";
         }
 
-        if (room.entradasAbertas) {
-          btnToggleEntries.className = "btn-warning";
-          btnToggleEntries.textContent = "Bloquear novas entradas";
+        if(room.entradasAbertas){
+          btnToggleEntries.className="btn-warning"; btnToggleEntries.textContent="Bloquear novas entradas";
         } else {
-          btnToggleEntries.className = "btn-success";
-          btnToggleEntries.textContent = "Liberar novas entradas";
+          btnToggleEntries.className="btn-success"; btnToggleEntries.textContent="Liberar novas entradas";
         }
 
-        renderPending(room.pedidos || {}, room);
+        renderPending(room.pedidos||{},room);
       }
 
-      renderPlayers(room.jogadores || {});
+      renderPlayers(room.jogadores||{});
     }
 
-    function renderPending(requests, room) {
-      const entries = Object.values(requests).filter(item => item && item.status === "pendente");
+    function renderPending(requests,room) {
+      const entries=Object.values(requests).filter(item=>item&&item.status==="pendente");
+      pendingCount.textContent=`${entries.length} ${entries.length===1?"pedido":"pedidos"}`;
 
-      pendingCount.textContent = `${entries.length} ${entries.length === 1 ? "pedido" : "pedidos"}`;
-
-      if (!entries.length) {
-        pendingList.innerHTML = `<div class="empty">Nenhum pedido no momento.</div>`;
+      if(!entries.length){
+        pendingList.innerHTML=`<div class="empty">Nenhum pedido no momento.</div>`;
         return;
       }
 
-      pendingList.innerHTML = "";
+      pendingList.innerHTML="";
+      entries.forEach(request=>{
+        const item=document.createElement("div"); item.className="list-item";
+        const info=document.createElement("div");
+        info.innerHTML=`<strong>${escapeHtml(request.nome||"Jogador")}</strong><small>Aguardando sua autorização</small>`;
 
-      entries.forEach(request => {
-        const item = document.createElement("div");
-        item.className = "list-item";
+        const actions=document.createElement("div"); actions.className="list-actions";
+        const approveButton=document.createElement("button");
+        approveButton.className="btn-success small-btn"; approveButton.textContent="Aprovar";
+        approveButton.disabled=!room.jogoLigado;
+        approveButton.addEventListener("click",()=>approvePlayer(request.uid));
 
-        const info = document.createElement("div");
-        info.innerHTML = `
-          <strong>${escapeHtml(request.nome || "Jogador")}</strong>
-          <small>Aguardando sua autorização</small>
-        `;
+        const blockButton=document.createElement("button");
+        blockButton.className="btn-danger small-btn"; blockButton.textContent="Bloquear";
+        blockButton.addEventListener("click",()=>blockPlayer(request.uid));
 
-        const actions = document.createElement("div");
-        actions.className = "list-actions";
-
-        const approveButton = document.createElement("button");
-        approveButton.className = "btn-success small-btn";
-        approveButton.textContent = "Aprovar";
-        approveButton.disabled = !room.jogoLigado;
-        approveButton.addEventListener("click", () => approvePlayer(request.uid));
-
-        const blockButton = document.createElement("button");
-        blockButton.className = "btn-danger small-btn";
-        blockButton.textContent = "Bloquear";
-        blockButton.addEventListener("click", () => blockPlayer(request.uid));
-
-        actions.append(approveButton, blockButton);
-        item.append(info, actions);
-        pendingList.appendChild(item);
+        actions.append(approveButton,blockButton); item.append(info,actions); pendingList.appendChild(item);
       });
     }
 
     function renderPlayers(players) {
-      const entries = Object.values(players).filter(player => player && player.autorizado);
+      const entries=Object.values(players).filter(player=>player&&player.autorizado);
+      playerCount.textContent=`${entries.length} ${entries.length===1?"jogador":"jogadores"}`;
 
-      playerCount.textContent = `${entries.length} ${entries.length === 1 ? "jogador" : "jogadores"}`;
+      if(!entries.length){playerList.innerHTML=`<div class="empty">Aguardando jogadores.</div>`;return;}
 
-      if (!entries.length) {
-        playerList.innerHTML = `<div class="empty">Aguardando jogadores.</div>`;
-        return;
-      }
-
-      entries.sort((a,b) => {
-        if (a.papel === "host") return -1;
-        if (b.papel === "host") return 1;
-        return (a.nome || "").localeCompare(b.nome || "");
+      entries.sort((a,b)=>{
+        if(a.papel==="host") return -1;
+        if(b.papel==="host") return 1;
+        return (a.nome||"").localeCompare(b.nome||"");
       });
 
-      playerList.innerHTML = "";
-
-      entries.forEach(player => {
-        const item = document.createElement("div");
-        item.className = "list-item";
-
-        const info = document.createElement("div");
-        info.innerHTML = `
-          <strong>${escapeHtml(player.nome || "Jogador")}</strong>
-          <small>${player.papel === "host" ? "Responsável da partida" : "Jogador autorizado"}</small>
-        `;
-
+      playerList.innerHTML="";
+      entries.forEach(player=>{
+        const item=document.createElement("div"); item.className="list-item";
+        const info=document.createElement("div");
+        info.innerHTML=`<strong>${escapeHtml(player.nome||"Jogador")}</strong><small>${player.papel==="host"?"Responsável da partida":"Jogador autorizado"}</small>`;
         item.appendChild(info);
 
-        if (currentRole === "host" && player.papel !== "host" && player.uid !== currentUser.uid) {
-          const actions = document.createElement("div");
-          actions.className = "list-actions";
-
-          const blockButton = document.createElement("button");
-          blockButton.className = "btn-danger small-btn";
-          blockButton.textContent = "Bloquear jogador";
-          blockButton.addEventListener("click", () => blockPlayer(player.uid));
-
-          actions.appendChild(blockButton);
-          item.appendChild(actions);
+        if(currentRole==="host"&&player.papel!=="host"&&player.uid!==currentUser.uid){
+          const actions=document.createElement("div"); actions.className="list-actions";
+          const blockButton=document.createElement("button");
+          blockButton.className="btn-danger small-btn"; blockButton.textContent="Bloquear jogador";
+          blockButton.addEventListener("click",()=>blockPlayer(player.uid));
+          actions.appendChild(blockButton); item.appendChild(actions);
         }
-
         playerList.appendChild(item);
       });
     }
 
     async function approvePlayer(uid) {
-      try {
-        if (!(await isCurrentUserHost(currentRoomCode))) {
-          alert("Somente o responsável pode aprovar jogadores.");
-          return;
-        }
+      if(!(await isCurrentUserHost(currentRoomCode))){alert("Somente o responsável pode aprovar jogadores.");return;}
+      const requestSnap=await get(ref(db,`partidas/${currentRoomCode}/pedidos/${uid}`));
+      if(!requestSnap.exists()) return;
+      const request=requestSnap.val();
 
-        const requestSnap = await get(ref(db, `partidas/${currentRoomCode}/pedidos/${uid}`));
-        if (!requestSnap.exists()) return;
-
-        const request = requestSnap.val();
-
-        await update(ref(db, `partidas/${currentRoomCode}/pedidos/${uid}`), {
-          status: "aprovado",
-          aprovadoEm: serverTimestamp()
-        });
-
-        await set(ref(db, `partidas/${currentRoomCode}/jogadores/${uid}`), {
-          uid,
-          nome: request.nome || "Jogador",
-          papel: "jogador",
-          autorizado: true,
-          entrouEm: serverTimestamp()
-        });
-
-      } catch (error) {
-        console.error(error);
-        alert("Não foi possível aprovar o jogador.");
-      }
+      await update(ref(db,`partidas/${currentRoomCode}/pedidos/${uid}`),{status:"aprovado",aprovadoEm:serverTimestamp()});
+      await set(ref(db,`partidas/${currentRoomCode}/jogadores/${uid}`),{
+        uid,nome:request.nome||"Jogador",papel:"jogador",autorizado:true,entrouEm:serverTimestamp()
+      });
     }
 
     async function blockPlayer(uid) {
-      if (!confirm("Deseja realmente bloquear este jogador nesta partida?")) return;
+      if(!confirm("Deseja realmente bloquear este jogador nesta partida?")) return;
+      if(!(await isCurrentUserHost(currentRoomCode))){alert("Somente o responsável pode bloquear jogadores.");return;}
 
-      try {
-        if (!(await isCurrentUserHost(currentRoomCode))) {
-          alert("Somente o responsável pode bloquear jogadores.");
-          return;
-        }
-
-        await set(ref(db, `partidas/${currentRoomCode}/bloqueados/${uid}`), true);
-
-        await update(ref(db, `partidas/${currentRoomCode}/pedidos/${uid}`), {
-          status: "bloqueado",
-          bloqueadoEm: serverTimestamp()
-        });
-
-        await remove(ref(db, `partidas/${currentRoomCode}/jogadores/${uid}`));
-
-      } catch (error) {
-        console.error(error);
-        alert("Não foi possível bloquear o jogador.");
-      }
+      await set(ref(db,`partidas/${currentRoomCode}/bloqueados/${uid}`),true);
+      await update(ref(db,`partidas/${currentRoomCode}/pedidos/${uid}`),{status:"bloqueado",bloqueadoEm:serverTimestamp()});
+      await remove(ref(db,`partidas/${currentRoomCode}/jogadores/${uid}`));
     }
 
     async function toggleGame() {
-      try {
-        if (!(await isCurrentUserHost(currentRoomCode))) {
-          alert("Somente o responsável pode ligar ou desligar o jogo.");
-          return;
-        }
-
-        const snap = await get(ref(db, `partidas/${currentRoomCode}/jogoLigado`));
-        const current = snap.exists() ? !!snap.val() : false;
-
-        await update(ref(db, `partidas/${currentRoomCode}`), {
-          jogoLigado: !current,
-          alteradoEm: serverTimestamp()
-        });
-
-      } catch (error) {
-        console.error(error);
-        alert("Não foi possível alterar o estado do jogo.");
-      }
+      if(!(await isCurrentUserHost(currentRoomCode))){alert("Somente o responsável pode ligar ou desligar o jogo.");return;}
+      const snap=await get(ref(db,`partidas/${currentRoomCode}/jogoLigado`));
+      await update(ref(db,`partidas/${currentRoomCode}`),{jogoLigado:!(snap.exists()?!!snap.val():false),alteradoEm:serverTimestamp()});
     }
 
     async function toggleEntries() {
-      try {
-        if (!(await isCurrentUserHost(currentRoomCode))) {
-          alert("Somente o responsável pode controlar novas entradas.");
-          return;
-        }
-
-        const snap = await get(ref(db, `partidas/${currentRoomCode}/entradasAbertas`));
-        const current = snap.exists() ? !!snap.val() : false;
-
-        await update(ref(db, `partidas/${currentRoomCode}`), {
-          entradasAbertas: !current,
-          alteradoEm: serverTimestamp()
-        });
-
-      } catch (error) {
-        console.error(error);
-        alert("Não foi possível alterar as entradas.");
-      }
+      if(!(await isCurrentUserHost(currentRoomCode))){alert("Somente o responsável pode controlar novas entradas.");return;}
+      const snap=await get(ref(db,`partidas/${currentRoomCode}/entradasAbertas`));
+      await update(ref(db,`partidas/${currentRoomCode}`),{entradasAbertas:!(snap.exists()?!!snap.val():false),alteradoEm:serverTimestamp()});
     }
 
     async function startQuestions() {
       try {
-        if (!(await isCurrentUserHost(currentRoomCode))) {
-          alert("Somente o responsável pode iniciar as perguntas.");
-          return;
-        }
+        if(!(await isCurrentUserHost(currentRoomCode))){alert("Somente o responsável pode iniciar as perguntas.");return;}
 
-        const roomSnap = await get(ref(db, `partidas/${currentRoomCode}`));
-        if (!roomSnap.exists()) return;
+        const roomSnap=await get(ref(db,`partidas/${currentRoomCode}`));
+        if(!roomSnap.exists()) return;
+        const room=roomSnap.val();
 
-        const room = roomSnap.val();
+        if(!room.jogoLigado){alert("Ligue o jogo antes de iniciar as perguntas.");return;}
 
-        if (!room.jogoLigado) {
-          alert("Ligue o jogo antes de iniciar as perguntas.");
-          return;
-        }
+        const total=Math.min(Number(room.configuracoes?.quantidadePerguntas||10),TEST_QUESTIONS.length);
 
-        const total = Math.min(
-          Number(room.configuracoes?.quantidadePerguntas || 10),
-          TEST_QUESTIONS.length
-        );
-
-        await update(ref(db, `partidas/${currentRoomCode}/quiz`), {
-          ativo: true,
-          indice: 0,
-          total,
-          inicioPergunta: serverTimestamp(),
-          duracao: Number(room.configuracoes?.tempoPergunta || 10),
-          encerrado: false
+        // primeiro grava o estado base
+        await update(ref(db,`partidas/${currentRoomCode}/quiz`),{
+          ativo:true, indice:0, total,
+          duracao:Number(room.configuracoes?.tempoPergunta||10),
+          inicioPergunta:Date.now()+serverOffset,
+          iniciadoPor:currentUser.uid,
+          encerrado:false
         });
 
-      } catch (error) {
+      } catch(error) {
         console.error(error);
-        alert("Não foi possível iniciar as perguntas.");
+        alert("Não foi possível iniciar as perguntas. "+(error.message||error));
       }
     }
 
-    function renderQuiz(room) {
-      if (!room.quiz?.ativo) return;
+    async function renderQuiz(room) {
+      const quiz=room.quiz||{};
+      if(!quiz.ativo) return;
 
-      currentQuizState = room.quiz;
+      const index=Number(quiz.indice||0);
+      const total=Number(quiz.total||1);
+      const question=TEST_QUESTIONS[index];
 
-      const index = Number(room.quiz.indice || 0);
-      const total = Number(room.quiz.total || 1);
-      const question = TEST_QUESTIONS[index];
-
-      if (!question) {
-        showQuizFinished(room);
+      if(!question){
+        await finishQuiz();
         return;
       }
 
-      if (!screens.quiz.classList.contains("active")) {
+      const renderKey=`${index}-${quiz.inicioPergunta||0}`;
+
+      if(!screens.quiz.classList.contains("active")){
         showScreen("quiz");
       }
 
-      quizRolePill.textContent = currentRole === "host" ? "Responsável" : "Jogador";
-      quizRolePill.className = currentRole === "host" ? "pill on" : "pill";
-      quizRoomCode.textContent = currentRoomCode;
-      questionProgress.textContent = `Pergunta ${index + 1} de ${total}`;
-      questionText.textContent = question.pergunta;
-      hostQuizPanel.style.display = currentRole === "host" ? "grid" : "none";
+      quizRolePill.textContent=currentRole==="host"?"Responsável":"Jogador";
+      quizRolePill.className=currentRole==="host"?"pill on":"pill";
+      quizRoomCode.textContent=currentRoomCode;
+      questionProgress.textContent=`Pergunta ${index+1} de ${total}`;
+      questionText.textContent=question.pergunta;
+      hostQuizPanel.style.display=currentRole==="host"?"grid":"none";
 
-      renderAnswerButtons(room, question, index);
+      if(lastRenderedQuestionKey!==renderKey){
+        lastRenderedQuestionKey=renderKey;
+        await renderAnswerButtons(room,question,index);
+      }
+
       startCountdown(room);
     }
 
-    async function renderAnswerButtons(room, question, index) {
-      answers.innerHTML = "";
+    async function renderAnswerButtons(room,question,index) {
+      answers.innerHTML="";
+      let selected=null;
 
-      let selected = null;
-
-      if (currentRole === "player") {
-        const voteSnap = await get(
-          ref(db, `partidas/${currentRoomCode}/votos/${index}/${currentUser.uid}`)
-        );
-        if (voteSnap.exists()) {
-          selected = voteSnap.val()?.resposta ?? null;
-        }
+      if(currentRole==="player"){
+        const voteSnap=await get(ref(db,`partidas/${currentRoomCode}/votos/${index}/${currentUser.uid}`));
+        if(voteSnap.exists()) selected=voteSnap.val()?.resposta??null;
       }
 
-      question.opcoes.forEach((option, i) => {
-        const button = document.createElement("button");
-        button.className = "answer-btn";
-        button.innerHTML = `<span class="answer-letter">${String.fromCharCode(65+i)}</span>${escapeHtml(option)}`;
+      question.opcoes.forEach((option,i)=>{
+        const button=document.createElement("button");
+        button.className="answer-btn";
+        button.innerHTML=`<span class="answer-letter">${String.fromCharCode(65+i)}</span>${escapeHtml(option)}`;
+        if(selected===i) button.classList.add("selected");
 
-        if (selected === i) {
-          button.classList.add("selected");
-        }
-
-        if (currentRole === "host") {
-          button.disabled = true;
-          button.classList.add("locked");
+        if(currentRole==="host"){
+          button.disabled=true; button.classList.add("locked");
         } else {
-          button.addEventListener("click", async () => {
-            const remaining = getRemainingSeconds(room);
-
-            if (remaining <= 0) return;
-
-            await set(
-              ref(db, `partidas/${currentRoomCode}/votos/${index}/${currentUser.uid}`),
-              {
-                uid: currentUser.uid,
-                resposta: i,
-                atualizadoEm: serverTimestamp()
-              }
-            );
-
-            Array.from(answers.children).forEach(el => el.classList.remove("selected"));
+          button.addEventListener("click",async()=>{
+            if(getRemainingSeconds(room)<=0) return;
+            await set(ref(db,`partidas/${currentRoomCode}/votos/${index}/${currentUser.uid}`),{
+              uid:currentUser.uid,resposta:i,atualizadoEm:serverTimestamp()
+            });
+            Array.from(answers.children).forEach(el=>el.classList.remove("selected"));
             button.classList.add("selected");
           });
         }
-
         answers.appendChild(button);
       });
 
-      quizNote.textContent =
-        currentRole === "host"
-          ? "O responsável acompanha o teste. Nesta etapa ele não vota."
-          : "Você pode mudar sua resposta enquanto o cronômetro estiver rodando.";
+      quizNote.textContent=currentRole==="host"
+        ?"O responsável acompanha o teste. Nesta etapa ele não vota."
+        :"Você pode mudar sua resposta enquanto o cronômetro estiver rodando.";
     }
 
     function getRemainingSeconds(room) {
-      const start = Number(room.quiz?.inicioPergunta || 0);
-      const duration = Number(room.quiz?.duracao || 10);
-      const now = Date.now() + serverOffset;
-      const end = start + duration * 1000;
-      return Math.max(0, Math.ceil((end - now) / 1000));
+      const start=Number(room.quiz?.inicioPergunta||0);
+      const duration=Number(room.quiz?.duracao||10);
+      const now=Date.now()+serverOffset;
+      return Math.max(0,Math.ceil(((start+duration*1000)-now)/1000));
     }
 
     function startCountdown(room) {
       stopTimer();
 
-      const updateTimer = async () => {
-        const remaining = getRemainingSeconds(room);
+      const tick=()=>{
+        const remaining=getRemainingSeconds(room);
+        timer.textContent=String(remaining);
+        timer.className=remaining<=3?"timer danger":"timer";
 
-        timer.textContent = String(remaining);
-        timer.className = remaining <= 3 ? "timer danger" : "timer";
-
-        if (remaining <= 0) {
+        if(remaining<=0){
           stopTimer();
+          Array.from(answers.children).forEach(button=>{button.disabled=true;button.classList.add("locked");});
+          quizNote.textContent="Tempo encerrado.";
 
-          Array.from(answers.children).forEach(button => {
-            button.disabled = true;
-            button.classList.add("locked");
-          });
-
-          quizNote.textContent = "Tempo encerrado.";
-
-          if (currentRole === "host") {
-            setTimeout(() => {
-              advanceQuestion();
-            }, 1200);
+          if(currentRole==="host"){
+            setTimeout(()=>advanceQuestion(),1000);
           }
         }
       };
 
-      updateTimer();
-      timerInterval = setInterval(updateTimer, 250);
+      tick();
+      timerInterval=setInterval(tick,250);
     }
 
     async function advanceQuestion() {
-      try {
-        if (!(await isCurrentUserHost(currentRoomCode))) return;
+      if(!(await isCurrentUserHost(currentRoomCode))) return;
 
-        const quizSnap = await get(ref(db, `partidas/${currentRoomCode}/quiz`));
-        if (!quizSnap.exists()) return;
+      const quizSnap=await get(ref(db,`partidas/${currentRoomCode}/quiz`));
+      if(!quizSnap.exists()) return;
 
-        const quiz = quizSnap.val();
-        const nextIndex = Number(quiz.indice || 0) + 1;
-        const total = Number(quiz.total || 1);
+      const quiz=quizSnap.val();
+      const nextIndex=Number(quiz.indice||0)+1;
+      const total=Number(quiz.total||1);
 
-        if (nextIndex >= total) {
-          await update(ref(db, `partidas/${currentRoomCode}/quiz`), {
-            ativo: false,
-            encerrado: true,
-            finalizadoEm: serverTimestamp()
-          });
+      if(nextIndex>=total){
+        await finishQuiz();
+        return;
+      }
 
-          alert("Teste de perguntas concluído.");
-          return;
-        }
+      await update(ref(db,`partidas/${currentRoomCode}/quiz`),{
+        indice:nextIndex,
+        inicioPergunta:Date.now()+serverOffset
+      });
+    }
 
-        await update(ref(db, `partidas/${currentRoomCode}/quiz`), {
-          indice: nextIndex,
-          inicioPergunta: serverTimestamp()
+    async function finishQuiz() {
+      if(currentRole==="host"){
+        await update(ref(db,`partidas/${currentRoomCode}/quiz`),{
+          ativo:false,encerrado:true,finalizadoEm:serverTimestamp()
         });
-
-      } catch (error) {
-        console.error(error);
+        alert("Teste de perguntas concluído.");
       }
     }
 
-    function showQuizFinished(room) {
-      stopTimer();
-      alert("Perguntas concluídas.");
-      showScreen("lobby");
-    }
-
     async function backToLobbyAsHost() {
-      if (currentRole !== "host") return;
-
-      await update(ref(db, `partidas/${currentRoomCode}/quiz`), {
-        ativo: false
-      });
+      if(currentRole!=="host") return;
+      await update(ref(db,`partidas/${currentRoomCode}/quiz`),{ativo:false});
     }
 
     function escapeHtml(text) {
       return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
 
-    btnAbrirCriar.addEventListener("click", () => showScreen("create"));
-    btnAbrirEntrar.addEventListener("click", () => showScreen("join"));
+    btnAbrirCriar.addEventListener("click",()=>showScreen("create"));
+    btnAbrirEntrar.addEventListener("click",()=>showScreen("join"));
+    document.querySelectorAll("[data-go-home]").forEach(button=>button.addEventListener("click",()=>showScreen("home")));
+    document.getElementById("btnCreateMatch").addEventListener("click",createMatch);
+    document.getElementById("btnRequestJoin").addEventListener("click",requestJoin);
 
-    document.querySelectorAll("[data-go-home]").forEach(button => {
-      button.addEventListener("click", () => showScreen("home"));
+    document.getElementById("btnCancelWaiting").addEventListener("click",()=>{
+      stopListeners(); stopTimer(); currentRoomCode=null; currentRole=null; showScreen("home");
     });
 
-    document.getElementById("btnCreateMatch").addEventListener("click", createMatch);
-    document.getElementById("btnRequestJoin").addEventListener("click", requestJoin);
-
-    document.getElementById("btnCancelWaiting").addEventListener("click", () => {
-      stopRoomListeners();
-      stopTimer();
-      currentRoomCode = null;
-      currentRole = null;
-      showScreen("home");
-    });
-
-    document.getElementById("btnLeaveLobby").addEventListener("click", async () => {
-      if (currentRoomCode && currentRole === "player") {
-        try {
-          await remove(ref(db, `partidas/${currentRoomCode}/jogadores/${currentUser.uid}`));
-        } catch (error) {
-          console.error(error);
-        }
+    document.getElementById("btnLeaveLobby").addEventListener("click",async()=>{
+      if(currentRoomCode&&currentRole==="player"){
+        try{await remove(ref(db,`partidas/${currentRoomCode}/jogadores/${currentUser.uid}`));}catch(error){console.error(error);}
       }
-
-      stopRoomListeners();
-      stopTimer();
-      currentRoomCode = null;
-      currentRole = null;
-      showScreen("home");
+      stopListeners(); stopTimer(); currentRoomCode=null; currentRole=null; showScreen("home");
     });
 
-    btnToggleGame.addEventListener("click", toggleGame);
-    btnToggleEntries.addEventListener("click", toggleEntries);
-    btnStartQuestions.addEventListener("click", startQuestions);
+    btnToggleGame.addEventListener("click",toggleGame);
+    btnToggleEntries.addEventListener("click",toggleEntries);
+    btnStartQuestions.addEventListener("click",startQuestions);
+    document.getElementById("btnNextQuestion").addEventListener("click",advanceQuestion);
+    document.getElementById("btnBackLobbyHost").addEventListener("click",backToLobbyAsHost);
 
-    document.getElementById("btnNextQuestion").addEventListener("click", advanceQuestion);
-    document.getElementById("btnBackLobbyHost").addEventListener("click", backToLobbyAsHost);
+    joinCode.addEventListener("input",()=>{joinCode.value=cleanCode(joinCode.value);});
 
-    joinCode.addEventListener("input", () => {
-      joinCode.value = cleanCode(joinCode.value);
-    });
+    onAuthStateChanged(auth,async user=>{
+      if(!user) return;
+      currentUser=user;
 
-    onAuthStateChanged(auth, async user => {
-      if (!user) return;
-
-      currentUser = user;
-
-      try {
-        await set(ref(db, `testesConexao/${user.uid}`), {
-          ok: true,
-          atualizadoEm: serverTimestamp()
-        });
-
-        setFirebaseStatus("ok", "Firebase conectado com sucesso.");
-        technicalInfo.textContent = `Identificação temporária do aparelho: ${user.uid}`;
-        btnAbrirCriar.disabled = false;
-        btnAbrirEntrar.disabled = false;
-
-      } catch (error) {
+      try{
+        await set(ref(db,`testesConexao/${user.uid}`),{ok:true,atualizadoEm:serverTimestamp()});
+        setFirebaseStatus("ok","Firebase conectado com sucesso.");
+        technicalInfo.textContent=`Identificação temporária do aparelho: ${user.uid}`;
+        btnAbrirCriar.disabled=false; btnAbrirEntrar.disabled=false;
+      }catch(error){
         console.error(error);
-        setFirebaseStatus("error", "Autenticou, mas não conseguiu gravar no Realtime Database.");
-        technicalInfo.textContent = error.message || String(error);
+        setFirebaseStatus("error","Autenticou, mas não conseguiu gravar no Realtime Database.");
+        technicalInfo.textContent=error.message||String(error);
       }
     });
 
-    if (!auth.currentUser) {
-      signInAnonymously(auth).catch(error => {
+    if(!auth.currentUser){
+      signInAnonymously(auth).catch(error=>{
         console.error(error);
-        setFirebaseStatus("error", "Não foi possível fazer a autenticação anônima.");
-        technicalInfo.textContent = error.message || String(error);
+        setFirebaseStatus("error","Não foi possível fazer a autenticação anônima.");
+        technicalInfo.textContent=error.message||String(error);
       });
     }
   </script>
