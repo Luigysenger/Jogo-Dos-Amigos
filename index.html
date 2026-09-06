@@ -1,1 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo dos Amigos</title>
+  <meta name="theme-color" content="#111827">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
+    :root {
+      --bg-1: #0f172a;
+      --bg-2: #111827;
+      --card: rgba(17, 24, 39, 0.88);
+      --card-border: rgba(255, 255, 255, 0.10);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --primary: #7c3aed;
+      --primary-2: #8b5cf6;
+      --secondary: #06b6d4;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.28), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(6, 182, 212, 0.20), transparent 35%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .app {
+      width: min(100%, 520px);
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 14px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 18px 50px rgba(124, 58, 237, 0.35);
+    }
+
+    h1 {
+      font-size: clamp(30px, 8vw, 46px);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .card {
+      border: 1px solid var(--card-border);
+      background: var(--card);
+      backdrop-filter: blur(14px);
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 10px 12px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--warning);
+      flex: 0 0 auto;
+      box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.12);
+    }
+
+    .status.ok .status-dot {
+      background: var(--success);
+      box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.12);
+    }
+
+    .status.error .status-dot {
+      background: var(--danger);
+      box-shadow: 0 0 0 5px rgba(239, 68, 68, 0.12);
+    }
+
+    .actions {
+      display: grid;
+      gap: 14px;
+    }
+
+    button {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 17px 18px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s ease, filter .15s ease, opacity .15s ease;
+    }
+
+    button:active {
+      transform: scale(0.985);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+    }
+
+    .btn-secondary {
+      color: white;
+      background: linear-gradient(135deg, #0891b2, var(--secondary));
+    }
+
+    .hint {
+      text-align: center;
+      margin-top: 18px;
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .technical {
+      margin-top: 14px;
+      text-align: center;
+      color: #64748b;
+      font-size: 11px;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        align-items: stretch;
+        padding: 18px;
+      }
+
+      .app {
+        margin: auto;
+      }
+
+      .card {
+        padding: 20px;
+        border-radius: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="brand">
+      <div class="logo" aria-hidden="true">🎯</div>
+      <h1>Jogo dos Amigos</h1>
+      <p class="subtitle">
+        Quiz multiplayer por times. Entre pelo celular, participe da votação e ajude seu time a vencer.
+      </p>
+    </section>
+
+    <section class="card">
+      <div id="firebaseStatus" class="status">
+        <span class="status-dot"></span>
+        <span id="firebaseStatusText">Conectando ao Firebase...</span>
+      </div>
+
+      <div class="actions">
+        <button id="btnCriar" class="btn-primary" type="button" disabled>
+          Criar partida
+        </button>
+
+        <button id="btnEntrar" class="btn-secondary" type="button" disabled>
+          Entrar em partida
+        </button>
+      </div>
+
+      <p class="hint">
+        Nesta primeira etapa, vamos apenas confirmar que o site abre corretamente
+        e que a conexão segura com o Firebase está funcionando.
+      </p>
+
+      <p id="technicalInfo" class="technical"></p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+    import {
+      getAuth,
+      signInAnonymously,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+    import {
+      getDatabase,
+      ref,
+      set,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD-_S0j1L-YVF6ynKiF8NcTU_4_pCn-S3Q",
+      authDomain: "jogo-dos-amigos-ca3f5.firebaseapp.com",
+      databaseURL: "https://jogo-dos-amigos-ca3f5-default-rtdb.firebaseio.com",
+      projectId: "jogo-dos-amigos-ca3f5",
+      storageBucket: "jogo-dos-amigos-ca3f5.firebasestorage.app",
+      messagingSenderId: "817678231030",
+      appId: "1:817678231030:web:1e406c32d15e0ec7a953d7"
+    };
+
+    const statusBox = document.getElementById("firebaseStatus");
+    const statusText = document.getElementById("firebaseStatusText");
+    const technicalInfo = document.getElementById("technicalInfo");
+    const btnCriar = document.getElementById("btnCriar");
+    const btnEntrar = document.getElementById("btnEntrar");
+
+    function setStatus(type, text) {
+      statusBox.className = "status" + (type ? " " + type : "");
+      statusText.textContent = text;
+    }
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getDatabase(app);
+
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) return;
+
+        try {
+          await set(ref(db, `testesConexao/${user.uid}`), {
+            ok: true,
+            atualizadoEm: serverTimestamp()
+          });
+
+          setStatus("ok", "Firebase conectado com sucesso.");
+          technicalInfo.textContent = `Identificação temporária do aparelho: ${user.uid}`;
+          btnCriar.disabled = false;
+          btnEntrar.disabled = false;
+        } catch (error) {
+          console.error(error);
+          setStatus("error", "Autenticou, mas não conseguiu gravar no Realtime Database.");
+          technicalInfo.textContent = error.message || String(error);
+        }
+      });
+
+      if (!auth.currentUser) {
+        signInAnonymously(auth).catch((error) => {
+          console.error(error);
+          setStatus("error", "Não foi possível fazer a autenticação anônima.");
+          technicalInfo.textContent = error.message || String(error);
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      setStatus("error", "Erro ao iniciar o Firebase.");
+      technicalInfo.textContent = error.message || String(error);
+    }
+
+    btnCriar.addEventListener("click", () => {
+      alert("Conexão funcionando. Na próxima etapa vamos criar a tela de criação da partida.");
+    });
+
+    btnEntrar.addEventListener("click", () => {
+      alert("Conexão funcionando. Na próxima etapa vamos criar a entrada por código da partida.");
+    });
+  </script>
+</body>
+</html>
