@@ -1,108 +1,1280 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Jogo dos Amigos</title>
-<meta name="theme-color" content="#0f172a">
-<style>
-*{box-sizing:border-box;margin:0;padding:0}:root{--bg1:#0f172a;--bg2:#111827;--card:rgba(17,24,39,.94);--line:rgba(255,255,255,.10);--text:#f8fafc;--muted:#94a3b8;--p:#7c3aed;--p2:#8b5cf6;--c:#06b6d4;--g:#22c55e;--r:#ef4444;--y:#f59e0b}body{min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:radial-gradient(circle at top left,rgba(124,58,237,.26),transparent 34%),radial-gradient(circle at bottom right,rgba(6,182,212,.18),transparent 34%),linear-gradient(135deg,var(--bg1),var(--bg2));padding:20px}button,input,select{font:inherit}button{width:100%;border:0;border-radius:14px;padding:14px 16px;font-weight:800;font-size:15px;cursor:pointer}button:disabled{opacity:.48;cursor:not-allowed}input,select{width:100%;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:13px 14px;color:var(--text);background:rgba(255,255,255,.07);outline:none}select option{color:#111827}label{display:block;margin-bottom:7px;color:#cbd5e1;font-size:13px;font-weight:800}.app{width:min(100%,900px);margin:0 auto}.brand{text-align:center;padding:14px 0 20px}.logo{width:72px;height:72px;margin:0 auto 12px;display:grid;place-items:center;border-radius:21px;font-size:36px;background:linear-gradient(135deg,var(--p),var(--c));box-shadow:0 18px 45px rgba(124,58,237,.30)}h1{font-size:clamp(30px,7vw,44px);line-height:1;margin-bottom:10px}h2{font-size:25px;margin-bottom:14px}h3{font-size:18px;margin-bottom:10px}.subtitle{max-width:680px;margin:0 auto;color:#cbd5e1;line-height:1.5}.screen{display:none}.screen.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:23px;padding:21px;box-shadow:0 24px 80px rgba(0,0,0,.34);margin-bottom:18px}.sub{background:rgba(30,41,59,.82);border:1px solid var(--line);border-radius:16px;padding:14px}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.stack{display:grid;gap:12px}.fg{margin-bottom:14px}.btnp{color:#fff;background:linear-gradient(135deg,var(--p),var(--p2))}.btnc{color:#fff;background:linear-gradient(135deg,#0891b2,var(--c))}.btng{color:#fff;background:#15803d}.btnr{color:#fff;background:#b91c1c}.btny{color:#111827;background:#f59e0b}.btnd{color:#fff;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.09)}.small{width:auto;padding:9px 11px;border-radius:10px;font-size:12px}.status{display:flex;align-items:center;gap:10px;border-radius:13px;padding:11px 12px;margin-bottom:15px;background:rgba(255,255,255,.06);color:#cbd5e1;font-size:13px}.dot{width:10px;height:10px;border-radius:50%;background:var(--y);box-shadow:0 0 0 5px rgba(245,158,11,.12)}.status.ok .dot{background:var(--g);box-shadow:0 0 0 5px rgba(34,197,94,.12)}.status.error .dot{background:var(--r);box-shadow:0 0 0 5px rgba(239,68,68,.12)}.notice,.success,.danger{border-radius:13px;padding:13px;line-height:1.45;font-size:13px;margin-bottom:13px}.notice{color:#fde68a;border:1px solid rgba(245,158,11,.25);background:rgba(245,158,11,.10)}.success{color:#bbf7d0;border:1px solid rgba(34,197,94,.25);background:rgba(34,197,94,.10)}.danger{color:#fecaca;border:1px solid rgba(239,68,68,.25);background:rgba(239,68,68,.10)}.muted{color:var(--muted);font-size:13px;line-height:1.45}.tiny{color:#64748b;font-size:11px;overflow-wrap:anywhere}.center{text-align:center}.pill{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:900;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);color:#cbd5e1}.pill.g{color:#bbf7d0;background:rgba(34,197,94,.10);border-color:rgba(34,197,94,.22)}.pill.y{color:#fde68a;background:rgba(245,158,11,.10);border-color:rgba(245,158,11,.22)}.pill.p{color:#ddd6fe;background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.25)}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}.list{display:grid;gap:9px}.item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-radius:14px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)}.item small{color:#94a3b8}.actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.empty{color:#94a3b8;text-align:center;border:1px dashed rgba(255,255,255,.12);border-radius:13px;padding:16px 10px}.team{border-radius:18px;padding:15px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);margin-bottom:13px}.teamhead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}.codes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}.code{border-radius:12px;padding:11px;background:rgba(15,23,42,.68);border:1px solid rgba(255,255,255,.08)}.code span{display:block;color:#94a3b8;font-size:11px;margin-bottom:5px;font-weight:700}.code strong{font-size:19px;letter-spacing:2px;overflow-wrap:anywhere}.ready{display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:13px;padding:11px;background:rgba(255,255,255,.05)}.roster{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.rosterteam{border-radius:16px;padding:13px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.05)}.rosterteam ul{list-style:none;display:grid;gap:6px}.balance{margin:14px 0;border-radius:14px;padding:13px;background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.24);color:#fde68a;line-height:1.45}.quizhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:15px}.timer{min-width:82px;text-align:center;padding:9px 12px;border-radius:13px;color:#fde68a;background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.22);font-size:28px;font-weight:900}.timer.danger{color:#fecaca;background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.22)}.question{font-size:clamp(21px,5vw,31px);line-height:1.3;font-weight:900;margin:10px 0 17px}.answers{display:grid;gap:10px}.answer{text-align:left;color:#fff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10)}.answer.selected{background:rgba(124,58,237,.28);border-color:rgba(139,92,246,.70);box-shadow:0 0 0 3px rgba(139,92,246,.10)}.letter{width:29px;height:29px;display:inline-grid;place-items:center;margin-right:9px;border-radius:8px;background:rgba(255,255,255,.10)}.scoreboard{display:grid;gap:10px;margin-top:14px}.scorerow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px;border-radius:14px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)}.score{font-size:24px;font-weight:900}#fx{pointer-events:none;position:fixed;inset:0;overflow:hidden;z-index:9999}.conf,.rain{position:absolute;top:-40px;animation-timing-function:linear;animation-fill-mode:forwards}.conf{font-size:22px;animation-name:fallc}.rain{font-size:25px;animation-name:fallr}@keyframes fallc{to{transform:translateY(115vh) rotate(720deg);opacity:.2}}@keyframes fallr{to{transform:translateY(115vh);opacity:.3}}@media(max-width:700px){body{padding:13px}.grid2,.grid3,.roster,.codes{grid-template-columns:1fr}.card{padding:17px;border-radius:20px}.item{align-items:flex-start;flex-direction:column}.actions{width:100%}.brand{padding-top:5px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Jogo dos Amigos</title>
+  <meta name="theme-color" content="#0f172a">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg1:#0f172a;--bg2:#111827;--card:rgba(17,24,39,.94);--card2:rgba(30,41,59,.88);
+      --line:rgba(255,255,255,.10);--text:#f8fafc;--muted:#94a3b8;--purple:#7c3aed;
+      --purple2:#8b5cf6;--cyan:#06b6d4;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b
+    }
+    html,body{min-height:100%}
+    body{
+      min-height:100vh;font-family:Arial,Helvetica,sans-serif;color:var(--text);
+      background:
+        radial-gradient(circle at top left,rgba(124,58,237,.25),transparent 34%),
+        radial-gradient(circle at bottom right,rgba(6,182,212,.18),transparent 34%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      padding:18px
+    }
+    button,input,select{font:inherit}
+    button{
+      width:100%;border:0;border-radius:15px;padding:14px 17px;font-size:15px;font-weight:800;
+      cursor:pointer;transition:.15s ease
+    }
+    button:active{transform:scale(.985)}
+    button:disabled{opacity:.48;cursor:not-allowed}
+    input{
+      width:100%;border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:13px 14px;
+      color:var(--text);background:rgba(255,255,255,.07);outline:none;font-size:15px
+    }
+    input:focus{border-color:rgba(139,92,246,.75);box-shadow:0 0 0 3px rgba(139,92,246,.12)}
+    label{display:block;margin-bottom:7px;color:#cbd5e1;font-size:13px;font-weight:800}
+    h1{font-size:clamp(30px,7vw,44px);line-height:1;margin-bottom:10px}
+    h2{font-size:24px;margin-bottom:14px}
+    h3{font-size:18px;margin-bottom:10px}
+    .app{width:min(100%,900px);margin:0 auto}
+    .brand{text-align:center;padding:10px 0 20px}
+    .logo{
+      width:72px;height:72px;margin:0 auto 12px;border-radius:21px;display:grid;place-items:center;
+      font-size:36px;background:linear-gradient(135deg,var(--purple),var(--cyan));
+      box-shadow:0 18px 45px rgba(124,58,237,.30)
+    }
+    .subtitle{max-width:670px;margin:0 auto;color:#cbd5e1;line-height:1.5;font-size:15px}
+    .screen{display:none}
+    .screen.active{display:block}
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:24px;padding:22px;
+      box-shadow:0 24px 80px rgba(0,0,0,.34);margin-bottom:18px
+    }
+    .subcard{background:var(--card2);border:1px solid var(--line);border-radius:17px;padding:15px}
+    .stack{display:grid;gap:12px}
+    .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .fg{margin-bottom:14px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .btnp{color:#fff;background:linear-gradient(135deg,var(--purple),var(--purple2))}
+    .btnc{color:#fff;background:linear-gradient(135deg,#0891b2,var(--cyan))}
+    .btng{color:#fff;background:#15803d}
+    .btnr{color:#fff;background:#b91c1c}
+    .btny{color:#111827;background:#f59e0b}
+    .btnd{color:#fff;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.09)}
+    .small{width:auto;padding:9px 11px;border-radius:11px;font-size:12px}
+    .status{
+      display:flex;align-items:center;gap:10px;border-radius:13px;padding:12px;margin-bottom:15px;
+      background:rgba(255,255,255,.06);color:#cbd5e1;font-size:13px
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 5px rgba(245,158,11,.12)}
+    .status.on .dot{background:var(--green);box-shadow:0 0 0 5px rgba(34,197,94,.12)}
+    .status.off .dot{background:var(--red);box-shadow:0 0 0 5px rgba(239,68,68,.12)}
+    .notice,.success,.danger{
+      border-radius:13px;padding:13px;line-height:1.45;font-size:13px;margin-bottom:13px
+    }
+    .notice{color:#fde68a;border:1px solid rgba(245,158,11,.25);background:rgba(245,158,11,.10)}
+    .success{color:#bbf7d0;border:1px solid rgba(34,197,94,.25);background:rgba(34,197,94,.10)}
+    .danger{color:#fecaca;border:1px solid rgba(239,68,68,.25);background:rgba(239,68,68,.10)}
+    .muted{color:var(--muted);font-size:13px;line-height:1.45}
+    .tiny{color:#64748b;font-size:11px;overflow-wrap:anywhere}
+    .center{text-align:center}
+    .pill{
+      display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;font-size:11px;
+      font-weight:900;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);color:#cbd5e1
+    }
+    .pill.g{color:#bbf7d0;background:rgba(34,197,94,.10);border-color:rgba(34,197,94,.22)}
+    .pill.r{color:#fecaca;background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.22)}
+    .pill.y{color:#fde68a;background:rgba(245,158,11,.10);border-color:rgba(245,158,11,.22)}
+    .pill.p{color:#ddd6fe;background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.25)}
+    .rooms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .room{
+      border-radius:18px;padding:15px;background:rgba(255,255,255,.055);
+      border:1px solid rgba(255,255,255,.09)
+    }
+    .room.complete{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.07)}
+    .room.ready{border-color:rgba(139,92,246,.35);background:rgba(124,58,237,.08)}
+    .room h3{margin:0}
+    .room-list{list-style:none;display:grid;gap:6px;margin-top:10px}
+    .room-list li{font-size:13px;color:#cbd5e1}
+    .codebox{
+      margin:12px 0;border-radius:15px;padding:14px;background:linear-gradient(135deg,rgba(124,58,237,.28),rgba(6,182,212,.18));
+      border:1px solid rgba(255,255,255,.11);text-align:center
+    }
+    .codebox small{display:block;color:#cbd5e1;margin-bottom:6px}
+    .codebox strong{font-size:30px;letter-spacing:4px}
+    .list{display:grid;gap:9px}
+    .listitem{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:14px;
+      background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)
+    }
+    .empty{color:#94a3b8;text-align:center;border:1px dashed rgba(255,255,255,.12);border-radius:13px;padding:16px 10px}
+    .question{font-size:clamp(21px,5vw,31px);line-height:1.3;font-weight:900;margin:10px 0 17px}
+    .answers{display:grid;gap:10px}
+    .answer{text-align:left;color:#fff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10)}
+    .answer.selected{background:rgba(124,58,237,.28);border-color:rgba(139,92,246,.70)}
+    .letter{width:29px;height:29px;display:inline-grid;place-items:center;margin-right:9px;border-radius:8px;background:rgba(255,255,255,.10)}
+    .timer{
+      min-width:82px;text-align:center;padding:9px 12px;border-radius:13px;color:#fde68a;
+      background:rgba(245,158,11,.10);border:1px solid rgba(245,158,11,.22);font-size:28px;font-weight:900
+    }
+    .timer.danger{color:#fecaca;background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.22)}
+    .scoreboard{display:grid;gap:10px}
+    .score{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px;border-radius:14px;
+      background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08)
+    }
+    #fx{pointer-events:none;position:fixed;inset:0;overflow:hidden;z-index:9999}
+    .piece,.drop{position:absolute;top:-40px;animation-timing-function:linear;animation-fill-mode:forwards}
+    .piece{font-size:22px;animation-name:fall}
+    .drop{font-size:25px;animation-name:rain}
+    @keyframes fall{to{transform:translateY(115vh) rotate(720deg);opacity:.2}}
+    @keyframes rain{to{transform:translateY(115vh);opacity:.3}}
+    @media(max-width:700px){
+      body{padding:13px}.grid2,.grid3,.rooms{grid-template-columns:1fr}.card{padding:18px;border-radius:21px}
+    }
+  </style>
 </head>
 <body>
 <div id="fx"></div>
 <main class="app">
-<section class="brand"><div class="logo">🎯</div><h1>Jogo dos Amigos</h1><p class="subtitle">Partidas privadas por times, com técnicos, códigos exclusivos, perguntas sincronizadas e controle do responsável.</p></section>
+  <section class="brand">
+    <div class="logo">🎯</div>
+    <h1>Jogo dos Amigos</h1>
+    <p class="subtitle">Times de até 5 participantes, com técnico, código exclusivo e perguntas sincronizadas.</p>
+  </section>
 
-<section id="home" class="screen"><div class="card"><div id="status" class="status"><span class="dot"></span><span id="statusText">Conectando...</span></div><div class="stack"><button id="openJoin" class="btnc" disabled>Entrar na partida</button><button id="authCreate" class="btnp" style="display:none">Criar partida autorizada</button><button id="openAdmin" class="btnd">Área do responsável</button></div><p class="muted center" style="margin-top:15px">Área interna de testes. A criação de salas é controlada pelo responsável.</p><p id="userInfo" class="tiny center" style="margin-top:10px"></p></div></section>
+  <!-- TELA PÚBLICA / PARTICIPANTE -->
+  <section id="publicScreen" class="screen active">
+    <div class="card">
+      <div id="serverStatus" class="status off">
+        <span class="dot"></span>
+        <span id="serverStatusText">Servidor desligado. Aguardando o administrador liberar.</span>
+      </div>
 
-<section id="adminLogin" class="screen active"><div class="card"><div class="top"><div><span class="pill p">PAINEL 1</span><h2 style="margin:10px 0 0">Login do responsável</h2></div></div><div class="fg"><label>Login</label><input id="adminEmail" type="email" value="senger.luigy@gmail.com" autocomplete="username"></div><div class="fg"><label>Senha</label><input id="adminPass" type="password" placeholder="Digite sua senha" autocomplete="current-password"></div><div class="notice">Durante os testes, este login libera somente o painel de controle e criação de salas. Os convidados entram separadamente pelo código que receberem do técnico.</div><button id="adminLoginBtn" class="btnp">Entrar no Painel 2</button><div style="height:10px"></div><button id="participantAccessBtn" class="btnc">Sou participante — entrar com código</button><p class="tiny center" style="margin-top:12px">Conectado com servidor para sincronizar salas, times e perguntas.</p></div></section>
+      <div id="serverOffArea">
+        <div class="danger">
+          O servidor está desligado. Quando o administrador fizer login, as opções para jogar aparecerão automaticamente.
+        </div>
+      </div>
 
-<section id="admin" class="screen"><div class="card"><div class="top"><div><span class="pill p">PAINEL 2</span><h2 style="margin:10px 0 5px">Controle e criação de salas</h2><p class="muted">Crie a sala, escolha os times e depois envie os códigos exclusivos aos técnicos e jogadores.</p></div><button id="adminLogout" class="btnd small">Sair</button></div><div class="grid2" style="margin-bottom:15px"><button id="adminCreate" class="btnp">Criar nova sala / partida</button><button id="refreshUsers" class="btnd">Atualizar participantes</button></div><div class="sub"><div class="row" style="margin-bottom:10px"><h3 style="margin:0">Participantes conhecidos</h3><span id="userCount" class="pill">0</span></div><div id="userList" class="list"><div class="empty">Nenhum participante identificado ainda.</div></div></div></div></section>
+      <div id="serverOnArea" style="display:none">
+        <div class="success">Servidor conectado e pronto para receber participantes.</div>
 
-<section id="create" class="screen"><div class="card"><div class="top"><h2>Configurar partida</h2><button id="cancelCreate" class="btnd small">Voltar</button></div><div class="grid2"><div class="fg"><label>Nome do responsável / técnico do Time A</label><input id="creatorName" maxlength="24" placeholder="Ex.: Luigy"></div><div class="fg"><label>Nome da partida</label><input id="matchName" maxlength="40" placeholder="Ex.: Quiz da Noite"></div></div><div class="grid3"><div class="fg"><label>Quantidade de times</label><select id="teamCount"><option value="2" selected>2 times</option><option value="3">3 times</option><option value="4">4 times</option><option value="5">5 times</option></select></div><div class="fg"><label>Máximo por time</label><select id="maxTeam"><option>3</option><option>4</option><option value="5" selected>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div><div class="fg"><label>Tempo por pergunta</label><select id="qTime"><option>10</option><option value="15" selected>15</option><option>20</option></select></div></div><div class="fg"><label>Quantidade de perguntas</label><select id="qCount"><option>5</option><option value="10" selected>10</option></select></div><h3>Nomes dos times</h3><div id="teamNames" class="stack" style="margin-bottom:14px"></div><div class="notice">O criador será automaticamente o técnico do primeiro time. Cada time terá um código exclusivo para jogadores; os outros times também terão um código exclusivo para o técnico. Assim, cada técnico pode enviar pelo WhatsApp somente o código do seu próprio time.</div><button id="createMatch" class="btnp">Criar partida</button></div></section>
+        <div class="grid2">
+          <button id="openCoach" class="btnp">Sou técnico — criar meu time</button>
+          <button id="openPlayer" class="btnc">Sou jogador — tenho um código</button>
+        </div>
 
-<section id="join" class="screen"><div class="card"><div class="top"><h2>Entrar na partida</h2><button class="btnd small" data-home>Voltar</button></div><div class="fg"><label>Seu nome ou apelido</label><input id="joinName" maxlength="24" placeholder="Ex.: Laisa"></div><div class="fg"><label>Código recebido</label><input id="joinCode" maxlength="8" placeholder="Ex.: AB12CD"></div><div class="notice">Use o código enviado pelo técnico do seu time. O sistema identifica automaticamente se é um código de técnico ou jogador.</div><button id="joinBtn" class="btnc">Entrar</button></div></section>
+        <div style="height:14px"></div>
+        <h3>Salas</h3>
+        <div id="publicRooms" class="rooms"></div>
+      </div>
 
-<section id="lobby" class="screen"><div class="card"><div class="top"><div><span id="rolePill" class="pill">Participante</span><h2 id="lobbyName" style="margin:9px 0 0">Partida</h2></div><button id="leaveMatch" class="btnd small">Sair</button></div><div id="offBox" class="danger" style="display:none">Jogo desligado pelo responsável.</div><div id="hostControls" class="grid2" style="display:none;margin-bottom:14px"><button id="toggleGame" class="btnr">Desligar jogo</button><button id="deleteMatch" class="btnd">Encerrar e excluir partida</button></div><div id="teamCards"></div><div id="balanceBox" class="balance" style="display:none"></div><div class="sub"><div class="row"><div><h3 style="margin:0 0 4px">Pronto para começar?</h3><p class="muted">Cada técnico confirma quando terminou de escalar seu time.</p></div><button id="readyBtn" class="btng small" style="display:none">Estou pronto</button></div><div id="readySummary" class="stack" style="margin-top:12px"></div><div id="startControls" class="stack" style="display:none;margin-top:14px"><button id="startBtn" class="btnp">Começar partida</button><button id="forceStart" class="btny" style="display:none">Começar assim mesmo</button></div></div></div></section>
+      <div style="height:14px"></div>
+      <button id="openAdminLogin" class="btnd">Área do administrador</button>
+    </div>
+  </section>
 
-<section id="presentation" class="screen"><div class="card"><div class="center"><span class="pill p">PARTIDA INICIANDO</span><h2 id="presTitle" style="margin:12px 0 5px">Times escalados</h2><p class="muted">Confira os participantes antes da primeira pergunta.</p></div><div id="presRosters" class="roster" style="margin-top:18px"></div><div class="center" style="margin-top:18px"><div id="presCount" class="code" style="font-size:38px;font-weight:900;text-align:center">5</div><p class="muted">A primeira pergunta começa automaticamente.</p></div></div></section>
+  <!-- LOGIN ADM -->
+  <section id="adminLoginScreen" class="screen">
+    <div class="card">
+      <div class="top">
+        <div>
+          <span class="pill p">ADMIN</span>
+          <h2 style="margin:10px 0 0">Login do administrador</h2>
+        </div>
+        <button id="backPublic1" class="btnd small">Voltar</button>
+      </div>
 
-<section id="quiz" class="screen"><div class="card"><div class="quizhead"><div><span id="quizTeam" class="pill p">Time</span><div id="quizProgress" class="muted" style="margin-top:6px">Pergunta 1 de 10</div></div><div id="quizTimer" class="timer">15</div></div><div id="quizQuestion" class="question">Carregando...</div><div id="quizAnswers" class="answers"></div><p class="muted center" style="margin-top:13px">Vote na alternativa que seu time considera correta.</p><div id="votePanel" class="sub" style="display:none;margin-top:14px"><h3>Votos do seu time</h3><div id="voteCounts" class="stack"></div></div><div id="resultBox" style="display:none;margin-top:14px"></div></div></section>
+      <div class="fg">
+        <label>Login</label>
+        <input id="adminLogin" type="email" value="senger.luigy@gmail.com">
+      </div>
+      <div class="fg">
+        <label>Senha</label>
+        <input id="adminPassword" type="password" placeholder="Digite a senha">
+      </div>
 
-<section id="final" class="screen"><div class="card"><div class="center"><span class="pill g">FIM DE JOGO</span><h2 style="margin:12px 0 5px">Placar final</h2><p class="muted">Pontuação por acertos de equipe.</p></div><div id="scoreboard" class="scoreboard"></div><button id="finalHome" class="btnp" style="margin-top:16px">Voltar ao início</button></div></section>
+      <button id="adminEnter" class="btnp">Entrar e ligar servidor</button>
+    </div>
+  </section>
+
+  <!-- PAINEL ADM -->
+  <section id="adminPanel" class="screen">
+    <div class="card">
+      <div class="top">
+        <div>
+          <span class="pill g">ADMIN ONLINE</span>
+          <h2 style="margin:10px 0 5px">Painel conectado</h2>
+          <p class="muted">Servidor liberado e pronto para receber os participantes.</p>
+        </div>
+        <button id="adminLogout" class="btnr small">Desligar servidor e sair</button>
+      </div>
+
+      <div class="success">Conectado com servidor.</div>
+
+      <div class="row" style="margin-bottom:12px">
+        <h3 style="margin:0">Salas 1 a 10</h3>
+        <button id="resetRooms" class="btnd small">Limpar todas as salas</button>
+      </div>
+
+      <div id="adminRooms" class="rooms"></div>
+    </div>
+  </section>
+
+  <!-- TÉCNICO -->
+  <section id="coachCreateScreen" class="screen">
+    <div class="card">
+      <div class="top">
+        <h2>Entrar como técnico</h2>
+        <button id="backPublic2" class="btnd small">Voltar</button>
+      </div>
+
+      <div class="notice">
+        O sistema escolhe automaticamente a primeira sala livre. Se a Sala 1 já tiver técnico, o próximo técnico vai para a Sala 2, e assim por diante.
+      </div>
+
+      <div class="fg">
+        <label>Seu nome</label>
+        <input id="coachName" maxlength="24" placeholder="Ex.: Luigy">
+      </div>
+
+      <div class="fg">
+        <label>Nome do seu time</label>
+        <input id="teamName" maxlength="24" placeholder="Ex.: Os Campeões">
+      </div>
+
+      <button id="createTeam" class="btnp">Criar meu time e gerar código</button>
+    </div>
+  </section>
+
+  <!-- JOGADOR -->
+  <section id="playerJoinScreen" class="screen">
+    <div class="card">
+      <div class="top">
+        <h2>Entrar no time</h2>
+        <button id="backPublic3" class="btnd small">Voltar</button>
+      </div>
+
+      <div class="fg">
+        <label>Seu nome</label>
+        <input id="playerName" maxlength="24" placeholder="Ex.: Laisa">
+      </div>
+
+      <div class="fg">
+        <label>Código enviado pelo técnico</label>
+        <input id="inviteCode" maxlength="6" placeholder="ABC123">
+      </div>
+
+      <button id="joinTeam" class="btnc">Entrar no time</button>
+    </div>
+  </section>
+
+  <!-- LOBBY DO TIME -->
+  <section id="teamLobbyScreen" class="screen">
+    <div class="card">
+      <div class="top">
+        <div>
+          <span id="myRolePill" class="pill p">Técnico</span>
+          <h2 id="myRoomTitle" style="margin:10px 0 0">Sala</h2>
+        </div>
+        <button id="leaveTeam" class="btnd small">Sair</button>
+      </div>
+
+      <div id="myRoomState" class="success">Seu time está sendo montado.</div>
+
+      <div id="coachOnlyArea" style="display:none">
+        <div class="codebox">
+          <small>Código para convidar até 4 jogadores para o seu time</small>
+          <strong id="myInviteCode">------</strong>
+        </div>
+
+        <button id="copyInvite" class="btnc">Copiar código para enviar no WhatsApp</button>
+        <div style="height:10px"></div>
+        <button id="startAnyway" class="btny">Começar assim mesmo</button>
+      </div>
+
+      <div style="height:14px"></div>
+      <h3 id="myTeamHeading">Meu time</h3>
+      <div id="myMembers" class="list"></div>
+
+      <div id="waitingGame" class="notice" style="margin-top:14px">
+        Aguardando outros times ficarem prontos.
+      </div>
+    </div>
+  </section>
+
+  <!-- APRESENTAÇÃO DOS TIMES -->
+  <section id="presentationScreen" class="screen">
+    <div class="card">
+      <div class="center">
+        <span class="pill p">PARTIDA INICIANDO</span>
+        <h2 style="margin:12px 0 6px">Times prontos</h2>
+        <p class="muted">Confira os participantes antes da primeira pergunta.</p>
+      </div>
+      <div id="presentationRooms" class="rooms" style="margin-top:16px"></div>
+      <div id="presentationCountdown" class="codebox"><strong>5</strong></div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quizScreen" class="screen">
+    <div class="card">
+      <div class="row">
+        <div>
+          <span id="quizTeamPill" class="pill p">Time</span>
+          <div id="quizProgress" class="muted" style="margin-top:6px">Pergunta 1 de 10</div>
+        </div>
+        <div id="quizTimer" class="timer">15</div>
+      </div>
+
+      <div id="quizQuestion" class="question">Carregando...</div>
+      <div id="quizAnswers" class="answers"></div>
+      <div id="quizResult" style="display:none;margin-top:14px"></div>
+    </div>
+  </section>
+
+  <!-- FINAL -->
+  <section id="finalScreen" class="screen">
+    <div class="card">
+      <div class="center">
+        <span class="pill g">FIM DE JOGO</span>
+        <h2 style="margin:12px 0 6px">Placar final</h2>
+      </div>
+      <div id="finalScore" class="scoreboard" style="margin-top:14px"></div>
+      <button id="finalHome" class="btnp" style="margin-top:15px">Voltar ao início</button>
+    </div>
+  </section>
 </main>
+
 <script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";import{getAuth,signInAnonymously,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";import{getDatabase,ref,get,set,update,remove,onValue,serverTimestamp}from"https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
-const cfg={apiKey:"AIzaSyD_-S0j1L-YVF6ynKiF8NcTU_4_pCn-S3Q",authDomain:"jogo-dos-amigos-ca3f5.firebaseapp.com",databaseURL:"https://jogo-dos-amigos-ca3f5-default-rtdb.firebaseio.com",projectId:"jogo-dos-amigos-ca3f5",storageBucket:"jogo-dos-amigos-ca3f5.firebasestorage.app",messagingSenderId:"817678231030",appId:"1:817678231030:web:1e406c32d15e0ec7a953d7"},ADMIN="senger.luigy@gmail.com",ADMIN_PASS="104528",Q=[{q:"Qual é o maior planeta do Sistema Solar?",a:["Terra","Marte","Júpiter","Vênus"],c:2},{q:"Qual animal é conhecido como o rei da selva?",a:["Leão","Elefante","Tigre","Urso"],c:0},{q:"Quantos dias tem uma semana?",a:["5","6","7","8"],c:2},{q:"Qual é a capital do Brasil?",a:["Rio de Janeiro","Brasília","São Paulo","Salvador"],c:1},{q:"Qual oceano banha a maior parte do litoral brasileiro?",a:["Pacífico","Índico","Atlântico","Ártico"],c:2},{q:"Quantos lados possui um triângulo?",a:["2","3","4","5"],c:1},{q:"Qual cor surge da mistura de azul e amarelo?",a:["Verde","Roxo","Laranja","Vermelho"],c:0},{q:"Em qual planeta vivemos?",a:["Marte","Saturno","Terra","Mercúrio"],c:2},{q:"Quantos meses existem em um ano?",a:["10","11","12","13"],c:2},{q:"Qual destes animais é um mamífero?",a:["Tubarão","Golfinho","Sardinha","Polvo"],c:1}];
-const app=initializeApp(cfg),auth=getAuth(app),db=getDatabase(app),$=id=>document.getElementById(id);let user=null,isAdmin=false,canCreate=false,matchId=null,role=null,teamId=null,unMatch=null,unPerm=null,unUsers=null,timerInt=null,offset=0,processing=false,presKey=null;onValue(ref(db,".info/serverTimeOffset"),s=>offset=Number(s.val()||0));const screens={home:$('home'),adminLogin:$('adminLogin'),admin:$('admin'),create:$('create'),join:$('join'),lobby:$('lobby'),presentation:$('presentation'),quiz:$('quiz'),final:$('final')};function show(n){Object.values(screens).forEach(s=>s.classList.remove('active'));screens[n].classList.add('active');scrollTo({top:0,behavior:'smooth'})}function clean(v){return String(v||'').trim().replace(/\s+/g,' ').slice(0,24)}function code(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8)}function esc(t){return String(t).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;')}function rand(n=6){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let o='';for(let i=0;i<n;i++)o+=c[Math.floor(Math.random()*c.length)];return o}async function uniq(){for(let i=0;i<30;i++){let c=rand();if(!(await get(ref(db,`codigos/${c}`))).exists())return c}throw Error('Falha ao gerar código')}function adminUser(){return sessionStorage.getItem('jogoDosAmigosAdmin')==='1'}function stop(){if(typeof unMatch==='function')unMatch();unMatch=null;if(timerInt)clearInterval(timerInt);timerInt=null}
-async function known(name=''){if(!user||isAdmin)return;let r=ref(db,`usuarios/${user.uid}`),s=await get(r),old=s.exists()?s.val():{};await set(r,{uid:user.uid,nome:clean(name)||old.nome||'Participante',ultimoAcesso:serverTimestamp()})}function homeStatus(){if(!user){$('status').className='status error';$('statusText').textContent='Sem conexão';$('openJoin').disabled=true;return}$('status').className='status ok';$('statusText').textContent=isAdmin?'Administrador conectado com servidor.':'Conectado com servidor.';$('openJoin').disabled=false;$('userInfo').textContent=isAdmin?'':`Identificação deste aparelho: ${user.uid}`}function watchPerm(){if(typeof unPerm==='function')unPerm();if(!user||isAdmin){canCreate=isAdmin;$('authCreate').style.display='none';return}unPerm=onValue(ref(db,`permissoesCriar/${user.uid}`),s=>{canCreate=!!(s.exists()&&s.val()?.permitido===true);$('authCreate').style.display=canCreate?'block':'none'})}
-async function doAdminLogin(){
-  let e=$('adminEmail').value.trim().toLowerCase(),p=$('adminPass').value;
-  if(!e||!p)return alert('Digite o login e a senha.');
-  let b=$('adminLoginBtn');
-  b.disabled=true;
-  b.textContent='Entrando...';
-  try{
-    if(e!==ADMIN.toLowerCase()||p!==ADMIN_PASS){
-      alert('Login ou senha incorretos.');
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+  import {
+    getDatabase, ref, get, set, update, remove, onValue, runTransaction, onDisconnect, serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD_-S0j1L-YVF6ynKiF8NcTU_4_pCn-S3Q",
+    authDomain: "jogo-dos-amigos-ca3f5.firebaseapp.com",
+    databaseURL: "https://jogo-dos-amigos-ca3f5-default-rtdb.firebaseio.com",
+    projectId: "jogo-dos-amigos-ca3f5",
+    storageBucket: "jogo-dos-amigos-ca3f5.firebasestorage.app",
+    messagingSenderId: "817678231030",
+    appId: "1:817678231030:web:1e406c32d15e0ec7a953d7"
+  };
+
+  const ADMIN_LOGIN = "senger.luigy@gmail.com";
+  const ADMIN_PASSWORD = "104528";
+  const MAX_ROOMS = 10;
+  const MAX_TOTAL_PER_ROOM = 5; // técnico + 4 jogadores
+
+  const QUESTIONS = [
+    {q:"Qual é o maior planeta do Sistema Solar?",a:["Terra","Marte","Júpiter","Vênus"],c:2},
+    {q:"Qual animal é conhecido como o rei da selva?",a:["Leão","Elefante","Tigre","Urso"],c:0},
+    {q:"Quantos dias tem uma semana?",a:["5","6","7","8"],c:2},
+    {q:"Qual é a capital do Brasil?",a:["Rio de Janeiro","Brasília","São Paulo","Salvador"],c:1},
+    {q:"Qual oceano banha a maior parte do litoral brasileiro?",a:["Pacífico","Índico","Atlântico","Ártico"],c:2},
+    {q:"Quantos lados possui um triângulo?",a:["2","3","4","5"],c:1},
+    {q:"Qual cor surge da mistura de azul e amarelo?",a:["Verde","Roxo","Laranja","Vermelho"],c:0},
+    {q:"Em qual planeta vivemos?",a:["Marte","Saturno","Terra","Mercúrio"],c:2},
+    {q:"Quantos meses existem em um ano?",a:["10","11","12","13"],c:2},
+    {q:"Qual destes animais é um mamífero?",a:["Tubarão","Golfinho","Sardinha","Polvo"],c:1}
+  ];
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  const $ = id => document.getElementById(id);
+
+  let user = null;
+  let serverOnline = false;
+  let isAdmin = sessionStorage.getItem("jda_admin") === "1";
+  let myRoom = null;
+  let myRole = null; // coach | player
+  let roomUnsub = null;
+  let gameUnsub = null;
+  let timerId = null;
+  let offset = 0;
+  let hostAdvanceLock = false;
+
+  onValue(ref(db,".info/serverTimeOffset"), s => offset = Number(s.val() || 0));
+
+  const screens = [
+    "publicScreen","adminLoginScreen","adminPanel","coachCreateScreen","playerJoinScreen",
+    "teamLobbyScreen","presentationScreen","quizScreen","finalScreen"
+  ];
+
+  function show(id){
+    screens.forEach(x => $(x).classList.remove("active"));
+    $(id).classList.add("active");
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+
+  function normalizeText(text){
+    return String(text||"")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g,"")
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g," ")
+      .replace(/\s+/g," ")
+      .trim();
+  }
+
+  const BLOCKED_WORDS = [
+    "puta","puto","putaria","caralho","cacete","porra","merda","bosta","cu","cuzinho",
+    "foder","foda","fodase","foda se","viado","veado","bicha","arrombado","arrombada",
+    "desgracado","desgracada","filho da puta","fdp","vagabunda","vagabundo","piranha",
+    "piroca","pau","rola","penis","vagina","buceta","xoxota","xereca","boquete","sexo",
+    "sexual","transar","trepar","gozar","gozo","orgia","porn","porno","pornografia",
+    "masturbar","masturbacao","punheta","siririca","anal","oral","nudes","nude"
+  ];
+
+  function containsBlockedContent(value){
+    const text = normalizeText(value);
+    return BLOCKED_WORDS.some(word => {
+      const w = normalizeText(word);
+      if(w.includes(" ")) return text.includes(w);
+      const tokens = text.split(" ");
+      return tokens.includes(w);
+    });
+  }
+
+  function validateCleanField(value,label){
+    const cleaned = String(value||"").trim().replace(/\s+/g," ").slice(0,24);
+    if(!cleaned){
+      alert(`Digite ${label}.`);
+      return null;
+    }
+    if(containsBlockedContent(cleaned)){
+      alert(`${label} contém palavra ou expressão não permitida. Escolha outro texto.`);
+      return null;
+    }
+    return cleaned;
+  }
+
+  function code6(){
+    const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let out="";
+    for(let i=0;i<6;i++) out+=chars[Math.floor(Math.random()*chars.length)];
+    return out;
+  }
+
+  async function uniqueInviteCode(){
+    for(let i=0;i<50;i++){
+      const c=code6();
+      const s=await get(ref(db,`inviteCodes/${c}`));
+      if(!s.exists()) return c;
+    }
+    throw new Error("Não foi possível gerar código.");
+  }
+
+  function esc(s){
+    return String(s||"")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function stopRoomListeners(){
+    if(typeof roomUnsub==="function"){roomUnsub();roomUnsub=null}
+    if(typeof gameUnsub==="function"){gameUnsub();gameUnsub=null}
+    if(timerId){clearInterval(timerId);timerId=null}
+  }
+
+  async function ensureAuth(){
+    if(auth.currentUser) return auth.currentUser;
+    return await signInAnonymously(auth);
+  }
+
+  function renderServerState(){
+    if(serverOnline){
+      $("serverStatus").className="status on";
+      $("serverStatusText").textContent="Conectado com servidor. Sistema liberado.";
+      $("serverOffArea").style.display="none";
+      $("serverOnArea").style.display="block";
+    }else{
+      $("serverStatus").className="status off";
+      $("serverStatusText").textContent="Servidor desligado. Aguardando o administrador liberar.";
+      $("serverOffArea").style.display="block";
+      $("serverOnArea").style.display="none";
+      if(!isAdmin && ["coachCreateScreen","playerJoinScreen"].some(x=>$(x).classList.contains("active"))){
+        show("publicScreen");
+      }
+    }
+  }
+
+  function roomMembers(room){
+    return Object.values(room?.members||{}).filter(Boolean);
+  }
+
+  function renderRooms(containerId,rooms,admin=false){
+    const box=$(containerId);
+    box.innerHTML="";
+
+    for(let i=1;i<=MAX_ROOMS;i++){
+      const key=String(i);
+      const room=rooms?.[key]||null;
+      const members=roomMembers(room);
+      const coach=members.find(m=>m.role==="coach");
+      const players=members.filter(m=>m.role==="player");
+      const total=members.length;
+
+      const div=document.createElement("div");
+      div.className="room"+(total>=MAX_TOTAL_PER_ROOM?" complete":room?.ready?" ready":"");
+
+      if(!room || !room.coachUid){
+        div.innerHTML=`
+          <div class="row">
+            <h3>Sala ${i}</h3>
+            <span class="pill">LIVRE</span>
+          </div>
+          <p class="muted" style="margin-top:8px">Aguardando técnico.</p>
+        `;
+      }else{
+        let state = total>=MAX_TOTAL_PER_ROOM ? "COMPLETA" : room.ready ? "PRONTA" : `${total}/5`;
+        let pillClass = total>=MAX_TOTAL_PER_ROOM ? "g" : room.ready ? "p" : "y";
+
+        div.innerHTML=`
+          <div class="row">
+            <h3>Sala ${i}</h3>
+            <span class="pill ${pillClass}">${state}</span>
+          </div>
+          <p style="margin-top:8px"><strong>${esc(room.teamName||"Time")}</strong></p>
+          <p class="muted">Técnico: ${esc(coach?.name||room.coachName||"")}</p>
+          <ul class="room-list">
+            ${players.length ? players.map(p=>`<li>👤 ${esc(p.name)}</li>`).join("") : "<li>Nenhum jogador ainda.</li>"}
+          </ul>
+          ${admin ? `<p class="tiny" style="margin-top:8px">Código: ${esc(room.inviteCode||"")}</p>` : ""}
+        `;
+      }
+
+      box.appendChild(div);
+    }
+  }
+
+  onValue(ref(db,"config/serverOnline"),snap=>{
+    serverOnline = snap.exists() && snap.val()===true;
+    renderServerState();
+  });
+
+  onValue(ref(db,"rooms"),snap=>{
+    const rooms=snap.exists()?snap.val():{};
+    renderRooms("publicRooms",rooms,false);
+    if(isAdmin) renderRooms("adminRooms",rooms,true);
+  });
+
+  async function adminLogin(){
+    const login=$("adminLogin").value.trim().toLowerCase();
+    const pass=$("adminPassword").value;
+
+    if(login!==ADMIN_LOGIN.toLowerCase() || pass!==ADMIN_PASSWORD){
+      alert("Login ou senha incorretos.");
       return;
     }
-    if(!auth.currentUser) await signInAnonymously(auth);
-    user=auth.currentUser;
-    sessionStorage.setItem('jogoDosAmigosAdmin','1');
-    isAdmin=true;
-    canCreate=true;
-    show('admin');
-    loadUsers();
-  }catch(err){
-    console.error(err);
-    alert('Não foi possível conectar com o servidor. Verifique sua internet e tente novamente.');
-  }finally{
-    b.disabled=false;
-    b.textContent='Entrar no Painel 2';
-  }
-}
-async function logoutAdmin(){
-  if(typeof unUsers==='function')unUsers();
-  sessionStorage.removeItem('jogoDosAmigosAdmin');
-  isAdmin=false;
-  canCreate=false;
-  $('adminPass').value='';
-  show('adminLogin');
-}function loadUsers(){if(typeof unUsers==='function')unUsers();unUsers=onValue(ref(db,'usuarios'),async s=>{let a=Object.values(s.exists()?s.val():{}).filter(Boolean);$('userCount').textContent=a.length;let box=$('userList');if(!a.length){box.innerHTML='<div class="empty">Nenhum participante identificado ainda.</div>';return}box.innerHTML='';for(const u of a){let ps=await get(ref(db,`permissoesCriar/${u.uid}`)),ok=ps.exists()&&ps.val()?.permitido===true,item=document.createElement('div');item.className='item';item.innerHTML=`<div><strong>${esc(u.nome||'Participante')}</strong><small>${esc(u.uid)}</small></div>`;let act=document.createElement('div');act.className='actions';let bt=document.createElement('button');bt.className=(ok?'btnr':'btng')+' small';bt.textContent=ok?'Retirar permissão':'Permitir criar partida';bt.onclick=()=>set(ref(db,`permissoesCriar/${u.uid}`),{permitido:!ok,alteradoEm:serverTimestamp(),alteradoPor:user.uid});act.appendChild(bt);item.appendChild(act);box.appendChild(item)}})}
-function teamInputs(){let n=Number($('teamCount').value),box=$('teamNames');box.innerHTML='';for(let i=0;i<n;i++){let l=String.fromCharCode(65+i),d=document.createElement('div');d.className='fg';d.innerHTML=`<label>Time ${l}</label><input id="tn${i}" maxlength="24" value="Time ${l}">`;box.appendChild(d)}}async function openCreate(){if(!isAdmin&&!canCreate)return alert('Você não tem permissão para criar partidas.');$('creatorName').value=isAdmin?'Luigy':'';$('matchName').value='';$('teamCount').value='2';teamInputs();show('create')}
-async function createMatch(){if(!isAdmin&&!canCreate)return alert('Sem permissão.');let creator=clean($('creatorName').value),name=String($('matchName').value||'').trim().slice(0,40),n=Number($('teamCount').value);if(!creator||!name)return alert('Preencha nome do responsável e da partida.');let names=[];for(let i=0;i<n;i++)names.push(clean($(`tn${i}`).value)||`Time ${String.fromCharCode(65+i)}`);let btn=$('createMatch');btn.disabled=true;btn.textContent='Criando...';try{let id=rand(8),teams={},jobs=[];for(let i=0;i<n;i++){let tid=`t${i+1}`,pc=await uniq(),cc=i===0?null:await uniq();teams[tid]={id:tid,nome:names[i],ordem:i,playerCode:pc,coachCode:cc,coachUid:i===0?user.uid:null,coachNome:i===0?creator:null,pronto:false,pontos:0};jobs.push(set(ref(db,`codigos/${pc}`),{partidaId:id,timeId:tid,papel:'player'}));if(cc)jobs.push(set(ref(db,`codigos/${cc}`),{partidaId:id,timeId:tid,papel:'coach'}))}await set(ref(db,`partidas/${id}`),{id,nome:name,hostUid:user.uid,hostNome:creator,criadoPorAdmin:isAdmin,criadoEm:serverTimestamp(),jogoLigado:true,status:'lobby',configuracoes:{quantidadeTimes:n,maxPorTime:Number($('maxTeam').value),quantidadePerguntas:Number($('qCount').value),tempoPergunta:Number($('qTime').value)},quiz:{ativo:false,fase:'lobby',indice:0},times:teams});await set(ref(db,`partidas/${id}/membros/${user.uid}`),{uid:user.uid,nome:creator,papel:'coach',timeId:'t1',entrouEm:serverTimestamp()});await Promise.all(jobs);await known(creator);matchId=id;role='host';teamId='t1';openMatch(id)}catch(e){console.error(e);alert('Não foi possível criar a partida.')}finally{btn.disabled=false;btn.textContent='Criar partida'}}
-async function join(){let name=clean($('joinName').value),c=code($('joinCode').value);$('joinCode').value=c;if(!name||c.length<5)return alert('Digite nome e código.');let cs=await get(ref(db,`codigos/${c}`));if(!cs.exists())return alert('Código inválido.');let info=cs.val(),ms=await get(ref(db,`partidas/${info.partidaId}`));if(!ms.exists())return alert('Partida encerrada.');let m=ms.val();if(!m.jogoLigado)return alert('Jogo desligado.');if(m.status!=='lobby')return alert('A partida já começou.');let t=m.times?.[info.timeId],members=Object.values(m.membros||{}).filter(x=>x&&x.timeId===info.timeId);if(members.length>=Number(m.configuracoes?.maxPorTime||10))return alert('Time cheio.');if(info.papel==='coach'&&t.coachUid&&t.coachUid!==user.uid)return alert('Este time já tem técnico.');await set(ref(db,`partidas/${info.partidaId}/membros/${user.uid}`),{uid:user.uid,nome:name,papel:info.papel,timeId:info.timeId,entrouEm:serverTimestamp()});if(info.papel==='coach')await update(ref(db,`partidas/${info.partidaId}/times/${info.timeId}`),{coachUid:user.uid,coachNome:name,pronto:false});await known(name);matchId=info.partidaId;role=info.papel;teamId=info.timeId;openMatch(matchId)}
-function openMatch(id){stop();matchId=id;unMatch=onValue(ref(db,`partidas/${id}`),s=>{if(!s.exists()){alert('Partida encerrada.');return leaveHome()}let m=s.val(),me=m.membros?.[user.uid];if(me){teamId=me.timeId;role=user.uid===m.hostUid?'host':me.papel}if(m.status==='lobby'){renderLobby(m);if(!screens.lobby.classList.contains('active'))show('lobby')}else if(m.status==='presentation')renderPres(m);else if(m.status==='playing')renderQuiz(m);else if(m.status==='finished')renderFinal(m)})}function members(m,tid){return Object.values(m.membros||{}).filter(x=>x&&x.timeId===tid)}
-function renderLobby(m){$('lobbyName').textContent=m.nome;$('offBox').style.display=m.jogoLigado?'none':'block';$('rolePill').textContent=role==='host'?'Responsável / Técnico':role==='coach'?'Técnico':'Jogador';$('rolePill').className=role==='player'?'pill':'pill p';$('hostControls').style.display=role==='host'?'grid':'none';$('readyBtn').style.display=(role==='host'||role==='coach')?'inline-block':'none';$('startControls').style.display=role==='host'?'grid':'none';if(role==='host'){$('toggleGame').textContent=m.jogoLigado?'Desligar jogo':'Ligar jogo';$('toggleGame').className=m.jogoLigado?'btnr':'btng'}renderTeams(m);renderReady(m);renderBalance(m)}function renderTeams(m){let box=$('teamCards');box.innerHTML='';Object.values(m.times||{}).sort((a,b)=>a.ordem-b.ordem).forEach(t=>{let ms=members(m,t.id),mine=t.id===teamId,see=role==='host'||(mine&&role==='coach'),card=document.createElement('div');card.className='team';card.innerHTML=`<div class="teamhead"><div><h3 style="margin:0">${esc(t.nome)}</h3><span class="muted">${ms.filter(x=>x.papel==='player').length}/${m.configuracoes?.maxPorTime||10} jogadores</span></div><span class="pill ${t.pronto?'g':'y'}">${t.pronto?'Técnico pronto':'Aguardando técnico'}</span></div>${see?`<div class="codes">${t.coachCode?`<div class="code"><span>Código do técnico</span><strong>${esc(t.coachCode)}</strong></div>`:`<div class="code"><span>Técnico</span><strong>${esc(t.coachNome||'Você')}</strong></div>`}<div class="code"><span>Código dos jogadores</span><strong>${esc(t.playerCode)}</strong></div></div>`:''}<div class="list">${ms.length?ms.map(x=>`<div class="item"><div><strong>${esc(x.nome)}</strong><small>${x.papel==='coach'?'Técnico':'Jogador'}</small></div>${role==='host'&&x.uid!==m.hostUid?`<div class="actions"><button class="btnr small" data-block="${x.uid}">Bloquear</button></div>`:''}</div>`).join(''):'<div class="empty">Nenhum participante ainda.</div>'}</div>`;box.appendChild(card)});box.querySelectorAll('[data-block]').forEach(b=>b.onclick=()=>blockMember(b.dataset.block))}function renderReady(m){let box=$('readySummary');box.innerHTML='';let ts=Object.values(m.times||{}).sort((a,b)=>a.ordem-b.ordem);ts.forEach(t=>{let d=document.createElement('div');d.className='ready';d.innerHTML=`<div><strong>${esc(t.nome)}</strong><div class="muted">${t.coachUid?esc(t.coachNome||'Técnico definido'):'Sem técnico ainda'}</div></div><span class="pill ${t.pronto?'g':'y'}">${t.pronto?'PRONTO':'AGUARDANDO'}</span>`;box.appendChild(d)});if(role==='host'||role==='coach'){let t=m.times?.[teamId];$('readyBtn').textContent=t?.pronto?'Cancelar pronto':'Estou pronto';$('readyBtn').className=(t?.pronto?'btny':'btng')+' small'}let all=ts.every(t=>t.coachUid&&t.pronto),temJogador=ts.every(t=>members(m,t.id).some(x=>x.papel==='player'));$('startBtn').disabled=!(all&&temJogador&&m.jogoLigado)}function counts(m){return Object.values(m.times||{}).sort((a,b)=>a.ordem-b.ordem).map(t=>({t,c:members(m,t.id).filter(x=>x.papel==='player').length}))}function renderBalance(m){let c=counts(m),v=c.map(x=>x.c),mx=Math.max(...v),mn=Math.min(...v),d=mx-mn,box=$('balanceBox');if(d<=0){box.style.display='none';$('forceStart').style.display='none';return}box.style.display='block';let small=c.filter(x=>x.c===mn).map(x=>x.t.nome).join(', ');box.innerHTML=`Os times ainda não estão equilibrados. O maior tem <strong>${mx}</strong> e o menor <strong>${mn}</strong>. Você pode escalar mais <strong>${d}</strong> ${d===1?'participante':'participantes'} em ${esc(small)} para igualar.`;let ts=Object.values(m.times||{}),all=ts.every(t=>t.coachUid&&t.pronto),temJogador=ts.every(t=>members(m,t.id).some(x=>x.papel==='player'));$('forceStart').style.display=role==='host'&&all&&temJogador?'block':'none'}
-async function ready(){if(!(role==='host'||role==='coach'))return;let s=await get(ref(db,`partidas/${matchId}/times/${teamId}/pronto`)),r=s.exists()&&s.val()===true;await update(ref(db,`partidas/${matchId}/times/${teamId}`),{pronto:!r,prontoEm:serverTimestamp()})}async function toggleGame(){if(role!=='host')return;let s=await get(ref(db,`partidas/${matchId}/jogoLigado`));await update(ref(db,`partidas/${matchId}`),{jogoLigado:!(s.exists()?!!s.val():false),alteradoEm:serverTimestamp()})}async function blockMember(uid){if(role!=='host'||!confirm('Bloquear este participante?'))return;let s=await get(ref(db,`partidas/${matchId}/membros/${uid}`));if(!s.exists())return;let x=s.val();await set(ref(db,`partidas/${matchId}/bloqueados/${uid}`),true);await remove(ref(db,`partidas/${matchId}/membros/${uid}`));if(x.papel==='coach')await update(ref(db,`partidas/${matchId}/times/${x.timeId}`),{coachUid:null,coachNome:null,pronto:false})}async function delMatch(){if(role!=='host'||!confirm('Encerrar e excluir esta partida?'))return;let s=await get(ref(db,`partidas/${matchId}`));if(s.exists())for(const t of Object.values(s.val().times||{})){if(t.playerCode)await remove(ref(db,`codigos/${t.playerCode}`));if(t.coachCode)await remove(ref(db,`codigos/${t.coachCode}`))}await remove(ref(db,`partidas/${matchId}`));leaveHome()}async function start(force=false){if(role!=='host')return;let s=await get(ref(db,`partidas/${matchId}`));if(!s.exists())return;let m=s.val(),ts=Object.values(m.times||{}),all=ts.every(t=>t.coachUid&&t.pronto);if(!all)return alert('Todos os times precisam ter técnico e estar prontos.');let semJogador=ts.filter(t=>members(m,t.id).filter(x=>x.papel==='player').length<1);if(semJogador.length)return alert('Cada time precisa ter pelo menos 1 jogador além do técnico. Falta jogador em: '+semJogador.map(t=>t.nome).join(', ')+'.');let c=counts(m).map(x=>x.c),d=Math.max(...c)-Math.min(...c);if(d>0&&!force)return alert('Os times estão desequilibrados. Escale mais jogadores ou use “Começar assim mesmo”.');await update(ref(db,`partidas/${matchId}`),{status:'presentation','quiz/fase':'presentation','quiz/ativo':false,'quiz/indice':0,'quiz/apresentacaoInicio':Date.now()+offset})}
-function renderPres(m){if(!screens.presentation.classList.contains('active'))show('presentation');$('presTitle').textContent=m.nome;let box=$('presRosters');box.innerHTML='';Object.values(m.times||{}).sort((a,b)=>a.ordem-b.ordem).forEach(t=>{let d=document.createElement('div');d.className='rosterteam';d.innerHTML=`<h3>${esc(t.nome)}</h3><ul>${members(m,t.id).map(x=>`<li>${x.papel==='coach'?'🎧':'👤'} ${esc(x.nome)}</li>`).join('')}</ul>`;box.appendChild(d)});let st=Number(m.quiz?.apresentacaoInicio||Date.now()+offset),key=`${m.id}-${st}`;presKey=key;if(timerInt)clearInterval(timerInt);const tick=async()=>{let rem=Math.max(0,Math.ceil((st+5000-(Date.now()+offset))/1000));$('presCount').textContent=rem;if(rem<=0){clearInterval(timerInt);timerInt=null;if(role==='host')await firstQ(m)}};tick();timerInt=setInterval(tick,250)}async function firstQ(m){if(role!=='host')return;let s=await get(ref(db,`partidas/${matchId}/status`));if(!s.exists()||s.val()!=='presentation')return;await update(ref(db,`partidas/${matchId}`),{status:'playing','quiz/fase':'question','quiz/ativo':true,'quiz/indice':0,'quiz/total':Math.min(Number(m.configuracoes?.quantidadePerguntas||10),Q.length),'quiz/duracao':Number(m.configuracoes?.tempoPergunta||15),'quiz/inicioPergunta':Date.now()+offset,'quiz/resultadoPronto':false,'quiz/resultadoIndice':-1})}
-function renderQuiz(m){if(!screens.quiz.classList.contains('active'))show('quiz');let qz=m.quiz||{},i=Number(qz.indice||0),total=Number(qz.total||1),q=Q[i];if(!q)return;let t=m.times?.[teamId];$('quizTeam').textContent=t?.nome||'Time';$('quizProgress').textContent=`Pergunta ${i+1} de ${total}`;$('quizQuestion').textContent=q.q;renderAnswers(m,q,i);renderVotes(m,i,q);renderResult(m,i,q);startTimer(m)}async function renderAnswers(m,q,i){let box=$('quizAnswers');box.innerHTML='';let s=await get(ref(db,`partidas/${matchId}/votos/${i}/${user.uid}`)),sel=s.exists()?s.val()?.resposta:null,ready=m.quiz?.resultadoPronto===true&&Number(m.quiz?.resultadoIndice)===i;q.a.forEach((op,k)=>{let b=document.createElement('button');b.className='answer'+(sel===k?' selected':'');b.disabled=ready;b.innerHTML=`<span class="letter">${String.fromCharCode(65+k)}</span>${esc(op)}`;b.onclick=async()=>{if(remain(m)<=0||ready)return;await set(ref(db,`partidas/${matchId}/votos/${i}/${user.uid}`),{uid:user.uid,timeId:teamId,resposta:k,papel:role,atualizadoEm:serverTimestamp()});Array.from(box.children).forEach(x=>x.classList.remove('selected'));b.classList.add('selected')};box.appendChild(b)})}function renderVotes(m,i,q){let coach=role==='host'||role==='coach';$('votePanel').style.display=coach?'block':'none';if(!coach)return;let c=[0,0,0,0],vs=m.votos?.[i]||{};Object.values(vs).forEach(v=>{if(v&&v.timeId===teamId)c[Number(v.resposta)]++});$('voteCounts').innerHTML=c.map((n,k)=>`<div class="row"><span>${String.fromCharCode(65+k)} - ${esc(q.a[k])}</span><span class="pill p">${n} voto${n===1?'':'s'}</span></div>`).join('')}function remain(m){let st=Number(m.quiz?.inicioPergunta||0),d=Number(m.quiz?.duracao||15);return Math.max(0,Math.ceil((st+d*1000-(Date.now()+offset))/1000))}function startTimer(m){if(timerInt)clearInterval(timerInt);const tick=async()=>{let r=remain(m);$('quizTimer').textContent=r;$('quizTimer').className=r<=3?'timer danger':'timer';if(r<=0){clearInterval(timerInt);timerInt=null;if(role==='host'&&!processing){processing=true;try{await calc(m)}finally{processing=false}}}};tick();timerInt=setInterval(tick,250)}async function calc(m){let i=Number(m.quiz?.indice||0),rp=await get(ref(db,`partidas/${matchId}/quiz/resultadoPronto`)),ri=await get(ref(db,`partidas/${matchId}/quiz/resultadoIndice`));if(rp.exists()&&rp.val()===true&&ri.exists()&&Number(ri.val())===i)return;let q=Q[i],vsn=await get(ref(db,`partidas/${matchId}/votos/${i}`)),vs=vsn.exists()?vsn.val():{},res={};for(const t of Object.values(m.times||{})){let tv=Object.values(vs).filter(v=>v&&v.timeId===t.id),c=[0,0,0,0];tv.forEach(v=>c[Number(v.resposta)]++);let mx=Math.max(...c),cand=c.map((n,k)=>n===mx?k:-1).filter(k=>k>=0),off=cand[0]??0;if(cand.length>1){let cv=tv.find(v=>v.uid===t.coachUid);if(cv&&cand.includes(Number(cv.resposta)))off=Number(cv.resposta)}let ok=off===q.c;res[t.id]={resposta:off,correta:ok,votos:c};if(ok)await set(ref(db,`partidas/${matchId}/times/${t.id}/pontos`),Number(t.pontos||0)+1)}await set(ref(db,`partidas/${matchId}/resultados/${i}`),res);await update(ref(db,`partidas/${matchId}/quiz`),{resultadoPronto:true,resultadoIndice:i,resultadoEm:Date.now()+offset});setTimeout(nextQ,4500)}function renderResult(m,i,q){let ready=m.quiz?.resultadoPronto===true&&Number(m.quiz?.resultadoIndice)===i,box=$('resultBox');if(!ready){box.style.display='none';box.innerHTML='';return}let r=m.resultados?.[i]?.[teamId];if(!r)return;box.style.display='block';if(r.correta){box.className='success';box.innerHTML=`<strong>Seu time acertou! 🎉</strong><br>Resposta oficial: ${String.fromCharCode(65+Number(r.resposta))} - ${esc(q.a[Number(r.resposta)])}`;confetti()}else{box.className='danger';box.innerHTML=`<strong>Seu time errou. 🌧️</strong><br>Resposta do time: ${String.fromCharCode(65+Number(r.resposta))} - ${esc(q.a[Number(r.resposta)])}<br>Correta: ${String.fromCharCode(65+q.c)} - ${esc(q.a[q.c])}`;rain()}}async function nextQ(){if(role!=='host')return;let s=await get(ref(db,`partidas/${matchId}`));if(!s.exists())return;let m=s.val(),i=Number(m.quiz?.indice||0),total=Number(m.quiz?.total||1),n=i+1;if(n>=total)return update(ref(db,`partidas/${matchId}`),{status:'finished','quiz/fase':'finished','quiz/ativo':false,'quiz/finalizadoEm':serverTimestamp()});await update(ref(db,`partidas/${matchId}/quiz`),{indice:n,inicioPergunta:Date.now()+offset,resultadoPronto:false,resultadoIndice:-1})}function renderFinal(m){if(!screens.final.classList.contains('active'))show('final');let ts=Object.values(m.times||{}).sort((a,b)=>Number(b.pontos||0)-Number(a.pontos||0));$('scoreboard').innerHTML=ts.map((t,i)=>`<div class="scorerow"><div><strong>${i===0?'🏆 ':''}${esc(t.nome)}</strong><div class="muted">${esc(t.coachNome||'Sem técnico')}</div></div><div class="score">${Number(t.pontos||0)}</div></div>`).join('')}function confetti(){let l=$('fx');l.innerHTML='';for(let i=0;i<55;i++){let e=document.createElement('div');e.className='conf';e.textContent=['🎉','✨','🎊','⭐'][Math.floor(Math.random()*4)];e.style.left=`${Math.random()*100}%`;e.style.animationDuration=`${2.3+Math.random()*2.1}s`;e.style.animationDelay=`${Math.random()*.6}s`;l.appendChild(e)}setTimeout(()=>l.innerHTML='',5000)}function rain(){let l=$('fx');l.innerHTML='';for(let i=0;i<45;i++){let e=document.createElement('div');e.className='rain';e.textContent='💧';e.style.left=`${Math.random()*100}%`;e.style.animationDuration=`${1.5+Math.random()*1.4}s`;e.style.animationDelay=`${Math.random()*.6}s`;l.appendChild(e)}setTimeout(()=>l.innerHTML='',4300)}function leaveHome(){stop();matchId=null;role=null;teamId=null;show(isAdmin?'admin':'adminLogin')}
-$('openJoin').onclick=()=>show('join');$('participantAccessBtn').onclick=()=>show('join');$('openAdmin').onclick=()=>show('adminLogin');$('authCreate').onclick=openCreate;document.querySelectorAll('[data-home]').forEach(b=>b.onclick=()=>show(isAdmin?'admin':'adminLogin'));$('adminLoginBtn').onclick=doAdminLogin;$('adminLogout').onclick=logoutAdmin;$('adminCreate').onclick=openCreate;$('refreshUsers').onclick=loadUsers;$('cancelCreate').onclick=()=>show(isAdmin?'admin':'home');$('teamCount').onchange=teamInputs;$('createMatch').onclick=createMatch;$('joinCode').oninput=()=>$('joinCode').value=code($('joinCode').value);$('joinBtn').onclick=join;$('readyBtn').onclick=ready;$('toggleGame').onclick=toggleGame;$('deleteMatch').onclick=delMatch;$('startBtn').onclick=()=>start(false);$('forceStart').onclick=()=>start(true);$('leaveMatch').onclick=leaveHome;$('finalHome').onclick=leaveHome;teamInputs();
-onAuthStateChanged(auth,async u=>{
-  user=u;
-  isAdmin=adminUser();
-  if(!u){
+
+    const btn=$("adminEnter");
+    btn.disabled=true;
+    btn.textContent="Conectando...";
+
     try{
-      await signInAnonymously(auth);
+      await ensureAuth();
+      user=auth.currentUser;
+      sessionStorage.setItem("jda_admin","1");
+      isAdmin=true;
+
+      await set(ref(db,"config/serverOnline"),true);
+      await set(ref(db,"config/adminOnline"),{
+        uid:user.uid,
+        online:true,
+        loginEm:serverTimestamp()
+      });
+
+      await onDisconnect(ref(db,"config/serverOnline")).set(false);
+      await onDisconnect(ref(db,"config/adminOnline/online")).set(false);
+
+      show("adminPanel");
     }catch(e){
       console.error(e);
-      alert('Não foi possível conectar com o servidor.');
+      alert("Não foi possível conectar com o servidor.");
+    }finally{
+      btn.disabled=false;
+      btn.textContent="Entrar e ligar servidor";
     }
-    return;
   }
-  if(isAdmin){
-    canCreate=true;
-  }else{
-    canCreate=false;
+
+  async function adminLogout(){
+    try{
+      await set(ref(db,"config/serverOnline"),false);
+      await update(ref(db,"config/adminOnline"),{online:false,saiuEm:serverTimestamp()});
+    }catch(e){console.error(e)}
+    sessionStorage.removeItem("jda_admin");
+    isAdmin=false;
+    $("adminPassword").value="";
+    show("publicScreen");
   }
-});
-if(!auth.currentUser){
-  signInAnonymously(auth).catch(e=>{
-    console.error(e);
+
+  async function resetAllRooms(){
+    if(!isAdmin) return;
+    if(!confirm("Apagar todas as salas e códigos atuais?")) return;
+
+    const codesSnap=await get(ref(db,"inviteCodes"));
+    const codes=codesSnap.exists()?codesSnap.val():{};
+    for(const key of Object.keys(codes)) await remove(ref(db,`inviteCodes/${key}`));
+    await remove(ref(db,"rooms"));
+    await remove(ref(db,"game"));
+    alert("Salas limpas.");
+  }
+
+  async function createTeam(){
+    if(!serverOnline){
+      alert("O servidor está desligado.");
+      return;
+    }
+
+    const coachName=validateCleanField($("coachName").value,"seu nome");
+    if(!coachName) return;
+
+    const teamName=validateCleanField($("teamName").value,"o nome do time");
+    if(!teamName) return;
+
+    await ensureAuth();
+    user=auth.currentUser;
+
+    const roomsRef=ref(db,"rooms");
+    const inviteCode=await uniqueInviteCode();
+
+    let assignedRoom=null;
+
+    const tx=await runTransaction(roomsRef,current=>{
+      const rooms=current||{};
+
+      let existing=null;
+      for(let i=1;i<=MAX_ROOMS;i++){
+        const r=rooms[String(i)];
+        if(r?.coachUid===user.uid){
+          existing=String(i);
+          break;
+        }
+      }
+
+      if(existing){
+        assignedRoom=existing;
+        return;
+      }
+
+      for(let i=1;i<=MAX_ROOMS;i++){
+        const key=String(i);
+        if(!rooms[key] || !rooms[key].coachUid){
+          assignedRoom=key;
+          rooms[key]={
+            roomNumber:i,
+            coachUid:user.uid,
+            coachName,
+            teamName,
+            inviteCode,
+            ready:false,
+            complete:false,
+            score:0,
+            createdAt:Date.now(),
+            members:{
+              [user.uid]:{
+                uid:user.uid,
+                name:coachName,
+                role:"coach",
+                joinedAt:Date.now()
+              }
+            }
+          };
+          return rooms;
+        }
+      }
+
+      return;
+    });
+
+    if(!assignedRoom){
+      alert("As 10 salas já estão ocupadas.");
+      return;
+    }
+
+    const roomSnap=await get(ref(db,`rooms/${assignedRoom}`));
+    if(!roomSnap.exists()){
+      alert("Não foi possível criar a sala.");
+      return;
+    }
+
+    const room=roomSnap.val();
+
+    await set(ref(db,`inviteCodes/${room.inviteCode}`),{
+      roomId:assignedRoom,
+      active:true
+    });
+
+    myRoom=assignedRoom;
+    myRole="coach";
+    openMyRoom();
+  }
+
+  async function joinTeam(){
+    if(!serverOnline){
+      alert("O servidor está desligado.");
+      return;
+    }
+
+    const name=validateCleanField($("playerName").value,"seu nome");
+    if(!name) return;
+
+    const code=String($("inviteCode").value||"").trim().toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6);
+    $("inviteCode").value=code;
+
+    if(code.length!==6){
+      alert("Digite o código de 6 caracteres enviado pelo técnico.");
+      return;
+    }
+
+    await ensureAuth();
+    user=auth.currentUser;
+
+    const codeSnap=await get(ref(db,`inviteCodes/${code}`));
+    if(!codeSnap.exists() || codeSnap.val()?.active!==true){
+      alert("Código inválido ou desativado.");
+      return;
+    }
+
+    const roomId=String(codeSnap.val().roomId);
+    const roomRef=ref(db,`rooms/${roomId}`);
+    let joined=false;
+    let full=false;
+    let already=false;
+
+    await runTransaction(roomRef,room=>{
+      if(!room || room.inviteCode!==code) return room;
+
+      const members=room.members||{};
+
+      if(members[user.uid]){
+        already=true;
+        joined=true;
+        return room;
+      }
+
+      const total=Object.keys(members).length;
+      if(total>=MAX_TOTAL_PER_ROOM){
+        full=true;
+        return room;
+      }
+
+      members[user.uid]={
+        uid:user.uid,
+        name,
+        role:"player",
+        joinedAt:Date.now()
+      };
+      room.members=members;
+
+      const newTotal=Object.keys(members).length;
+      if(newTotal>=MAX_TOTAL_PER_ROOM){
+        room.complete=true;
+        room.ready=true;
+      }
+
+      joined=true;
+      return room;
+    });
+
+    if(full){
+      alert("Esta sala já está completa.");
+      return;
+    }
+
+    if(!joined){
+      alert("Não foi possível entrar nesta sala.");
+      return;
+    }
+
+    myRoom=roomId;
+    myRole="player";
+    openMyRoom();
+  }
+
+  function openMyRoom(){
+    stopRoomListeners();
+    show("teamLobbyScreen");
+
+    roomUnsub=onValue(ref(db,`rooms/${myRoom}`),snap=>{
+      if(!snap.exists()){
+        alert("Sua sala foi encerrada.");
+        stopRoomListeners();
+        myRoom=null;
+        myRole=null;
+        show("publicScreen");
+        return;
+      }
+
+      const room=snap.val();
+      renderMyRoom(room);
+    });
+
+    gameUnsub=onValue(ref(db,"game"),snap=>{
+      if(!snap.exists()) return;
+      const game=snap.val();
+
+      if(game.status==="presentation") renderPresentation(game);
+      if(game.status==="playing") renderQuiz(game);
+      if(game.status==="finished") renderFinal(game);
+    });
+  }
+
+  function renderMyRoom(room){
+    const members=roomMembers(room);
+    const coach=members.find(m=>m.role==="coach");
+    const players=members.filter(m=>m.role==="player");
+    const total=members.length;
+
+    $("myRolePill").textContent=myRole==="coach"?"Técnico":"Jogador";
+    $("myRoomTitle").textContent=`Sala ${room.roomNumber} — ${room.teamName}`;
+    $("myTeamHeading").textContent=`${room.teamName} — ${total}/5 participantes`;
+
+    if(total>=MAX_TOTAL_PER_ROOM){
+      $("myRoomState").className="success";
+      $("myRoomState").textContent=`Sala ${room.roomNumber} completa: técnico + 4 jogadores.`;
+    }else if(room.ready){
+      $("myRoomState").className="success";
+      $("myRoomState").textContent=`Time pronto para começar com ${total} participante${total===1?"":"s"}.`;
+    }else{
+      $("myRoomState").className="notice";
+      $("myRoomState").textContent=`Faltam ${MAX_TOTAL_PER_ROOM-total} participante${MAX_TOTAL_PER_ROOM-total===1?"":"s"} para completar a sala.`;
+    }
+
+    $("coachOnlyArea").style.display=myRole==="coach"?"block":"none";
+    $("myInviteCode").textContent=room.inviteCode||"------";
+
+    $("myMembers").innerHTML = `
+      <div class="listitem">
+        <div><strong>🎧 ${esc(coach?.name||room.coachName||"Técnico")}</strong><div class="muted">Técnico</div></div>
+      </div>
+      ${players.map(p=>`
+        <div class="listitem">
+          <div><strong>👤 ${esc(p.name)}</strong><div class="muted">Jogador</div></div>
+        </div>
+      `).join("")}
+      ${players.length<4 ? `<div class="empty">${4-players.length} vaga${4-players.length===1?"":"s"} para jogador${4-players.length===1?"":"es"}.</div>` : ""}
+    `;
+
+    if(room.ready){
+      $("waitingGame").className="success";
+      $("waitingGame").textContent="Seu time está pronto. Aguardando pelo menos outro time pronto.";
+    }else{
+      $("waitingGame").className="notice";
+      $("waitingGame").textContent="O técnico pode completar 5 participantes ou clicar em “Começar assim mesmo”.";
+    }
+
+    if(myRole==="coach"){
+      $("startAnyway").style.display = room.ready ? "none" : "block";
+    }
+  }
+
+  async function copyInvite(){
+    const code=$("myInviteCode").textContent.trim();
+    const text=`Jogo dos Amigos - entre no meu time usando o código ${code}`;
+    try{
+      await navigator.clipboard.writeText(text);
+      alert("Convite copiado. Agora é só colar no WhatsApp.");
+    }catch{
+      prompt("Copie esta mensagem e envie pelo WhatsApp:",text);
+    }
+  }
+
+  async function markReady(){
+    if(myRole!=="coach" || !myRoom) return;
+
+    const snap=await get(ref(db,`rooms/${myRoom}`));
+    if(!snap.exists()) return;
+
+    const room=snap.val();
+    const members=roomMembers(room);
+
+    if(members.length<2){
+      if(!confirm("Seu time tem somente o técnico. Deseja marcar como pronto assim mesmo?")) return;
+    }
+
+    await update(ref(db,`rooms/${myRoom}`),{
+      ready:true,
+      readyAt:serverTimestamp()
+    });
+
+    await maybeStartGame();
+  }
+
+  async function maybeStartGame(){
+    const gameSnap=await get(ref(db,"game"));
+    if(gameSnap.exists() && ["presentation","playing"].includes(gameSnap.val()?.status)) return;
+
+    const roomsSnap=await get(ref(db,"rooms"));
+    if(!roomsSnap.exists()) return;
+
+    const rooms=roomsSnap.val();
+    const occupied=Object.entries(rooms).filter(([_,r])=>r?.coachUid);
+    const ready=occupied.filter(([_,r])=>r?.ready===true);
+
+    // Para haver disputa, pelo menos 2 times precisam estar prontos.
+    if(ready.length<2) return;
+
+    // Só começa quando todos os times atualmente ocupados estiverem prontos.
+    if(ready.length!==occupied.length) return;
+
+    const activeRooms={};
+    ready.forEach(([id,r])=>{
+      activeRooms[id]={
+        roomId:id,
+        teamName:r.teamName,
+        score:Number(r.score||0)
+      };
+    });
+
+    await set(ref(db,"game"),{
+      status:"presentation",
+      activeRooms,
+      presentationStart:Date.now()+offset,
+      quiz:{
+        index:0,
+        total:QUESTIONS.length,
+        duration:15,
+        resultReady:false,
+        resultIndex:-1
+      }
+    });
+  }
+
+  function renderPresentation(game){
+    if(!$("presentationScreen").classList.contains("active")) show("presentationScreen");
+
+    get(ref(db,"rooms")).then(snap=>{
+      const rooms=snap.exists()?snap.val():{};
+      const box=$("presentationRooms");
+      box.innerHTML="";
+
+      Object.keys(game.activeRooms||{}).sort((a,b)=>Number(a)-Number(b)).forEach(id=>{
+        const room=rooms[id];
+        if(!room) return;
+        const ms=roomMembers(room);
+        const coach=ms.find(m=>m.role==="coach");
+        const players=ms.filter(m=>m.role==="player");
+
+        const div=document.createElement("div");
+        div.className="room ready";
+        div.innerHTML=`
+          <div class="row"><h3>${esc(room.teamName)}</h3><span class="pill p">Sala ${id}</span></div>
+          <p class="muted">🎧 ${esc(coach?.name||room.coachName)}</p>
+          <ul class="room-list">${players.map(p=>`<li>👤 ${esc(p.name)}</li>`).join("")}</ul>
+        `;
+        box.appendChild(div);
+      });
+    });
+
+    const start=Number(game.presentationStart||Date.now()+offset);
+    if(timerId) clearInterval(timerId);
+
+    const tick=async()=>{
+      const remain=Math.max(0,Math.ceil((start+5000-(Date.now()+offset))/1000));
+      $("presentationCountdown").innerHTML=`<strong>${remain}</strong>`;
+      if(remain<=0){
+        clearInterval(timerId);timerId=null;
+        await tryBeginQuiz();
+      }
+    };
+
+    tick();
+    timerId=setInterval(tick,250);
+  }
+
+  async function tryBeginQuiz(){
+    // qualquer cliente pode tentar; transação garante apenas uma mudança.
+    await runTransaction(ref(db,"game"),game=>{
+      if(!game || game.status!=="presentation") return game;
+      game.status="playing";
+      game.quiz=game.quiz||{};
+      game.quiz.index=0;
+      game.quiz.total=QUESTIONS.length;
+      game.quiz.duration=15;
+      game.quiz.questionStart=Date.now()+offset;
+      game.quiz.resultReady=false;
+      game.quiz.resultIndex=-1;
+      return game;
+    });
+  }
+
+  function renderQuiz(game){
+    if(!$("quizScreen").classList.contains("active")) show("quizScreen");
+
+    const q=game.quiz||{};
+    const index=Number(q.index||0);
+    const question=QUESTIONS[index];
+    if(!question) return;
+
+    get(ref(db,`rooms/${myRoom}`)).then(s=>{
+      if(s.exists()) $("quizTeamPill").textContent=s.val().teamName||`Sala ${myRoom}`;
+    });
+
+    $("quizProgress").textContent=`Pergunta ${index+1} de ${q.total||QUESTIONS.length}`;
+    $("quizQuestion").textContent=question.q;
+
+    renderAnswers(game,index,question);
+    renderResult(game,index,question);
+    startTimer(game);
+  }
+
+  async function renderAnswers(game,index,question){
+    const box=$("quizAnswers");
+    box.innerHTML="";
+
+    const voteSnap=await get(ref(db,`game/votes/${index}/${user.uid}`));
+    const selected=voteSnap.exists()?Number(voteSnap.val()?.answer):-1;
+    const locked=game.quiz?.resultReady===true && Number(game.quiz?.resultIndex)===index;
+
+    question.a.forEach((opt,i)=>{
+      const b=document.createElement("button");
+      b.className="answer"+(selected===i?" selected":"");
+      b.disabled=locked;
+      b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span>${esc(opt)}`;
+
+      b.onclick=async()=>{
+        if(remaining(game)<=0 || locked) return;
+        await set(ref(db,`game/votes/${index}/${user.uid}`),{
+          uid:user.uid,
+          roomId:String(myRoom),
+          answer:i,
+          role:myRole,
+          at:serverTimestamp()
+        });
+        [...box.children].forEach(x=>x.classList.remove("selected"));
+        b.classList.add("selected");
+      };
+      box.appendChild(b);
+    });
+  }
+
+  function remaining(game){
+    const start=Number(game.quiz?.questionStart||0);
+    const duration=Number(game.quiz?.duration||15);
+    return Math.max(0,Math.ceil(((start+duration*1000)-(Date.now()+offset))/1000));
+  }
+
+  function startTimer(game){
+    if(timerId) clearInterval(timerId);
+
+    const tick=async()=>{
+      const r=remaining(game);
+      $("quizTimer").textContent=String(r);
+      $("quizTimer").className=r<=3?"timer danger":"timer";
+
+      if(r<=0){
+        clearInterval(timerId);timerId=null;
+        if(!hostAdvanceLock){
+          hostAdvanceLock=true;
+          try{await calculateResult()}finally{hostAdvanceLock=false}
+        }
+      }
+    };
+
+    tick();
+    timerId=setInterval(tick,250);
+  }
+
+  async function calculateResult(){
+    const gameSnap=await get(ref(db,"game"));
+    if(!gameSnap.exists()) return;
+    const game=gameSnap.val();
+    if(game.status!=="playing") return;
+
+    const index=Number(game.quiz?.index||0);
+    if(game.quiz?.resultReady===true && Number(game.quiz?.resultIndex)===index) return;
+
+    const q=QUESTIONS[index];
+    const votesSnap=await get(ref(db,`game/votes/${index}`));
+    const votes=votesSnap.exists()?votesSnap.val():{};
+    const roomsSnap=await get(ref(db,"rooms"));
+    const rooms=roomsSnap.exists()?roomsSnap.val():{};
+    const results={};
+
+    for(const roomId of Object.keys(game.activeRooms||{})){
+      const room=rooms[roomId];
+      if(!room) continue;
+
+      const roomVotes=Object.values(votes).filter(v=>v && String(v.roomId)===String(roomId));
+      const counts=[0,0,0,0];
+      roomVotes.forEach(v=>{
+        const a=Number(v.answer);
+        if(a>=0&&a<4) counts[a]++;
+      });
+
+      const max=Math.max(...counts);
+      let official=counts.indexOf(max);
+
+      // Em empate, o voto do técnico desempata.
+      const tied=counts.map((n,i)=>n===max?i:-1).filter(i=>i>=0);
+      if(tied.length>1){
+        const coachVote=roomVotes.find(v=>v.role==="coach");
+        if(coachVote && tied.includes(Number(coachVote.answer))) official=Number(coachVote.answer);
+      }
+
+      const correct=official===q.c;
+      results[roomId]={answer:official,correct,counts};
+
+      if(correct){
+        await runTransaction(ref(db,`rooms/${roomId}/score`),v=>Number(v||0)+1);
+      }
+    }
+
+    await set(ref(db,`game/results/${index}`),results);
+    await update(ref(db,"game/quiz"),{
+      resultReady:true,
+      resultIndex:index,
+      resultAt:Date.now()+offset
+    });
+
+    setTimeout(()=>advanceQuestion(),4500);
+  }
+
+  function renderResult(game,index,q){
+    const box=$("quizResult");
+    const ready=game.quiz?.resultReady===true && Number(game.quiz?.resultIndex)===index;
+    if(!ready){box.style.display="none";box.innerHTML="";return}
+
+    const result=game.results?.[index]?.[myRoom];
+    if(!result) return;
+
+    box.style.display="block";
+
+    if(result.correct){
+      box.className="success";
+      box.innerHTML=`<strong>Seu time acertou! 🎉</strong><br>Resposta: ${String.fromCharCode(65+Number(result.answer))} - ${esc(q.a[Number(result.answer)])}`;
+      confetti();
+    }else{
+      box.className="danger";
+      box.innerHTML=`<strong>Seu time errou. 🌧️</strong><br>Resposta do time: ${String.fromCharCode(65+Number(result.answer))} - ${esc(q.a[Number(result.answer)])}<br>Correta: ${String.fromCharCode(65+q.c)} - ${esc(q.a[q.c])}`;
+      rain();
+    }
+  }
+
+  async function advanceQuestion(){
+    await runTransaction(ref(db,"game"),game=>{
+      if(!game || game.status!=="playing") return game;
+
+      const idx=Number(game.quiz?.index||0);
+      const total=Number(game.quiz?.total||QUESTIONS.length);
+
+      if(!(game.quiz?.resultReady===true && Number(game.quiz?.resultIndex)===idx)) return game;
+
+      const next=idx+1;
+
+      if(next>=total){
+        game.status="finished";
+        return game;
+      }
+
+      game.quiz.index=next;
+      game.quiz.questionStart=Date.now()+offset;
+      game.quiz.resultReady=false;
+      game.quiz.resultIndex=-1;
+      return game;
+    });
+  }
+
+  async function renderFinal(game){
+    if(!$("finalScreen").classList.contains("active")) show("finalScreen");
+
+    const roomsSnap=await get(ref(db,"rooms"));
+    const rooms=roomsSnap.exists()?roomsSnap.val():{};
+    const active=Object.keys(game.activeRooms||{}).map(id=>rooms[id]).filter(Boolean)
+      .sort((a,b)=>Number(b.score||0)-Number(a.score||0));
+
+    $("finalScore").innerHTML=active.map((r,i)=>`
+      <div class="score">
+        <div><strong>${i===0?"🏆 ":""}${esc(r.teamName)}</strong><div class="muted">Sala ${r.roomNumber}</div></div>
+        <div style="font-size:24px;font-weight:900">${Number(r.score||0)}</div>
+      </div>
+    `).join("");
+  }
+
+  function confetti(){
+    const fx=$("fx");fx.innerHTML="";
+    for(let i=0;i<55;i++){
+      const e=document.createElement("div");e.className="piece";
+      e.textContent=["🎉","✨","🎊","⭐"][Math.floor(Math.random()*4)];
+      e.style.left=`${Math.random()*100}%`;
+      e.style.animationDuration=`${2.3+Math.random()*2.1}s`;
+      e.style.animationDelay=`${Math.random()*.6}s`;
+      fx.appendChild(e);
+    }
+    setTimeout(()=>fx.innerHTML="",5000);
+  }
+
+  function rain(){
+    const fx=$("fx");fx.innerHTML="";
+    for(let i=0;i<45;i++){
+      const e=document.createElement("div");e.className="drop";e.textContent="💧";
+      e.style.left=`${Math.random()*100}%`;
+      e.style.animationDuration=`${1.5+Math.random()*1.4}s`;
+      e.style.animationDelay=`${Math.random()*.6}s`;
+      fx.appendChild(e);
+    }
+    setTimeout(()=>fx.innerHTML="",4300);
+  }
+
+  async function leaveTeam(){
+    stopRoomListeners();
+    myRoom=null;myRole=null;
+    show("publicScreen");
+  }
+
+  // Eventos
+  $("openAdminLogin").onclick=()=>show("adminLoginScreen");
+  $("backPublic1").onclick=()=>show("publicScreen");
+  $("backPublic2").onclick=()=>show("publicScreen");
+  $("backPublic3").onclick=()=>show("publicScreen");
+
+  $("adminEnter").onclick=adminLogin;
+  $("adminLogout").onclick=adminLogout;
+  $("resetRooms").onclick=resetAllRooms;
+
+  $("openCoach").onclick=()=>serverOnline?show("coachCreateScreen"):alert("Servidor desligado.");
+  $("openPlayer").onclick=()=>serverOnline?show("playerJoinScreen"):alert("Servidor desligado.");
+
+  $("createTeam").onclick=createTeam;
+  $("joinTeam").onclick=joinTeam;
+  $("copyInvite").onclick=copyInvite;
+  $("startAnyway").onclick=markReady;
+  $("leaveTeam").onclick=leaveTeam;
+  $("finalHome").onclick=leaveTeam;
+
+  $("inviteCode").oninput=()=>$("inviteCode").value=$("inviteCode").value.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6);
+
+  onAuthStateChanged(auth,async u=>{
+    user=u;
+    if(!u){
+      try{await signInAnonymously(auth)}catch(e){console.error(e)}
+    }
   });
-}
+
+  if(!auth.currentUser){
+    signInAnonymously(auth).catch(e=>console.error(e));
+  }
+
+  // Se o administrador recarregar a página durante a mesma sessão, volta ao painel.
+  if(isAdmin){
+    ensureAuth().then(async()=>{
+      try{
+        await set(ref(db,"config/serverOnline"),true);
+        await onDisconnect(ref(db,"config/serverOnline")).set(false);
+        show("adminPanel");
+      }catch(e){console.error(e)}
+    });
+  }
 </script>
 </body>
 </html>
