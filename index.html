@@ -288,14 +288,17 @@ Até 10 salas. Cada time pode ter no máximo 5 participantes: 1 técnico + até 
 
 <script type="module">
   import { QUESTIONS } from "./questions.js";
- import {
+import {
+    auth,
     db,
     ref,
     get,
     set,
     update,
     remove,
-    onValue
+    onValue,
+    signInAnonymously,
+    onAuthStateChanged
 } from "./firebase.js";
 
   const ADMIN_LOGIN = "senger.luigy@gmail.com";
