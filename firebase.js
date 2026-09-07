@@ -1,5 +1,10 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+
+import {
+    getAuth,
+    signInAnonymously,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 import {
     getDatabase,
@@ -12,7 +17,7 @@ import {
     runTransaction,
     onDisconnect,
     serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/12.8.0/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD_-S0j1L-YVF6ynKiF8NcTU_4_pCn-S3Q",
@@ -30,9 +35,10 @@ const auth = getAuth(app);
 
 const db = getDatabase(app);
 
-export { app, auth, db };
-
 export {
+    app,
+    auth,
+    db,
     ref,
     get,
     set,
