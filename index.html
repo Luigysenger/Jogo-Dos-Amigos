@@ -441,8 +441,13 @@ import {
     const coach = members.find(m=>m.role==="coach");
     const players = members
       .filter(m=>m.role==="player")
-      .sort((a,b)=>Number(a.joinedAt||0)-Number(b.joinedAt||0));
-    return [coach,...players].filter(Boolean);
+      .sort((a, b) => {
+        const timeA = Number(a.joinedAt || 0);
+        const timeB = Number(b.joinedAt || 0);
+        if (timeA !== timeB) return timeA - timeB;
+        return String(a.uid || "").localeCompare(String(b.uid || ""));
+      });
+    return [coach, ...players].filter(Boolean);
   }
 
   function responderForQuestion(room,index){
@@ -528,11 +533,11 @@ import {
     try{
       await ensureAuth();
       user=auth.currentUser;
-     sessionStorage.setItem("jda_admin","1");
-isAdmin = true;
+      sessionStorage.setItem("jda_admin","1");
+      isAdmin = true;
 
-const roomsSnap = await get(ref(db, "rooms"));
-renderRooms("adminRooms", roomsSnap.exists() ? roomsSnap.val() : {}, true);
+      const roomsSnap = await get(ref(db, "rooms"));
+      renderRooms("adminRooms", roomsSnap.exists() ? roomsSnap.val() : {}, true);
 
       await set(ref(db,"config/serverOnline"),true);
       await set(ref(db,"config/adminOnline"),{
