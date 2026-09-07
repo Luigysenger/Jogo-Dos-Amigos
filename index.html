@@ -288,12 +288,15 @@ Até 10 salas. Cada time pode ter no máximo 5 participantes: 1 técnico + até 
 
 <script type="module">
   import { QUESTIONS } from "./questions.js";
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
-  import {
-    getDatabase, ref, get, set, update, remove, onValue, runTransaction, onDisconnect, serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
-
+ import {
+    db,
+    ref,
+    get,
+    set,
+    update,
+    remove,
+    onValue
+} from "./firebase.js";
   const firebaseConfig = {
     apiKey: "AIzaSyD_-S0j1L-YVF6ynKiF8NcTU_4_pCn-S3Q",
     authDomain: "jogo-dos-amigos-ca3f5.firebaseapp.com",
