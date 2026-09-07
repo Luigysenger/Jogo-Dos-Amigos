@@ -309,11 +309,7 @@ Até 10 salas. Cada time pode ter no máximo 5 participantes: 1 técnico + até 
   const MAX_ROOMS = 10;
   const MAX_TOTAL_PER_ROOM = 5; // técnico + 4 jogadores
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
-
-  const $ = id => document.getElementById(id);
+   const $ = id => document.getElementById(id);
 
   let user = null;
   let serverOnline = false;
