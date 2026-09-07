@@ -528,8 +528,11 @@ import {
     try{
       await ensureAuth();
       user=auth.currentUser;
-      sessionStorage.setItem("jda_admin","1");
-      isAdmin=true;
+     sessionStorage.setItem("jda_admin","1");
+isAdmin = true;
+
+const roomsSnap = await get(ref(db, "rooms"));
+renderRooms("adminRooms", roomsSnap.exists() ? roomsSnap.val() : {}, true);
 
       await set(ref(db,"config/serverOnline"),true);
       await set(ref(db,"config/adminOnline"),{
