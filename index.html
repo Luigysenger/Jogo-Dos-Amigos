@@ -124,7 +124,7 @@ Até 10 salas. Cada time pode ter no máximo 5 participantes: 1 técnico + até 
 
       <div class="row" style="margin-bottom:12px">
         <h3 style="margin:0">Salas 1 a 10</h3>
-        <button id="resetRooms" class="btnd small">Limpar todas as salas</button>
+        <button id="resetRooms" class="btnd small">Limpar todas as salas e placar</button>
       </div>
 
       <div id="adminRooms" class="rooms"></div>
@@ -167,11 +167,13 @@ Até 10 salas. Cada time pode ter no máximo 5 participantes: 1 técnico + até 
             <label>Tempo para responder</label>
             <select id="answerTime">
               <option value="10" selected>10 segundos</option>
+              <option value="15">15 segundos</option>
+              <option value="20">20 segundos</option>
             </select>
           </div>
         </div>
         <div id="gameConfigInfo" class="notice">
-          O primeiro técnico escolhe apenas a quantidade de perguntas. O tempo de resposta é fixo em 10 segundos para todos os times.
+          Escolha a quantidade de perguntas e o tempo de resposta para esta partida.
         </div>
       </div>
 
@@ -298,7 +300,6 @@ import {
     remove,
     onValue,
     runTransaction,
-    onDisconnect,
     serverTimestamp,
     signInAnonymously,
     onAuthStateChanged
@@ -456,11 +457,6 @@ import {
     return roster[index % roster.length];
   }
 
-  async function getGameSettings(){
-    const snap = await get(ref(db,"config/gameSettings"));
-    return snap.exists()?snap.val():null;
-  }
-
   function renderRooms(containerId,rooms,admin=false){
     const box=$(containerId);
     box.innerHTML="";
@@ -546,7 +542,6 @@ import {
         loginEm:serverTimestamp()
       });
 
-
       show("adminPanel");
     }catch(e){
       console.error(e);
@@ -581,7 +576,7 @@ import {
 
   async function resetAllRooms(){
     if(!isAdmin) return;
-    if(!confirm("Apagar todas as salas e códigos atuais?")) return;
+    if(!confirm("Apagar todas as salas, códigos e placar atual?")) return;
 
     const codesSnap=await get(ref(db,"inviteCodes"));
     const codes=codesSnap.exists()?codesSnap.val():{};
@@ -589,7 +584,7 @@ import {
     await remove(ref(db,"rooms"));
     await remove(ref(db,"game"));
     await remove(ref(db,"config/gameSettings"));
-    alert("Salas e configuração da rodada limpas.");
+    alert("Salas, configurações e placar limpos com sucesso.");
   }
 
   async function createTeam(){
@@ -604,17 +599,15 @@ import {
     const teamName=validateCleanField($("teamName").value,"o nome do time");
     if(!teamName) return;
 
-    let gameSettings=await getGameSettings();
-    if(!gameSettings){
-      gameSettings={
-        questionCount:Number($("questionCount").value||10),
-        answerTime:Number($("answerTime").value||10),
-        createdAt:Date.now()
-      };
-      if(![10,20,40].includes(gameSettings.questionCount)) gameSettings.questionCount=10;
-      if(gameSettings.answerTime!==10) gameSettings.answerTime=10;
-      await set(ref(db,"config/gameSettings"),gameSettings);
-    }
+    const questionCount = Number($("questionCount").value || 10);
+    const answerTime = Number($("answerTime").value || 10);
+
+    const gameSettings = {
+      questionCount,
+      answerTime,
+      createdAt: Date.now()
+    };
+    await set(ref(db,"config/gameSettings"), gameSettings);
 
     await ensureAuth();
     user=auth.currentUser;
@@ -1035,7 +1028,6 @@ import {
   }
 
   async function tryBeginQuiz(){
-    // qualquer cliente pode tentar; transação garante apenas uma mudança.
     await runTransaction(ref(db,"game"),game=>{
       if(!game || game.status!=="presentation") return game;
       game.status="playing";
@@ -1302,20 +1294,13 @@ import {
 
   $("openCoach").onclick=async()=>{
       if(!serverOnline){alert("Servidor desligado.");return}
-      const cfg=await getGameSettings();
-      if(cfg){
-        $("questionCount").value=String(cfg.questionCount||10);
-        $("answerTime").value=String(cfg.answerTime||15);
-        $("questionCount").disabled=true;
-        $("answerTime").disabled=true;
-        $("gameConfigInfo").className="success";
-        $("gameConfigInfo").textContent=`Esta rodada já está configurada com ${cfg.questionCount} perguntas e ${cfg.answerTime} segundos por resposta.`;
-      }else{
-        $("questionCount").disabled=false;
-        $("answerTime").disabled=false;
-        $("gameConfigInfo").className="notice";
-        $("gameConfigInfo").textContent="Você é o primeiro técnico desta rodada. Escolha a quantidade de perguntas e o tempo para resposta.";
-      }
+      
+      // Sempre libera os selects para permitir nova escolha por rodada
+      $("questionCount").disabled=false;
+      $("answerTime").disabled=false;
+      $("gameConfigInfo").className="notice";
+      $("gameConfigInfo").textContent="Escolha a quantidade de perguntas e o tempo para resposta desta partida.";
+      
       show("coachCreateScreen");
     };
   $("openPlayer").onclick=()=>serverOnline?show("playerJoinScreen"):alert("Servidor desligado.");
@@ -1341,8 +1326,6 @@ import {
     signInAnonymously(auth).catch(e=>console.error(e));
   }
 
-  // Se o administrador apenas atualizar a mesma aba, volta ao painel.
-  // O estado ligado/desligado do servidor continua sendo o que está salvo no Firebase.
   if(isAdmin){
     ensureAuth().then(async()=>{
       try{
