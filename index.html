@@ -707,20 +707,34 @@ import {
     await ensureAuth();
     user=auth.currentUser;
 
-    const codeSnap=await get(ref(db,`inviteCodes/${code}`));
-    if(!codeSnap.exists() || codeSnap.val()?.active!==true){
+    // Busca diretamente na lista de salas para encontrar qual possui este inviteCode (mais seguro e imune a dessincronia do índice separado)
+    const roomsSnap = await get(ref(db, "rooms"));
+    if(!roomsSnap.exists()){
       alert("Código inválido ou desativado.");
       return;
     }
 
-    const roomId=String(codeSnap.val().roomId);
+    let roomId = null;
+    const roomsData = roomsSnap.val();
+    for(const [id, r] of Object.entries(roomsData)){
+      if(r && String(r.inviteCode || "").trim().toUpperCase() === code){
+        roomId = id;
+        break;
+      }
+    }
+
+    if(!roomId){
+      alert("Código inválido ou desativado.");
+      return;
+    }
+
     const roomRef=ref(db,`rooms/${roomId}`);
     let joined=false;
     let full=false;
     let already=false;
 
     await runTransaction(roomRef,room=>{
-      if(!room || room.inviteCode!==code) return room;
+      if(!room) return room;
 
       const members=room.members||{};
 
@@ -1295,7 +1309,6 @@ import {
   $("openCoach").onclick=async()=>{
       if(!serverOnline){alert("Servidor desligado.");return}
       
-      // Sempre libera os selects para permitir nova escolha por rodada
       $("questionCount").disabled=false;
       $("answerTime").disabled=false;
       $("gameConfigInfo").className="notice";
