@@ -707,7 +707,6 @@ import {
     await ensureAuth();
     user=auth.currentUser;
 
-    // Busca diretamente na lista de salas para encontrar qual possui este inviteCode (mais seguro e imune a dessincronia do índice separado)
     const roomsSnap = await get(ref(db, "rooms"));
     if(!roomsSnap.exists()){
       alert("Código inválido ou desativado.");
@@ -857,21 +856,32 @@ import {
 
     if(myRole==="coach"){
       $("startAnyway").style.display = room.ready ? "none" : "block";
-      updateStartMatchAvailability();
+      updateStartMatchAvailability(room);
     }
   }
 
-  async function updateStartMatchAvailability(){
+  async function updateStartMatchAvailability(room){
     if(myRole!=="coach"){
       $("startMatchNow").style.display="none";
       $("startMatchHint").style.display="none";
       return;
     }
 
+    // Valida se este técnico está na Sala 1 e é o criador original dela
+    const isRoom1 = Number(room.roomNumber) === 1;
+    const isFirstCoach = isRoom1 && room.coachUid === user.uid;
+
     const snap=await get(ref(db,"rooms"));
     const rooms=snap.exists()?snap.val():{};
     const occupied=Object.entries(rooms).filter(([_,r])=>r?.coachUid);
     const ready=occupied.filter(([_,r])=>r?.ready===true);
+
+    if(!isFirstCoach){
+      $("startMatchNow").style.display="none";
+      $("startMatchHint").style.display="block";
+      $("startMatchHint").textContent="Apenas o técnico da Sala 1 pode iniciar a partida.";
+      return;
+    }
 
     if(occupied.length<2){
       $("startMatchNow").style.display="none";
@@ -938,6 +948,12 @@ import {
     }
 
     const rooms=roomsSnap.val();
+    const room1 = rooms["1"];
+    if(!room1 || room1.coachUid !== user.uid){
+      alert("Apenas o técnico da Sala 1 pode iniciar a partida.");
+      return;
+    }
+
     const occupied=Object.entries(rooms).filter(([_,r])=>r?.coachUid);
     const ready=occupied.filter(([_,r])=>r?.ready===true);
 
@@ -974,6 +990,11 @@ import {
         resultIndex:-1
       }
     });
+  }
+
+  async function getGameSettings(){
+    const snap = await get(ref(db, "config/gameSettings"));
+    return snap.exists() ? snap.val() : null;
   }
 
   function renderPresentation(game){
@@ -1082,7 +1103,7 @@ import {
       }else{
         const label=responder.role==="coach"?"técnico":"jogador";
         $("turnBanner").className="turn-banner";
-        $("turnBanner").innerHTML=`<strong>Boa sorte ao ${label} ${esc(responder.name)}!</strong><span>Somente ${esc(responder.name)} responde esta pergunta pelo seu time.</span>`;
+        $("turnBanner").innerHTML=`<strong>Vez de ${esc(responder.name)} (${label})</strong><span>Somente ${esc(responder.name)} responde esta pergunta pelo seu time.</span>`;
       }
     }
 
