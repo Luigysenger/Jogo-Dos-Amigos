@@ -322,6 +322,34 @@ import {
   let timerId = null;
   let offset = 0;
   let hostAdvanceLock = false;
+  let wakeLockObj = null;
+
+  async function requestWakeLock(){
+    try{
+      if('wakeLock' in navigator && !wakeLockObj){
+        wakeLockObj = await navigator.wakeLock.request('screen');
+        wakeLockObj.addEventListener('release', () => {
+          wakeLockObj = null;
+        });
+      }
+    }catch(err){
+      console.warn("Wake Lock não suportado ou bloqueado:", err);
+    }
+  }
+
+  function releaseWakeLock(){
+    if(wakeLockObj){
+      wakeLockObj.release().catch(() => {});
+      wakeLockObj = null;
+    }
+  }
+
+  // Reaproveita wake lock se o usuário alternar abas e voltar para o jogo
+  document.addEventListener('visibilitychange', async () => {
+    if(wakeLockObj !== null && document.visibilityState === 'visible'){
+      await requestWakeLock();
+    }
+  });
 
   onValue(ref(db,".info/serverTimeOffset"), s => offset = Number(s.val() || 0));
 
@@ -492,7 +520,7 @@ import {
           <p style="margin-top:8px"><strong>${esc(room.teamName||"Time")}</strong></p>
           <p class="muted">Técnico: ${esc(coach?.name||room.coachName||"")}</p>
           <ul class="room-list">
-            ${players.length ? players.map(p=>`<li>👤 ${esc(p.name)}</li>`).join("") : "<li>Nenhum jogador ainda.</li>"}
+            ${players.length ? players.map(p=>`👤 ${esc(p.name)}`).join("") : "<li>Nenhum jogador ainda.</li>"}
           </ul>
           ${admin ? `<p class="tiny" style="margin-top:8px">Código: ${esc(room.inviteCode||"")}</p>` : ""}
         `;
@@ -730,15 +758,15 @@ import {
     const roomRef=ref(db,`rooms/${roomId}`);
     let joined=false;
     let full=false;
-    let already=false;
 
     await runTransaction(roomRef,room=>{
       if(!room) return room;
 
       const members=room.members||{};
 
+      // Se o usuário já está na sala (reconexão por queda ou fechamento de aba)
       if(members[user.uid]){
-        already=true;
+        members[user.uid].name = name; // Atualiza caso tenha mudado o nome levemente
         joined=true;
         return room;
       }
@@ -792,6 +820,7 @@ import {
         stopRoomListeners();
         myRoom=null;
         myRole=null;
+        releaseWakeLock();
         show("playerAreaScreen");
         return;
       }
@@ -867,7 +896,6 @@ import {
       return;
     }
 
-    // Valida se este técnico está na Sala 1 e é o criador original dela
     const isRoom1 = Number(room.roomNumber) === 1;
     const isFirstCoach = isRoom1 && room.coachUid === user.uid;
 
@@ -998,6 +1026,7 @@ import {
   }
 
   function renderPresentation(game){
+    requestWakeLock(); // Mantém a tela acesa ao iniciar a apresentação/partida
     if(!$("presentationScreen").classList.contains("active")) show("presentationScreen");
 
     get(ref(db,"rooms")).then(snap=>{
@@ -1078,6 +1107,7 @@ import {
   }
 
   async function renderQuiz(game){
+    requestWakeLock(); // Garante tela acesa durante as perguntas
     if(!$("quizScreen").classList.contains("active")) show("quizScreen");
 
     const q=game.quiz||{};
@@ -1268,6 +1298,7 @@ import {
   }
 
   async function renderFinal(game){
+    releaseWakeLock(); // Libera o bloqueio de tela ao terminar o jogo
     if(!$("finalScreen").classList.contains("active")) show("finalScreen");
 
     const roomsSnap=await get(ref(db,"rooms"));
@@ -1311,6 +1342,7 @@ import {
   async function leaveTeam(){
     stopRoomListeners();
     myRoom=null;myRole=null;
+    releaseWakeLock();
     show("playerAreaScreen");
   }
 
